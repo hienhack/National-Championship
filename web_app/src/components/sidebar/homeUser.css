@@ -1,0 +1,48 @@
+
+.homeUser {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  justify-content: center;
+}
+
+.homeUserAll {
+  height: 100vh;
+}
+
+.contentUser {
+  width: 100%;
+  flex: 4;
+  justify-content: center;
+}
+
+.sidebarUser {
+  flex: 1;
+  height: 100%;
+  margin: 0;
+}
+
+.mainContentUser {
+  width: 50%;
+  top: 120px;
+  left: 550px;
+  background-color: white;
+  border-radius: 20px;
+  padding-bottom: 20px;
+  height: 400px;
+}
+
+.mainContentUser1 {
+  position: absolute;
+  width: 50%;
+  top: 120px;
+  left: 550px;
+  background-color: white;
+  border-radius: 20px;
+  padding-bottom: 20px;
+  height: 500px;
+}
+
+.contentUserMain {
+  display: flex;
+}

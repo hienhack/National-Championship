@@ -1,0 +1,12 @@
+.allTeamTitle{
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.myTeamContainer{
+  background: #dfdfdf;
+  padding: 30px 0px;
+  border-radius: 15px;
+}
+
