@@ -17,12 +17,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// app.get('/season/:id', (req, res) => { res.status(200).send({message: "ok bro"}); });
-
-// const seasonRouter = require('./API/Router/season.router');
-// app.use('/season', seasonRouter);
-
-
 router(app);
 
 app.listen(port, host, () => {
