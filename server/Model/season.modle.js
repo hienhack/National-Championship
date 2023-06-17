@@ -3,18 +3,17 @@ const { Schema } = mongoose;
 
 const seasonSchema = new Schema({
     seasonName: String,
-    year: {
-        start: Number,
-        end: Number
-    },
-    image: String,
+    yearStart: Number,
+    yearEnd: Number,
     rule: {
         demotedPosition: Number,
         minAge: Number,
         redCardBanned: Number,
         totalClubs: Number,
-        maxForeignPlayer: Number
-    }
+        maxForeignPlayer: Number,
+        maxClubPlayer: Number
+    },
+    clubs: [Schema.Types.ObjectId]
 });
 
 const seasonModel = mongoose.model('Season', seasonSchema, 'Season');
