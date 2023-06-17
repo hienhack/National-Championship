@@ -3,7 +3,10 @@ const { Schema } = mongoose;
 
 const seasonSchema = new Schema({
     seasonName: String,
-    year: String,
+    year: {
+        start: Number,
+        end: Number
+    },
     image: String,
     rule: {
         demotedPosition: Number,
