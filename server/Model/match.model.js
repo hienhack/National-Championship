@@ -16,13 +16,7 @@ const matchSchema = mongoose.Schema({
         substitutes: [Schema.Types.ObjectId],
     },
     reuslt: String,
-    goals: [{ 
-            time: Number, 
-            type: String, 
-            clubId: Schema.Types.ObjectId, 
-            scoredPlayer: Schema.Types.ObjectId,
-            assistedPlayer: Schema.Types.ObjectId
-    }],
+    goals: [Schema.Types.ObjectId],
     cards: [{
         playerId: Schema.Types.ObjectId, 
         type: String

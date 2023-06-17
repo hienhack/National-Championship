@@ -7,6 +7,10 @@ const playerSchema = new Schema({
     dob: Date,
     nationality: String,
     position: String,
+    clubs: [{
+        seasonId: Schema.Types.ObjectId,
+        clubId: Schema.Types.ObjectId
+    }]
 });
 
 const playerModel = mongoose.model('Player', playerSchema, 'Player');

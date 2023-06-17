@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const seasonSchema = new Schema({
-    seasosName: String,
+    seasonName: String,
+    year: String,
     image: String,
     rule: {
         demotedPosition: Number,
