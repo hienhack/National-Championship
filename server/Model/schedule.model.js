@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const scheduleSchema = new Schema({
     seasonId: mongoose.Types.ObjectId,
     matches: [{ 
-        matchDay: Number,
+        round: Number,
         match: [mongoose.Types.ObjectId] 
     }]
 });
