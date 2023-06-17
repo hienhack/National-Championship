@@ -16,6 +16,7 @@ mongoose.connect(databaseURI);
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use('/static', express.static('Public'));
 
 router(app);
 
