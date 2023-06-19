@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const matchSchema = mongoose.Schema({
+    season: Schema.Types.ObjectId,
     round: Number,
     datetime: Date,
     stadium: String,

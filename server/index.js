@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 
 const router = require('./API/Router');
 
@@ -14,6 +15,8 @@ const databaseURI = process.env.DATABASE_URI;
 mongoose.connect(databaseURI);
 
 const app = express();
+
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/static', express.static('Public'));
