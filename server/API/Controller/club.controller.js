@@ -51,7 +51,7 @@ class ClubController {
         });
         club.save();
 
-        res.status(200).send({message:"Add Player Successfully"});
+        res.status(201).send({message:"Add Player Successfully"});
         return;
     }
 
@@ -87,7 +87,7 @@ class ClubController {
         });
 
         const rs = await clubModel.findByIdAndDelete(clubId);
-        res.status(200).send({message: "Deleted Club Successfully"});
+        res.status(201).send({message: "Deleted Club Successfully"});
     }
      
     async deletePlayerFromClub (req, res) {
@@ -103,10 +103,10 @@ class ClubController {
         
        
        if (club){
-        res.status(200).send({ message:"Deleted Player from Club Successfully"});
+        res.status(201).send({ message:"Deleted Player from Club Successfully"});
         return;
        }else{
-        res.status(400).send({message:"Deletec Player from Club Failed"});
+        res.status(400).send({message:"Deleted Player from Club Failed"});
         return;
        }
     }
