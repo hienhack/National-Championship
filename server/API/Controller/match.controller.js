@@ -1,5 +1,5 @@
 const clubModel = require('../../Model/club.model');
-
+const matchModel = require('../../Model/match.model');
 class MatchController {
     async createMatch(req,res){
         const match = req.body;
@@ -14,5 +14,20 @@ class MatchController {
         match.result = "";
         match.goals = [];
         match.cards = [];
+
+        const doc = new matchModel(match);
+
+        try {
+            await doc.save();
+        } catch (error) {
+            res.status(400).send({message: "Created Match Failed"});
+            return;
+        }
+        res.status(200).send({message: "Created Match Success"});
+        return;
+    }
+
+    async addGoal(req,res){
+        
     }
 }
