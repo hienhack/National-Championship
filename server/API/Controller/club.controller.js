@@ -1,6 +1,6 @@
 const clubModel = require('../../Model/club.model');
 const playerModel = require('../../Model/player.model');
-const seasonModel = require('../../Model/season.modle');
+const seasonModel = require('../../Model/season.model');
 const fs = require('fs');
 const path = require('path');
 
