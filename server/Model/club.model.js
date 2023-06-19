@@ -1,4 +1,4 @@
-const { Int32 } = require('bson');
+
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
@@ -7,6 +7,7 @@ const clubSchema = new Schema({
     stadium: String,
     image: String,
     seasons: [{
+        _id: false,
         seasonId: Schema.Types.ObjectId,
         coachName: String,
         players: [{
