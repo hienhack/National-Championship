@@ -16,7 +16,7 @@ const matchSchema = mongoose.Schema({
         appearances: [Schema.Types.ObjectId],
         substitutes: [Schema.Types.ObjectId],
     },
-    reuslt: String,
+    result: String,
     goals: [Schema.Types.ObjectId],
     cards: [{
         playerId: Schema.Types.ObjectId, 
