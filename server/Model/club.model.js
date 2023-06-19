@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
@@ -6,11 +7,13 @@ const clubSchema = new Schema({
     stadium: String,
     image: String,
     seasons: [{
+        _id: false,
         seasonId: Schema.Types.ObjectId,
         coachName: String,
         players: [{
-            shirtNumber: Number,
-            playerId: Schema.Types.ObjectId
+            _id: false,
+            playerId: Schema.Types.ObjectId,
+            shirt_number: Number
         }]
     }]
 })
