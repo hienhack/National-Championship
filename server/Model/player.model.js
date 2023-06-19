@@ -7,7 +7,7 @@ const playerSchema = new Schema({
     dob: Date,
     nationality: String,
     position: String,
-    clubs: [{
+    seasons: [{
         seasonId: Schema.Types.ObjectId,
         clubId: Schema.Types.ObjectId
     }]

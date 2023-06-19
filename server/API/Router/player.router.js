@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const playerController = require('../Controller/player.controller');
+const uploader = require('../../Util/imageParser')
 
-router.post('/add', (req, res) => { res.status(200).send({message: 'Not implemented'}); });
-router.post('/update', (req, res) => { res.status(200).send({message: 'Not implemented'}); });
-router.post('/delete', (req, res) => { res.status(200).send({message: 'Not implemented'}); });
-router.get('/:playerId', (req, res) => { res.status(200).send({message: 'Not implemented'}); });
+router.get('/:playerId', playerController.playerDetail);
+router.get('/', playerController.getAllPlayer);
+router.post('/create', uploader.single("image"), playerController.create);
+router.post('/update', uploader.single("image"), playerController.update);
+router.post('/delete', playerController.delete);
 
 module.exports = router;
