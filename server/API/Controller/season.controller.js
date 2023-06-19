@@ -1,4 +1,4 @@
-const seasonModel = require('../../Model/season.modle');
+const seasonModel = require('../../Model/season.model');
 const clubModel = require('../../Model/club.model');
 
 const RECENT_YEAR_QUERY = "recent"

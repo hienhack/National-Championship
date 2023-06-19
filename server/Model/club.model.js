@@ -8,7 +8,10 @@ const clubSchema = new Schema({
     seasons: [{
         seasonId: Schema.Types.ObjectId,
         coachName: String,
-        players: [Schema.Types.ObjectId]
+        players: [{
+            shirtNumber: Number,
+            playerId: Schema.Types.ObjectId
+        }]
     }]
 })
 

@@ -5,7 +5,7 @@ const goalSchema = new Schema({
     seasonId: Schema.Types.ObjectId,
     time: Number, 
     type: String, 
-    clubId: Schema.Types.ObjectId, 
+    club: Schema.Types.ObjectId, 
     scoredPlayer: Schema.Types.ObjectId,
     assistedPlayer: Schema.Types.ObjectId
 });
