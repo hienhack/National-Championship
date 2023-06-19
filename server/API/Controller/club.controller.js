@@ -1,6 +1,6 @@
 const clubModel = require('../../Model/club.model');
 const playerModel = require('../../Model/player.model');
-const seasonModel = require('../../Model/season.modle');
+const seasonModel = require('../../Model/season.model');
 const fs = require('fs');
 const path = require('path');
 
@@ -8,7 +8,7 @@ class ClubController {
     async createClub(req,res) {
         const club = req.body;
         club.seasons = [];
-
+        club.seasons.players = [];
         if ( req.file ){
             club.image = `Images/club/${req.file.filename}`;
         }
