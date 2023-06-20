@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const matchSchema = mongoose.Schema({
-    season: Schema.Types.ObjectId,
+    seasonId: Schema.Types.ObjectId,
     round: Number,
     datetime: Date,
     stadium: String,
@@ -16,7 +16,7 @@ const matchSchema = mongoose.Schema({
         appearances: [Schema.Types.ObjectId],
         substitutes: [Schema.Types.ObjectId],
     },
-    state: String,
+    isPlayed: Boolean,
     result: {
         club1: Number,
         club2: Number,
