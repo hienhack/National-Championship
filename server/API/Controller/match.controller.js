@@ -137,15 +137,10 @@ class MatchController {
             queries.$or = [{"club1.clubId": clubId},{"club2.clubId": clubId}];
         }
         console.log(queries);
-        const matchs = await matchModel.find(queries);
-        console.log(matchs);
-        if(matchs.length > 0){
-            res.status(200).send({ message: "success", data: matchs });
+        const matches = await matchModel.find(queries);
+        console.log(matches);
+        res.status(200).send({ message: "success", data: matches });
             return;
-        }else{
-            res.status(400).send({message: "failed"});
-            return;
-        }
         
     }
 
