@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Navigate, Routes, Route, useNavigate } from "react-router-dom";
 import $ from "jquery";
-
+import axios from "axios"
 import "../../style/myteam.css";
 import { Col, Row } from "antd";
 import muImage from "../../assets/imgs/mu.png";
+const API = 'http://127.0.0.1:5000/player'
+
 function MyTeam() {
   return (
     <Routes>
@@ -20,6 +22,26 @@ function MyTeam() {
 
 
 function AllTeam() {
+  const [listPlayer, setListPlayer] = useState([]);
+
+  useEffect(() => {
+
+
+    axios.get(API, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      }
+    }).
+      then(response => {
+        setListPlayer(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
+
   const navigate = useNavigate();
   const handleOnClick = useCallback(
     () => navigate("../add", { replace: true }),
@@ -59,47 +81,53 @@ function AllTeam() {
           <thead className="thead-dark">
             <tr>
               <th><i className="fa fa-user"></i> Cầu thủ</th>
-              <th><i className="fa fa-users"></i> Đội bóng</th>
+              <th><i className="fa fa-users"></i> Vị trí</th>
+
               <th><i className="fa fa-calendar-alt"></i> Ngày sinh</th>
               <th ><i className="fa fa-flag"></i> Quốc tịch</th>
-              <th ><i className="fa fa-futbol" />Bàn thắng</th>
+              <th><i className="fa fa-flag"></i> Hình ảnh</th>
+              {/* <th ><i className="fa fa-futbol" />Bàn thắng</th>
               <th><i className="fa fa-shoe-prints" />Kiến tạo</th>
               <th><i className="fa fa-file fa-file-yellow" />Thẻ vàng</th>
-              <th><i className="fa fa-file fa-file-red" />Thẻ đỏ</th>
+              <th><i className="fa fa-file fa-file-red" />Thẻ đỏ</th> */}
               <th> Cập nhật</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <a data-toggle="modal" data-target="#largeModal"><strong> Trần Văn Thật
-                </strong></a>
-                <br></br>
-                Tiền đạo
-              </td>
-              <td>CTT3</td>
-              <td>20/04/2002</td>
-              <td>Việt Nam</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-              <td>
-                <button
-                  type="button"
-                  className="btn btn-danger"
+            {listPlayer.map((i, index) => (
+              <tr key={`player_${index}`}>
 
-                  onClick={() => {
-                    handleOnClick1();
-                  }}
-                >
-                  Sửa
+                <td>
+                  <a data-toggle="modal" data-target="#largeModal"> {i.name}
+                  </a>
 
-                </button>
-              </td>
+                </td>
+                <td>{i.position}</td>
+                <td>{i.dob}</td>
+                <td>{i.nationality}</td>
+                <td><img
+                  src={i.image}
+                  alt=""
+                  height={80}
+                  width={80}
+                ></img></td>
 
-            </tr>
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
 
+                    onClick={() => {
+                      handleOnClick1();
+                    }}
+                  >
+                    Sửa
+
+                  </button>
+                </td>
+
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
