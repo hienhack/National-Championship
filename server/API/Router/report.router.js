@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const reportController = require('../Controller/report.controller');
 
-router.get('/:seasonId/standings', (req, res) => { res.status(200).send({message: 'Not implemented'}); });
-router.get('/:seasonId/goals', (req, res) => { res.status(200).send({message: 'Not implemented'}); });
+router.get('/:seasonId/standings',reportController.getStandings);
+router.get('/:seasonId/goals', reportController.getGoals);
 
 module.exports = router;
