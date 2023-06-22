@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Navigate, Routes, Route, useNavigate } from "react-router-dom";
 import $ from "jquery";
+import axios from "axios";
 
 import "../../style/myteam.css";
 import { Col, Row } from "antd";
 import muImage from "../../assets/imgs/mu.png";
+
+const API = "http://127.0.0.1:5000/match";
+
 function MyCalendar() {
   return (
     <Routes>
@@ -13,12 +17,33 @@ function MyCalendar() {
       <Route path="all" element={<AllCalendar />} />
       <Route path="add" element={<AddMatch />} />
       <Route path="edit" element={<EditMatch />} />
-
     </Routes>
   );
 }
 
 function AllCalendar() {
+  const [listMatch, setListMatch] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(API, {
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+        },
+      })
+      .then((response) => {
+        setListMatch(response.data.data);
+        console.log(response.data.data);
+      })
+      .catch((err) => { });
+  }, []);
+
+  function convertToLocalDate(utcDateTime) {
+    var utcDate = new Date(utcDateTime);
+    var localDate = utcDate.toLocaleString();
+    return localDate;
+  }
   const navigate = useNavigate();
   const handleOnClick = useCallback(
     () => navigate("../add", { replace: true }),
@@ -47,16 +72,17 @@ function AllCalendar() {
           >
             Tạo lịch đấu
           </button>
-
-
         </div>
       </div>
-      <div class="animated fadeIn" style={{ margin: "0px 20px", marginTop: 20 }}>
+      <div
+        class="animated fadeIn"
+        style={{ margin: "0px 20px", marginTop: 20 }}
+      >
         <div class="row">
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <strong class="card-title">Thông tin trận đấu - Vòng </strong>
+                <strong class="card-title">Thông tin trận đấu</strong>
               </div>
               <div class="card-body">
                 <table
@@ -66,13 +92,7 @@ function AllCalendar() {
                   <thead class="thead-dark">
                     <tr>
                       <th>
-                        <select id="round" class="form-control">
-                          <option selected>Vòng 1</option>
-                          <option>Vòng 2</option>
-                          <option>Vòng 3</option>
-                          <option>Vòng 4</option>
-                          <option>Vòng 5</option>
-                        </select>{" "}
+                        <i className="fa fa-users"></i> Vòng
                       </th>
                       <th>
                         <i className="fa fa-users"></i> Đội nhà
@@ -95,26 +115,26 @@ function AllCalendar() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>MU</td>
-                      <td>MCI</td>
-                      <td>Old Trafford</td>
-                      <td></td>
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-danger"
-
-                          onClick={() => {
-                            handleOnClick1();
-                          }}
-                        >
-                          Sửa
-
-                        </button>
-                      </td>
-                    </tr>
+                    {listMatch.map((i, index) => (
+                      <tr key={`match_${index}`}>
+                        <td>{i.round}</td>
+                        <td>MU</td>
+                        <td>MCI</td>
+                        <td>{i.stadium}</td>
+                        <td>{convertToLocalDate(i.date_time)}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => {
+                              handleOnClick1();
+                            }}
+                          >
+                            Sửa
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -277,9 +297,7 @@ function AddMatch() {
                         name="viTriThiDau"
                         className="form-control"
                         required="required"
-                      >
-
-                      </input>
+                      ></input>
                     </div>
                   </div>
                   <div className="row form-group" style={{ marginBottom: 15 }}>
@@ -298,8 +316,6 @@ function AddMatch() {
                       />
                     </div>
                   </div>
-
-
                 </form>
               </div>
               <div
@@ -435,9 +451,7 @@ function EditMatch() {
                         name="viTriThiDau"
                         className="form-control"
                         required="required"
-                      >
-
-                      </input>
+                      ></input>
                     </div>
                   </div>
                   <div className="row form-group" style={{ marginBottom: 15 }}>
@@ -456,8 +470,6 @@ function EditMatch() {
                       />
                     </div>
                   </div>
-
-
                 </form>
               </div>
               <div
@@ -487,7 +499,6 @@ function EditMatch() {
     </div>
   );
 }
-
 
 function Content(props) {
   return (

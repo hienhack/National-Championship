@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Select } from 'antd';
+import axios from "axios"
 
 import { Navigate, Routes, Route, useNavigate } from "react-router-dom";
 import "../../style/myteam.css";
 import { Col, Row } from "antd";
 import muImage from "../../assets/imgs/mu.png";
+
+const API = 'http://127.0.0.1:5000/season'
+
 function MyProfile() {
+
+
   return (
     <Routes>
       <Route index element={<Navigate to="all" replace />} />
@@ -55,6 +61,27 @@ const alleague = [
 ];
 
 function AllLeague() {
+  const [listAccount, setList] = useState([]);
+
+  useEffect(() => {
+
+
+    axios.get(API, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      }
+    }).
+      then(response => {
+        setList(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
+
   const navigate = useNavigate();
   const handleOnClick = useCallback(
     () => navigate("../add", { replace: true }),
@@ -85,9 +112,9 @@ function AllLeague() {
           </button>
         </div>
       </div>
-      <div className="myTeamContainer">
+      <div className="myTeamContainer" style={{ margin: "0px 20px" }}>
         <Row gutter={[36, 36]} style={{ padding: "0px 20px" }}>
-          {alleague.map((i, index) => (
+          {listAccount.map((i, index) => (
             <Col md={{ span: 6 }} xs={24} key={`analytic_${index}`}>
               <div
                 style={{
@@ -95,24 +122,31 @@ function AllLeague() {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  padding: "10px 0px",
+                  padding: "10px 10px",
                   background: "white",
+                  minHeight: "150px"
                 }}
               >
-                <div style={{ fontSize: 20, fontWeight: "bold" }}>{i.name}</div>
-                <img
+                <div style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{i.seasonName}</div>
+                {/* <img
                   src={i.image}
                   style={{ margin: "10px 0px" }}
                   alt=""
                   height={80}
                   width={80}
-                ></img>
+                ></img> */}
                 <button
                   type="button"
                   className="btn btn-danger"
-                  style={{ width: 140 }}
+
+                  style={{
+                    width: 140, display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end"
+                  }}
                   onClick={() => {
                     handleOnClick1();
+
                   }}
                 >
                   Xem thông tin
@@ -201,7 +235,7 @@ function AddLeague() {
                 >
                   <div className="row form-group" style={{ marginBottom: 15 }}>
                     <div className="col col-md-3 ">
-                      <label for="tendoibong" className=" form-control-label ">
+                      <label htmlFor="tendoibong" className=" form-control-label ">
                         Tên giải đấu
                       </label>
                     </div>
