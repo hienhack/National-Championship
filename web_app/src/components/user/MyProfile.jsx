@@ -73,7 +73,8 @@ function AllLeague() {
       }
     }).
       then(response => {
-        setList(response.data.data)
+        setList(response.data.data);
+        console.log(response.data.data)
 
       }).catch(err => {
       })
@@ -234,7 +235,7 @@ function AddLeague() {
                 >
                   <div className="row form-group" style={{ marginBottom: 15 }}>
                     <div className="col col-md-3 ">
-                      <label for="tendoibong" className=" form-control-label ">
+                      <label htmlFor="tendoibong" className=" form-control-label ">
                         Tên giải đấu
                       </label>
                     </div>
