@@ -8,11 +8,13 @@ const matchSchema = mongoose.Schema({
     stadium: String,
     club1: {
         clubId: Schema.Types.ObjectId,
+        name: String,
         appearances: [Schema.Types.ObjectId],
         substitutes: [Schema.Types.ObjectId],
     },
     club2: {
         clubId: Schema.Types.ObjectId,
+        name: String,
         appearances: [Schema.Types.ObjectId],
         substitutes: [Schema.Types.ObjectId],
     },
