@@ -5,6 +5,15 @@ const fs = require('fs');
 const path = require('path');
 
 class ClubController {
+    async getAll(req,res) {
+        try {
+            const clubs = await clubModel.find();
+            res.status(200).send({message: "Get all club successfully", data: clubs});
+        } catch (error) {
+            res.status(400).send({message: "Couldn't get all club", error: error});
+        }
+    }
+
     async createClub(req,res) {
         const club = req.body;
         club.seasons = [];

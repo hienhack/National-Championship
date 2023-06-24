@@ -3,6 +3,7 @@ const router = express.Router();
 const clubController = require('../Controller/club.controller');
 const uploader = require('../../Util/imageParser');
 
+router.get('/', clubController.getAll());
 router.post('/create', uploader.single("image"), clubController.createClub);
 router.post('/add-player', clubController.addPlayer);
 router.post('/update', uploader.single("image"), clubController.updateClub);
