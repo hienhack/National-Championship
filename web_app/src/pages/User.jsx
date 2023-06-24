@@ -17,8 +17,8 @@ function User() {
     <Routes>
 
       <Route path='/' element={<HomeUser />}>
-        <Route index element={<Navigate to="home" replace />} />
-        <Route path="home/*" element={<MyProfile />} />
+        <Route index element={<Navigate to="season" replace />} />
+        <Route path="season/*" element={<MyProfile />} />
         <Route path="team/*" element={<MyTeam />} />
         <Route path="player/*" element={<MyPlayer />} />
         <Route path="rule/*" element={<MyRule />} />

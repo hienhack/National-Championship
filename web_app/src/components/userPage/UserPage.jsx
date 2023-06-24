@@ -1,100 +1,128 @@
-import React, { useState, useEffect } from "react";
-// import ContentUser from "../content/ContentUser";
-// import DescribeContentUser from "../content/DescribeContentUser";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 
+import { Link } from "react-router-dom";
+import TourIcon from '@mui/icons-material/Tour';
 // import { Component } from "react";
 import style1 from "./style1.module.css";
 import "./style1.module.css";
-// import "../../style/styleGlobal.js/index.js"
-import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import AssignmentTurnedInOutlinedIcon from "@mui/icons-material/AssignmentTurnedInOutlined";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import vnImage from "../../assets/imgs/vn.png";
+import "../../css/style.css"
 
-
+import logo from "../../assets/imgs/logo.png";
+import PersonIcon from '@mui/icons-material/Person';
+import GroupsIcon from '@mui/icons-material/Groups';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 function UserPage() {
-  const [listAccount, setList] = useState([]);
+  // const [listAccount, setList] = useState([]);
 
   return (
     <>
-      <div className={style1.App}>
-        <div className={style1.Sidebar}>
-          <img src={vnImage} style={{ marginLeft: "90px" }} alt="" height={86} width={86}></img>
+      <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+        crossorigin="anonymous"
+      />
+      <link rel="stylesheet" href="web_app\src\font-awesome-4.7.0\css\font-awesome.min.css" />
 
-          <ul className={style1.SidebarList} style={{ borderTop: "1px solid black" }}>
+      <script
+        src="https://code.jquery.com/jquery-3.7.0.slim.min.js"
+        integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE="
+        crossorigin="anonymous"
+      ></script>
 
-            <Link to="/user/home">
-              <li className={style1.row}>
-                <div id={style1.icon}>
-                  <HomeOutlinedIcon />
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"
+      ></script>
+      <script src="https://kit.fontawesome.com/8a19b96b6e.js" crossorigin="anonymous"></script>
+      <div className="wrapper">
+
+        <div className="sidebar d-flex flex-column">
+          <div className="sidebar-header ps-4">
+            <img alt="" src={logo} className="app-logo"></img>
+          </div>
+          <hr className="mt-0 mx-4 text-secondary" />
+          <div className="menu flex-fill px-4">
+            <div className="submenu">
+              <div className="submenu-btn active" data-bs-toggle="collapse" data-bs-target="#home-menu"
+                aria-expanded="true">
+                <i className="fa-solid fa-flag"><TourIcon></TourIcon></i>&emsp;Mùa giải
+                <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
+              </div>
+              <ul className="collapse show" id="home-menu">
+                <li className="menu-item active"><Link to="/season">Danh sách mùa giải</Link></li>
+              </ul>
+            </div>
+            <h6 className="text-secondary mt-3">Hồ sơ mùa giải</h6>
+            <hr className="text-secondary" />
+            <div className="d-flex flex-column gap-2">
+              <div className="submenu">
+                <div className="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#club-menu"
+                  aria-expanded="false">
+                  <i className="fa-solid fa-users"><GroupsIcon></GroupsIcon></i>&emsp;Đội bóng
+                  <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
-                {""}
-                <div id={style1.title}>Giải đấu</div>
-              </li>
-            </Link>
-            <Link to="/user/team">
-              <li className={style1.row}>
-                <div id={style1.icon}>
-                  <GroupsOutlinedIcon />
+                <ul className="collapse" id="club-menu">
+                  <li className="menu-item"><a href="#">Danh sách đội bóng</a></li>
+                  <li className="menu-item"><a href="#">Đăng ký đội bóng</a></li>
+                </ul>
+              </div>
+              <div className="submenu">
+                <div className="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#player-menu"
+                  aria-expanded="false">
+                  <i className="fa-solid fa-user"><PersonIcon></PersonIcon></i>&emsp;Cầu thủ
+                  <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
-                {""}
-                <div id={style1.title}>Đội bóng</div>
-              </li>
-            </Link>
-            <Link to="/user/player">
-              <li className={style1.row}>
-                <div id={style1.icon}>
-                  <PersonOutlineOutlinedIcon />
+                <ul className="collapse" id="player-menu">
+                  <li className="menu-item"><a href="#">Danh sách cầu thủ</a></li>
+                  <li className="menu-item"><a href="#">Đăng ký cầu thủ</a></li>
+                </ul>
+              </div>
+              <div className="submenu">
+                <div className="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#schedule-menu"
+                  aria-expanded="false">
+                  <i className="fa-solid fa-calendar"><CalendarMonthIcon></CalendarMonthIcon></i>&emsp;Lịch thi đấu
+                  <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
-                {""}
-                <div id={style1.title}>Cầu thủ</div>
-              </li>
-            </Link>
-            <Link to="/user/calendar">
-              <li className={style1.row}>
-                <div id={style1.icon}>
-                  <CalendarMonthOutlinedIcon />
+                <ul className="collapse" id="schedule-menu">
+                  <li className="menu-item"><a href="#">Xem lịch thi đấu</a></li>
+                  <li className="menu-item"><a href="#">Tạo lịch thi đấu</a></li>
+                </ul>
+              </div>
+              <div className="submenu">
+                <div className="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#result-menu"
+                  aria-expanded="false">
+                  <i className="fa-solid fa-clipboard"><ContentPasteIcon></ContentPasteIcon></i>&emsp;Kết quả
+                  <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
-                {""}
-                <div id={style1.title}>Lịch thi đấu</div>
-              </li>
-            </Link>
-            <Link to="/user/result">
-              <li className={style1.row}>
-                <div id={style1.icon}>
-                  <DescriptionOutlinedIcon />
+                <ul className="collapse" id="result-menu">
+                  <li className="menu-item"><a href="#">ds</a></li>
+                  <li className="menu-item"><a href="#">dsf</a></li>
+                  <li className="menu-item"><a href="#">sdf</a></li>
+                </ul>
+              </div>
+              <div className="submenu">
+                <div className="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#report-menu"
+                  aria-expanded="false">
+                  <i className="fa-solid fa-paste"><ContentPasteSearchIcon></ContentPasteSearchIcon></i>&emsp;Báo cáo
+                  <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
-                {""}
-                <div id={style1.title}>Kết quả trận đấu</div>
-              </li>
-            </Link>
-            <Link to="/user/report">
-              <li className={style1.row}>
-                <div id={style1.icon}>
-                  <AssignmentTurnedInOutlinedIcon />
-                </div>
-                {""}
-                <div id={style1.title}>Báo cáo</div>
-              </li>
-            </Link>
-            <Link to="/user/rule">
-              <li className={style1.row}>
-                <div id={style1.icon}>
-                  <ContentPasteOutlinedIcon />
-                </div>
-                {""}
-                <div id={style1.title}>Điều lệ giải</div>
-              </li>
-            </Link>
-          </ul>
+                <ul className="collapse" id="report-menu">
+                  <li className="menu-item"><a href="#">Bảng xếp hạng</a></li>
+                  <li className="menu-item"><a href="#">Danh sách ghi bàn</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
+
+
+
   );
 }
 
