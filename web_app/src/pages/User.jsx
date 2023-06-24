@@ -19,7 +19,7 @@ function User() {
       <Route path='/' element={<HomeUser />}>
         <Route index element={<Navigate to="season" replace />} />
         <Route path="season/*" element={<MyProfile />} />
-        <Route path="team/*" element={<MyTeam />} />
+        <Route path="club/*" element={<MyTeam />} />
         <Route path="player/*" element={<MyPlayer />} />
         <Route path="rule/*" element={<MyRule />} />
         <Route path="report/*" element={<MyReport />} />

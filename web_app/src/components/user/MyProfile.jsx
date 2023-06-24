@@ -301,7 +301,7 @@ function EditLeague() {
   return (
     <div className="contentUser">
       <Content />
-      <div className="main">
+      <div className="main-wrapper">
 
 
         <div className="d-flex flex-column gap-4 p-4">
@@ -410,7 +410,7 @@ function InfoLeague() {
 
       <div className="contentUser">
         <Content />
-        <div className="main">
+        <div className="main-wrapper">
 
 
           <div className="d-flex flex-column gap-4 p-4">
