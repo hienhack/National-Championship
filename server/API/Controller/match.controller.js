@@ -140,7 +140,7 @@ class MatchController {
         const matches = await matchModel.find(queries);
         console.log(matches);
         res.status(200).send({ message: "success", data: matches });
-            return;
+        return;
         
     }
 

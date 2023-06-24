@@ -9,7 +9,7 @@ router.post('/update', uploader.single("image"), clubController.updateClub);
 router.post('/delete', clubController.deleteClub);
 router.post('/delete-player', clubController.deletePlayerFromClub);
 
-// trả về thông _id, name, image, coach, players list, mỗi player có shirtNumber, image, name
+// trả về thông _id, name, image, coach, players list, mỗi player có shirtNumber, image, name, stadium
 router.get('/:clubId/:seasonId', clubController.getClub);
 
 
@@ -21,6 +21,6 @@ router.get('/:clubId/:seasonId', clubController.getClub);
  // query chỉ có seasonId ->  trả về tất cả trong mùa giải
  // có cả name và seasonId -> có tên khớp và có trong mùa giải (này viểt ra thoi, chưa cần xử lý)
  // không có gì, trả về tất cả
-router.get('/', (req, res) => res.status(501).send({message: "not implemented"}));
+router.get('/', clubController.findClub);
 
 module.exports = router;
