@@ -10,34 +10,31 @@ class SeasonController {
 
         const year = req.params.year;
         if (year === RECENT_YEAR_QUERY) {
-            result = await seasonModel.find().sort({ yearStart: -1 }).limit(1);
+            result = await seasonModel.find().sort({ year: -1 }).limit(1);
         } else {
-            const pattern = /^\d+-\d+$/;
+            const pattern = /^\d+$/;
             if (year.match(pattern)) {
-                const start = parseInt(year.split('-')[0]);
-                const end = parseInt(year.split('-')[1]);
-                result = await seasonModel.findOne({ yearStart: start, yearEnd: end });
+                result = await seasonModel.findOne({ year: parseInt(year) });
             } else {
-                res.status(400).send({ message: "Invalid URL format" });
+                res.status(400).send({ message: "invalid URL format" });
                 return;
             }
         }
 
         if (result == null) {
-            res.status(400).send({ message: "Season not found" });
+            res.status(400).send({ message: "season not found" });
             return;
         }
         result.clubs = result.clubs.map(async clubId => {
-            let club = await clubModel.findOne({ _id: clubId });
-            const { seasons, ...info } = club;
-            return info;
+            let club = await clubModel.findOne({ _id: clubId }).select('_id name imag');
+            return club;
         });
 
         res.status(200).send({ message: "success", data: result });
     }
 
     async getAllSeason(req, res) {
-        const result = await seasonModel.find();
+        const result = await seasonModel.find().select('_id seasonName year start end');
 
         res.status(200).send({ message: "success", data: result });
     }
@@ -50,25 +47,25 @@ class SeasonController {
         try {
             await document.save();
         } catch(error) {
-            res.status(400).send({ message: "Invalid season" });
+            res.status(400).send({ message: "invalid season" });
             return;
         }
 
-        res.status(200).send({ message: "Added Successfully" });
+        res.status(200).send({ message: "added successfully" });
     }
 
     async update(req, res) {
         const { _id, ...updated} = req.body;
         
         const rs = await seasonModel.findOneAndUpdate({ _id: _id }, updated, { new: true});
-        res.status(200).send({ message: "Undated Successfully" });
+        res.status(200).send({ message: "updated successfully" });
     }
 
     async delete(req, res) {
         const id = req.body.id;
         await seasonModel.deleteOne({ _id: id });
 
-        res.status(200).send({ message: "Deleted Successfully" });
+        res.status(200).send({ message: "deleted successfully" });
     }
 
     async addClub(req, res) {
@@ -83,7 +80,7 @@ class SeasonController {
         club.seasons.push(seasonId);
         club.save();
 
-        res.status(200).send({ message: "Added Successfully"});
+        res.status(200).send({ message: "added successfully"});
     }
 
     async removeClub(req, res) {
@@ -98,7 +95,7 @@ class SeasonController {
         club.seasons.splice(club.seasons.indexOf(seasonId), 1);
         club.save();
 
-        res.status(200).send({ message: "Added Successfully"});
+        res.status(200).send({ message: "removed successfully"});
     }
 }
 
