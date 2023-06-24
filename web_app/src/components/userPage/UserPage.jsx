@@ -15,7 +15,11 @@ import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 function UserPage() {
   // const [listAccount, setList] = useState([]);
+  const [activeMenuItem, setActiveMenuItem] = useState('');
 
+  const handleMenuClick = (menuItem) => {
+    setActiveMenuItem(menuItem);
+  };
   return (
     <>
       <link
@@ -53,7 +57,7 @@ function UserPage() {
                 <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
               </div>
               <ul className="collapse show" id="home-menu">
-                <li className="menu-item active"><Link to="/season">Danh sách mùa giải</Link></li>
+                <li className={`menu-item ${activeMenuItem === 'season' ? 'active' : ''}`} onClick={() => handleMenuClick('season')}><Link to="/season">Danh sách mùa giải</Link></li>
               </ul>
             </div>
             <h6 className="text-secondary mt-3">Hồ sơ mùa giải</h6>
@@ -66,7 +70,7 @@ function UserPage() {
                   <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
                 <ul className="collapse" id="club-menu">
-                  <li className="menu-item"><a href="#">Danh sách đội bóng</a></li>
+                  <li className={`menu-item ${activeMenuItem === 'team' ? 'active' : ''}`} onClick={() => handleMenuClick('team')}><Link to="/team">Danh sách đội bóng</Link></li>
                   <li className="menu-item"><a href="#">Đăng ký đội bóng</a></li>
                 </ul>
               </div>
