@@ -15,7 +15,7 @@ import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 function UserPage() {
   // const [listAccount, setList] = useState([]);
-  const [activeMenuItem, setActiveMenuItem] = useState('');
+  const [activeMenuItem, setActiveMenuItem] = useState('season');
 
   const handleMenuClick = (menuItem) => {
     setActiveMenuItem(menuItem);
@@ -26,22 +26,22 @@ function UserPage() {
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
         rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-        crossorigin="anonymous"
+        crossOrigin="anonymous"
       />
       <link rel="stylesheet" href="web_app\src\font-awesome-4.7.0\css\font-awesome.min.css" />
 
       <script
         src="https://code.jquery.com/jquery-3.7.0.slim.min.js"
         integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE="
-        crossorigin="anonymous"
+        crossOrigin="anonymous"
       ></script>
 
       <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
         integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
-        crossorigin="anonymous"
+        crossOrigin="anonymous"
       ></script>
-      <script src="https://kit.fontawesome.com/8a19b96b6e.js" crossorigin="anonymous"></script>
+      <script src="https://kit.fontawesome.com/8a19b96b6e.js" crossOrigin="anonymous"></script>
       <div className="wrapper">
 
         <div className="sidebar d-flex flex-column">
@@ -70,8 +70,8 @@ function UserPage() {
                   <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
                 <ul className="collapse" id="club-menu">
-                  <li className={`menu-item ${activeMenuItem === 'team' ? 'active' : ''}`} onClick={() => handleMenuClick('team')}><Link to="/team">Danh sách đội bóng</Link></li>
-                  <li className="menu-item"><a href="#">Đăng ký đội bóng</a></li>
+                  <li className={`menu-item ${activeMenuItem === 'club' ? 'active' : ''}`} onClick={() => handleMenuClick('club')}><Link to="/club">Danh sách đội bóng</Link></li>
+                  <li className={`menu-item ${activeMenuItem === 'club/add' ? 'active' : ''}`} onClick={() => handleMenuClick('club/add')}><Link to="/club/add">Đăng ký đội bóng</Link></li>
                 </ul>
               </div>
               <div className="submenu">
@@ -81,8 +81,8 @@ function UserPage() {
                   <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
                 <ul className="collapse" id="player-menu">
-                  <li className="menu-item"><a href="#">Danh sách cầu thủ</a></li>
-                  <li className="menu-item"><a href="#">Đăng ký cầu thủ</a></li>
+                  <li className={`menu-item ${activeMenuItem === 'player' ? 'active' : ''}`} onClick={() => handleMenuClick('player')}><Link to="/player">Danh sách cầu thủ</Link></li>
+                  <li className={`menu-item ${activeMenuItem === 'player/add' ? 'active' : ''}`} onClick={() => handleMenuClick('player/add')}><Link to="/player/add">Đăng ký cầu thủ</Link></li>
                 </ul>
               </div>
               <div className="submenu">

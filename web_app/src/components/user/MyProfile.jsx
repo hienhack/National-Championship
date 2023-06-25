@@ -10,8 +10,10 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
 import $ from "jquery";
+import moment from 'moment';
 
-const API = 'http://127.0.0.1:5000/season'
+const API = 'http://127.0.0.1:5000/api/season';
+
 function MyProfile() {
 
 
@@ -27,40 +29,7 @@ function MyProfile() {
   );
 }
 
-const alleague = [
-  {
-    image: muImage,
-    name: "Manchester United",
-  },
-  {
-    image: muImage,
-    name: "Manchester United",
-  },
-  {
-    image: muImage,
-    name: "Manchester United",
-  },
-  {
-    image: muImage,
-    name: "Manchester United",
-  },
-  {
-    image: muImage,
-    name: "Manchester United",
-  },
-  {
-    image: muImage,
-    name: "Manchester United",
-  },
-  {
-    image: muImage,
-    name: "Manchester United",
-  },
-  {
-    image: muImage,
-    name: "Manchester United",
-  },
-];
+
 
 function AllLeague() {
   const [listAccount, setList] = useState([]);
@@ -84,6 +53,12 @@ function AllLeague() {
 
   }, [])
 
+
+
+  const formatDate = (dateString) => {
+    return moment(dateString).format('DD-MM-YYYY');
+  };
+
   const navigate = useNavigate();
   const handleOnClick = useCallback(
     () => navigate("../edit", { replace: true }),
@@ -101,48 +76,38 @@ function AllLeague() {
         <div className="d-flex flex-column gap-4 p-4">
           <h5 className="m-0">Danh sách mùa giải</h5>
           <ol className="list-group list-group-numbered gap-2">
-            <li className="list-group-item rounded-2 d-flex justify-content-between align-items-center">
-              <div className="ms-4 ps-4 me-auto border-start">
-                <div className=" fw-bold">Vô địch quốc gia 2023</div>
-                <div>
-                  <small>Năm: 2023</small>&emsp;&emsp;
-                  <small>Bắt đầu: 11/11/2022</small>&emsp;&emsp;
-                  <small>Kết thúc: 11/11/2023</small>&emsp;&emsp;
+            {listAccount.map((i, index) => (
+
+              <li className="list-group-item rounded-2 d-flex justify-content-between align-items-center" key={`season_${index}`}>
+                <div className="ms-4 ps-4 me-auto border-start">
+                  <div className=" fw-bold">{i.seasonName}</div>
+                  <div>
+                    <small>Năm: {i.year}</small>&emsp;&emsp;
+                    <small>Bắt đầu: {formatDate(i.start)}</small>&emsp;&emsp;
+                    <small>Kết thúc: {formatDate(i.end)}</small>&emsp;&emsp;
+                  </div>
                 </div>
-              </div>
-              <div className="d-flex gap-1">
-                <button className="btn btn-light" title="Xem chi tiết" onClick={() => {
-                  handleOnClick1()
-                }}><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
-                <button className="btn btn-light" title="Xóa"><DeleteIcon></DeleteIcon></button>
-                <button className="btn  btn-light" title="Sửa thông tin" onClick={() => {
-                  handleOnClick()
-                }}><BuildIcon></BuildIcon></button>
-              </div>
-            </li>
-            <li className="list-group-item rounded-2 d-flex justify-content-between align-items-center">
-              <div className="ms-4 ps-4 me-auto border-start">
-                <div className=" fw-bold">Vô địch quốc gia 2022</div>
-                <div>
-                  <small>Năm: 2022</small>&emsp;&emsp;
-                  <small>Bắt đầu: 11/11/2021</small>&emsp;&emsp;
-                  <small>Kết thúc: 11/11/2022</small>&emsp;&emsp;
+                <div className="d-flex gap-1">
+                  <button className="btn btn-light" title="Xem chi tiết" onClick={() => {
+                    handleOnClick1();
+                    localStorage.setItem("seasonSelected", i.year);
+
+                  }}><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
+                  <button className="btn btn-light" title="Xóa"><DeleteIcon></DeleteIcon></button>
+                  <button className="btn  btn-light" title="Sửa thông tin" onClick={() => {
+                    handleOnClick()
+                  }}><BuildIcon></BuildIcon></button>
                 </div>
-              </div>
-              <div className="d-flex gap-1">
-                <button className="btn btn-light" title="Xem chi tiết"><i
-                  className="fa-solid fa-circle-info"></i></button>
-                <button className="btn btn-light" title="Xóa"><i className="fa-solid fa-trash-can"></i></button>
-                <button className="btn set-season-btn" title="Thiết lập cho phiên hoạt động"><i
-                  className="fa-solid fa-gear"></i></button>
-              </div>
-            </li>
+              </li>
+            ))}
+
+
           </ol>
           <div className="btn btn-light w-100 m-auto text-secondary" data-bs-toggle="modal"
             data-bs-target="#add-season-modal">
             <i className="fa-solid fa-circle-plus"></i>&emsp;Thêm mùa giải
           </div>
-          <div className="modal fade" id="add-season-modal" tabindex="-1" aria-hidden="true">
+          <div className="modal fade" id="add-season-modal" tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog modal-lg">
               <div className="modal-content">
                 <div className="modal-header">
@@ -285,121 +250,32 @@ function ContentPreview() {
 
 
 function EditLeague() {
-  const navigate = useNavigate();
-  const handleOnClick = useCallback(
-    () => navigate("../edit", { replace: true }),
-    [navigate]
-  );
-  const options = [{
-    value: "MU",
-    label: "MU",
-  },
-  {
-    value: "MCI",
-    label: "MCI"
-  }];
-  return (
-    <div className="contentUser">
-      <Content />
-      <div className="main">
+  const [season, setSeason] = useState(null);
+  const id = localStorage.getItem("seasonSelected");
+  const formatDate = (dateString) => {
+    return moment(dateString).format('YYYY-MM-DD');
+  };
+
+  useEffect(() => {
 
 
-        <div className="d-flex flex-column gap-4 p-4">
-          <h5 className="m-0">Chi tiết mùa giải</h5>
-          <div className="bg-white shadow-sm p-4">
-            <form id="season-edit-form">
-              <div className="d-flex flex-column gap-3">
-                <h6 className="fw-bold text-secondary mb-1">Thông tin mùa giải</h6>
-                <div>
-                  <label className="fs-8 mb-1">Tên mùa giải</label>
-                  <div className="input-group">
-                    <input type="text" className="form-control" readonly />
-                  </div>
-                </div>
-                <div className="row row-cols-3 gx-3">
-                  <div className="col">
-                    <label className="fs-8 mb-1">Năm</label>
-                    <div className="input-group">
-                      <input type="number" className="form-control" readonly />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <label className="fs-8 mb-1">Ngày bắt đầu</label>
-                    <div className="input-group">
-                      <input type="date" className="form-control" readonly />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <label className="fs-8 mb-1">Ngày kết thúc</label>
-                    <div className="input-group">
-                      <input type="date" className="form-control" readonly />
-                    </div>
-                  </div>
-                </div>
-                <hr className="mb-1" />
-                <h6 className="fw-bold text-secondary mb-1">Điều lệ giải</h6>
-                <div className="row row-cols-3 g-3">
-                  <div className="col">
-                    <label className="fs-8 mb-1">Số đội bóng</label>
-                    <div className="input-group">
-                      <input type="number" className="form-control" readonly />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <label className="fs-8 mb-1">Số cầu thủ tối đa/đội</label>
-                    <div className="input-group">
-                      <input type="number" className="form-control" readonly />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <label className="fs-8 mb-1">Số ngoại binh tối đa/đội</label>
-                    <div className="input-group">
-                      <input type="number" className="form-control" readonly />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <label className="fs-8 mb-1">Vị trí xuống hạng</label>
-                    <div className="input-group">
-                      <input type="number" className="form-control" readonly />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <label className="fs-8 mb-1">Số trận treo giò/thẻ đỏ</label>
-                    <div className="input-group">
-                      <input type="number" className="form-control" readonly />
-                    </div>
-                  </div>
-                  <div className="col">
-                    <label className="fs-8 mb-1">Tuổi cầu thủ nhỏ nhất</label>
-                    <div className="input-group">
-                      <input type="number" className="form-control" readonly />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-5 mb-2 d-flex flex-row-reverse gap-2">
-                <button type="button" id="modify-season-btn" className="btn btn-success fload-end" onClick={() => {
-                }}>Lưu</button>
+    axios.get(`${API}/${id}`, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      }
+    }).
+      then(response => {
+        setSeason(response.data.data);
+        console.log(response.data.data)
 
-              </div>
-            </form>
-          </div>
+      }).catch(err => {
+      })
 
-        </div>
-      </div>
-    </div>
-  );
-}
 
-function InfoLeague() {
-  const options = [{
-    value: "MU",
-    label: "MU",
-  },
-  {
-    value: "MCI",
-    label: "MCI"
-  }];
+  }, [])
+
+
   const navigate = useNavigate();
   const handleOnClick = useCallback(
     () => navigate("../edit", { replace: true }),
@@ -410,7 +286,7 @@ function InfoLeague() {
 
       <div className="contentUser">
         <Content />
-        <div className="main">
+        <div className="main-wrapper">
 
 
           <div className="d-flex flex-column gap-4 p-4">
@@ -422,26 +298,26 @@ function InfoLeague() {
                   <div>
                     <label className="fs-8 mb-1">Tên mùa giải</label>
                     <div className="input-group">
-                      <input type="text" className="form-control" readonly />
+                      <input type="text" className="form-control" defaultValue={season?.seasonName} />
                     </div>
                   </div>
                   <div className="row row-cols-3 gx-3">
                     <div className="col">
                       <label className="fs-8 mb-1">Năm</label>
                       <div className="input-group">
-                        <input type="number" className="form-control" readonly />
+                        <input type="number" className="form-control" defaultValue={season?.year} />
                       </div>
                     </div>
                     <div className="col">
                       <label className="fs-8 mb-1">Ngày bắt đầu</label>
                       <div className="input-group">
-                        <input type="date" className="form-control" readonly />
+                        <input type="date" className="form-control" defaultValue={formatDate(season?.start)} />
                       </div>
                     </div>
                     <div className="col">
                       <label className="fs-8 mb-1">Ngày kết thúc</label>
                       <div className="input-group">
-                        <input type="date" className="form-control" readonly />
+                        <input type="date" className="form-control" defaultValue={formatDate(season?.end)} />
                       </div>
                     </div>
                   </div>
@@ -451,37 +327,166 @@ function InfoLeague() {
                     <div className="col">
                       <label className="fs-8 mb-1">Số đội bóng</label>
                       <div className="input-group">
-                        <input type="number" className="form-control" readonly />
+                        <input type="number" className="form-control" defaultValue={season?.rule.totalClubs} />
                       </div>
                     </div>
                     <div className="col">
                       <label className="fs-8 mb-1">Số cầu thủ tối đa/đội</label>
                       <div className="input-group">
-                        <input type="number" className="form-control" readonly />
+                        <input type="number" className="form-control" />
                       </div>
                     </div>
                     <div className="col">
                       <label className="fs-8 mb-1">Số ngoại binh tối đa/đội</label>
                       <div className="input-group">
-                        <input type="number" className="form-control" readonly />
+                        <input type="number" className="form-control" defaultValue={season?.rule.maxForeignPlayer} />
                       </div>
                     </div>
                     <div className="col">
                       <label className="fs-8 mb-1">Vị trí xuống hạng</label>
                       <div className="input-group">
-                        <input type="number" className="form-control" readonly />
+                        <input type="number" className="form-control" defaultValue={season?.rule.demotedPosition} />
                       </div>
                     </div>
                     <div className="col">
                       <label className="fs-8 mb-1">Số trận treo giò/thẻ đỏ</label>
                       <div className="input-group">
-                        <input type="number" className="form-control" readonly />
+                        <input type="number" className="form-control" defaultValue={season?.rule.redCardBanned} />
                       </div>
                     </div>
                     <div className="col">
                       <label className="fs-8 mb-1">Tuổi cầu thủ nhỏ nhất</label>
                       <div className="input-group">
-                        <input type="number" className="form-control" readonly />
+                        <input type="number" className="form-control" defaultValue={season?.rule.minAge} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-5 mb-2 d-flex flex-row-reverse gap-2">
+                  <button type="button" id="modify-season-btn" className="btn btn-success fload-end" onClick={() => {
+                    handleOnClick();
+                  }}>Lưu</button>
+
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function InfoLeague() {
+  const [season, setSeason] = useState(null);
+  const id = localStorage.getItem("seasonSelected");
+  const formatDate = (dateString) => {
+    return moment(dateString).format('YYYY-MM-DD');
+  };
+
+  useEffect(() => {
+
+
+    axios.get(`${API}/${id}`, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      }
+    }).
+      then(response => {
+        setSeason(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
+
+
+  const navigate = useNavigate();
+  const handleOnClick = useCallback(
+    () => navigate("../edit", { replace: true }),
+    [navigate]
+  );
+  return (
+    <>
+
+      <div className="contentUser">
+        <Content />
+        <div className="main-wrapper">
+
+
+          <div className="d-flex flex-column gap-4 p-4">
+            <h5 className="m-0">Chi tiết mùa giải</h5>
+            <div className="bg-white shadow-sm p-4">
+              <form id="season-edit-form">
+                <div className="d-flex flex-column gap-3">
+                  <h6 className="fw-bold text-secondary mb-1">Thông tin mùa giải</h6>
+                  <div>
+                    <label className="fs-8 mb-1">Tên mùa giải</label>
+                    <div className="input-group">
+                      <input type="text" className="form-control" disabled defaultValue={season?.seasonName} />
+                    </div>
+                  </div>
+                  <div className="row row-cols-3 gx-3">
+                    <div className="col">
+                      <label className="fs-8 mb-1">Năm</label>
+                      <div className="input-group">
+                        <input type="number" className="form-control" disabled defaultValue={season?.year} />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <label className="fs-8 mb-1">Ngày bắt đầu</label>
+                      <div className="input-group">
+                        <input type="date" className="form-control" disabled defaultValue={formatDate(season?.start)} />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <label className="fs-8 mb-1">Ngày kết thúc</label>
+                      <div className="input-group">
+                        <input type="date" className="form-control" disabled defaultValue={formatDate(season?.end)} />
+                      </div>
+                    </div>
+                  </div>
+                  <hr className="mb-1" />
+                  <h6 className="fw-bold text-secondary mb-1">Điều lệ giải</h6>
+                  <div className="row row-cols-3 g-3">
+                    <div className="col">
+                      <label className="fs-8 mb-1">Số đội bóng</label>
+                      <div className="input-group">
+                        <input type="number" className="form-control" disabled defaultValue={season?.rule.totalClubs} />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <label className="fs-8 mb-1">Số cầu thủ tối đa/đội</label>
+                      <div className="input-group">
+                        <input type="number" className="form-control" disabled />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <label className="fs-8 mb-1">Số ngoại binh tối đa/đội</label>
+                      <div className="input-group">
+                        <input type="number" className="form-control" disabled defaultValue={season?.rule.maxForeignPlayer} />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <label className="fs-8 mb-1">Vị trí xuống hạng</label>
+                      <div className="input-group">
+                        <input type="number" className="form-control" disabled defaultValue={season?.rule.demotedPosition} />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <label className="fs-8 mb-1">Số trận treo giò/thẻ đỏ</label>
+                      <div className="input-group">
+                        <input type="number" className="form-control" disabled defaultValue={season?.rule.redCardBanned} />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <label className="fs-8 mb-1">Tuổi cầu thủ nhỏ nhất</label>
+                      <div className="input-group">
+                        <input type="number" className="form-control" disabled defaultValue={season?.rule.minAge} />
                       </div>
                     </div>
                   </div>
