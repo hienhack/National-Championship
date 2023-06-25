@@ -9,7 +9,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import "../../style/myteam.css";
 import "../../css/content.css";
 import { Col, Row, Select } from "antd";
+import axios from "axios"
+
 import muImage from "../../assets/imgs/mu.png";
+const API = 'http://127.0.0.1:5000/api/club';
+
 function MyTeam() {
   return (
     <Routes>
@@ -27,6 +31,28 @@ function MyTeam() {
 
 
 function AllTeam() {
+  const [listTeam, setListTeam] = useState([]);
+
+  useEffect(() => {
+
+
+    axios.get(API, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      }
+    }).
+      then(response => {
+        setListTeam(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
+
+
   const navigate = useNavigate();
   const handleOnClick = useCallback(
     () => navigate("../add", { replace: true }),
@@ -40,67 +66,29 @@ function AllTeam() {
     <div className="contentUser">
       <Content />
       <div className="main-wrapper">
-        <header className="header d-flex flex-column justify-content-center px-4">
-          <h5 className="m-0 fw-semibold">QUẢN LÝ GIẢI VÔ ĐỊCH QUỐC GIA</h5>
-          <h6 className="m-0">Vô địch quốc gia Night Wolf 2023</h6>
-        </header>
 
         <div className="main">
           <div className="d-flex flex-column gap-4 p-4">
             <h5 className="m-0">Danh sách đội bóng</h5>
             <div className="row row-cols-4 g-4">
-              <div className="col-4 col-xl-3">
-                <div className="club-card" onClick={() => {
-                  handleOnClick1();
-                }}>
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png"
-                    className="club-logo"></img>
-                  <div className="club-card-body">
-                    <h6 className="club-name">Manchester City</h6>
-                    <ArrowForwardIcon></ArrowForwardIcon>
+              {listTeam.map((i, index) => (
+
+                <div className="col-4 col-xl-3" key={`club_${index}`}>
+                  <div className="club-card" onClick={() => {
+                    handleOnClick1();
+                    localStorage.setItem("clubSelected", i._id);
+
+                  }}>
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png"
+                      className="club-logo"></img>
+                    <div className="club-card-body">
+                      <h6 className="club-name">{i.name}</h6>
+                      <ArrowForwardIcon></ArrowForwardIcon>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-4 col-xl-3">
-                <div className="club-card">
-                  <a href="#">
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png"
-                      className="club-logo"></img>
-                    <div className="club-card-body">
-                      <h6 className="club-name">Manchester City</h6>
-                      <ArrowForwardIcon></ArrowForwardIcon>
-                    </div>
-                  </a>
-                </div>
-              </div>
-              <div className="col-4 col-xl-3">
-                <div className="club-card">
-                  <a href="#">
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png"
-                      className="club-logo"></img>
-                    <div className="club-card-body">
-                      <h6 className="club-name">Manchester City</h6>
-                      <ArrowForwardIcon></ArrowForwardIcon>
-                    </div>
-                  </a>
-                </div>
-              </div>
-              <div className="col-4 col-xl-3">
-                <div className="club-card">
-                  <a href="#">
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png"
-                      className="club-logo"></img>
-                    <div className="club-card-body">
-                      <h6 className="club-name">Manchester City</h6>
-                      <ArrowForwardIcon></ArrowForwardIcon>
-                    </div>
-                  </a>
-                </div>
-              </div>
+              ))}
 
             </div>
           </div>
@@ -219,6 +207,28 @@ function AddTeam() {
 }
 
 function InfoTeam() {
+  const [club, setClub] = useState(null);
+  const idClub = localStorage.getItem("clubSelected");
+  const idSeason = localStorage.getItem("seasonIDSelected");
+
+  useEffect(() => {
+
+
+    axios.get(`${API}/${idClub}/${idSeason}`, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      }
+    }).
+      then(response => {
+        setClub(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
   const navigate = useNavigate();
   const handleOnClick = useCallback(
     () => navigate("../all", { replace: true }),
@@ -254,9 +264,9 @@ function InfoTeam() {
                     src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
                   </img>
                   <div>
-                    <h2 className="text-light mb-4">Sông Lam Nghệ An</h2>
-                    <h6>Sân nhà: Etihad</h6>
-                    <h6>Huấn luyện viên: Pep Guardiola</h6>
+                    <h2 className="text-light mb-4">{club?.name}</h2>
+                    <h6>Sân nhà: {club?.stadium}</h6>
+                    <h6>Huấn luyện viên: {club?.seasons[0]?.coach_name}</h6>
                   </div>
                 </div>
                 <button className="btn btn-light" data-bs-toggle="modal"
@@ -286,19 +296,19 @@ function InfoTeam() {
                             <div>
                               <label className="fs-8 mb-1">Tên câu lạc bộ</label>
                               <div className="input-group">
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" defaultValue={club?.name} />
                               </div>
                             </div>
                             <div>
                               <label className="fs-8 mb-1">Sân nhà</label>
                               <div className="input-group">
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" defaultValue={club?.stadium} />
                               </div>
                             </div>
                             <div>
                               <label className="fs-8 mb-1">Huấn luyện viên</label>
                               <div className="input-group">
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" defaultValue={club?.seasons[0]?.coach_name} />
                               </div>
                             </div>
                           </div>
@@ -498,18 +508,28 @@ function EditPlayer() {
 }
 
 function Content(props) {
+  const [league, setLeague] = useState('')
+  const name = localStorage.getItem("seasonNameSelected");
+  useEffect(() => {
+
+
+    setLeague(name);
+
+
+
+  }, [])
   return (
-    <>
-      <div >
-        <header className="header d-flex flex-column justify-content-center px-4">
-          <h5 className="m-0 fw-semibold text-uppercase">Vô địch quốc gia Night Wolf 2023</h5>
-        </header>
+    <div >
+      <header className="header d-flex flex-column justify-content-center px-4">
+        <h5 className="m-0 fw-semibold text-uppercase">{league}</h5>
+      </header>
 
 
 
 
-      </div>
-    </>
+    </div>
+
+
   );
 }
 

@@ -9,7 +9,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
 import muImage from "../../assets/imgs/mu.png";
-const API = 'http://127.0.0.1:5000/player'
+const API = 'http://127.0.0.1:5000/api/player'
 
 function MyTeam() {
   return (
@@ -39,6 +39,7 @@ function AllPlayer() {
     }).
       then(response => {
         setListPlayer(response.data.data)
+        console.log(response.data.data)
 
       }).catch(err => {
       })
@@ -67,7 +68,7 @@ function AllPlayer() {
             <div className="d-flex flex-column gap-4 p-4">
               <div className="d-flex justify-content-between">
                 <form role="search">
-                  <div className="d-flex gap-2" style={{ width: "400px;" }}>
+                  <div className="d-flex gap-2" style={{ width: "400px" }}>
                     <div className="input-group">
                       <input type="text" className="form-control" />
                     </div>
@@ -76,7 +77,7 @@ function AllPlayer() {
                 </form>
                 <div className="d-flex gap-3 align-items-center">
                   <h6 className="text-secondary m-0">Số dòng</h6>
-                  <select className="form-select" style={{ width: "100px;" }}>
+                  <select className="form-select" style={{ width: "100px" }}>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
@@ -95,23 +96,27 @@ function AllPlayer() {
                   </tr>
                 </thead>
                 <tbody className="table-group-divider">
-                  <tr>
-                    <th style={{ verticalAlign: "middle;" }} scope="row">1</th>
-                    <td>
-                      <img className="avatar img-thumbnail"
-                        src="https://www.mancity.com/meta/media/vw0b1q45/ruben-dias.png">
-                      </img>
-                    </td>
-                    <td>Ruben Dias</td>
-                    <td>Hậu vệ</td>
-                    <td>Manchester City</td>
-                    <td>
-                      <button className="btn btn-light" title="Xem thông tin"><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
-                      <button className="btn btn-light" title="Xóa"><DeleteIcon></DeleteIcon></button>
-                      <button className="btn  btn-light" title="Sửa thông tin" ><BuildIcon></BuildIcon></button>
+                  {listPlayer.map((i, index) => (
 
-                    </td>
-                  </tr>
+                    <tr key={`player_${index}`}>
+                      <th style={{ verticalAlign: "middle" }} scope="row">{index + 1}</th>
+                      <td>
+                        <img className="avatar img-thumbnail"
+                          src={i.image}>
+                        </img>
+                      </td>
+                      <td>{i.name}</td>
+                      <td>{i.position}</td>
+                      <td>Manchester City</td>
+                      <td>
+                        <button className="btn btn-light" title="Xem thông tin"><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
+                        <button className="btn btn-light" title="Xóa"><DeleteIcon></DeleteIcon></button>
+                        <button className="btn  btn-light" title="Sửa thông tin" ><BuildIcon></BuildIcon></button>
+
+                      </td>
+                    </tr>
+                  ))}
+
                 </tbody>
               </table>
               <nav>
@@ -385,18 +390,28 @@ function AddPlayer() {
 // }
 
 function Content(props) {
+  const [league, setLeague] = useState('')
+  const name = localStorage.getItem("seasonNameSelected");
+  useEffect(() => {
+
+
+    setLeague(name);
+
+
+
+  }, [])
   return (
-    <>
-      <div >
-        <header className="header d-flex flex-column justify-content-center px-4">
-          <h5 className="m-0 fw-semibold text-uppercase">Vô địch quốc gia Night Wolf 2023</h5>
-        </header>
+    <div >
+      <header className="header d-flex flex-column justify-content-center px-4">
+        <h5 className="m-0 fw-semibold text-uppercase">{league}</h5>
+      </header>
 
 
 
 
-      </div>
-    </>
+    </div>
+
+
   );
 }
 

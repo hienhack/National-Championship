@@ -11,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
 import $ from "jquery";
 import moment from 'moment';
-
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 const API = 'http://127.0.0.1:5000/api/season';
 
 function MyProfile() {
@@ -33,7 +33,6 @@ function MyProfile() {
 
 function AllLeague() {
   const [listAccount, setList] = useState([]);
-
   useEffect(() => {
 
 
@@ -98,6 +97,11 @@ function AllLeague() {
                     handleOnClick()
                   }}><BuildIcon></BuildIcon></button>
                 </div>
+                <button className="btn btn-light" title="Chọn mùa giải" onClick={() => {
+                  localStorage.setItem("seasonIDSelected", i._id);
+                  localStorage.setItem("seasonNameSelected", i.seasonName);
+                  window.location.reload();
+                }}><CheckCircleIcon></CheckCircleIcon></button>
               </li>
             ))}
 
@@ -645,10 +649,20 @@ function InfoLeague() {
 }
 
 function Content(props) {
+  const [league, setLeague] = useState('')
+  const name = localStorage.getItem("seasonNameSelected");
+  useEffect(() => {
+
+
+    setLeague(name);
+
+
+
+  }, [])
   return (
     <div >
       <header className="header d-flex flex-column justify-content-center px-4">
-        <h5 className="m-0 fw-semibold text-uppercase">Vô địch quốc gia Night Wolf 2023</h5>
+        <h5 className="m-0 fw-semibold text-uppercase">{league}</h5>
       </header>
 
 
