@@ -4,17 +4,20 @@ import $ from "jquery";
 import axios from "axios"
 import "../../style/myteam.css";
 import { Col, Row } from "antd";
+import moment from "moment";
+
 import "../../css/style.css";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
 import muImage from "../../assets/imgs/mu.png";
-const API = 'http://127.0.0.1:5000/player'
+const API = 'http://127.0.0.1:5000/api/player'
 
 function MyTeam() {
   return (
     <Routes>
       <Route index element={<Navigate to="all" replace />} />
+      <Route path="info" element={<InfoPlayer />} />
 
       <Route path="all" element={<AllPlayer />} />
       <Route path="add" element={<AddPlayer />} />
@@ -39,6 +42,7 @@ function AllPlayer() {
     }).
       then(response => {
         setListPlayer(response.data.data)
+        console.log(response.data.data)
 
       }).catch(err => {
       })
@@ -52,7 +56,7 @@ function AllPlayer() {
     [navigate]
   );
   const handleOnClick1 = useCallback(
-    () => navigate("../edit", { replace: true }),
+    () => navigate("../info", { replace: true }),
     [navigate]
   );
   return (
@@ -67,7 +71,7 @@ function AllPlayer() {
             <div className="d-flex flex-column gap-4 p-4">
               <div className="d-flex justify-content-between">
                 <form role="search">
-                  <div className="d-flex gap-2" style={{ width: "400px;" }}>
+                  <div className="d-flex gap-2" style={{ width: "400px" }}>
                     <div className="input-group">
                       <input type="text" className="form-control" />
                     </div>
@@ -76,7 +80,7 @@ function AllPlayer() {
                 </form>
                 <div className="d-flex gap-3 align-items-center">
                   <h6 className="text-secondary m-0">Số dòng</h6>
-                  <select className="form-select" style={{ width: "100px;" }}>
+                  <select className="form-select" style={{ width: "100px" }}>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
@@ -95,23 +99,31 @@ function AllPlayer() {
                   </tr>
                 </thead>
                 <tbody className="table-group-divider">
-                  <tr>
-                    <th style={{ verticalAlign: "middle;" }} scope="row">1</th>
-                    <td>
-                      <img className="avatar img-thumbnail"
-                        src="https://www.mancity.com/meta/media/vw0b1q45/ruben-dias.png">
-                      </img>
-                    </td>
-                    <td>Ruben Dias</td>
-                    <td>Hậu vệ</td>
-                    <td>Manchester City</td>
-                    <td>
-                      <button className="btn btn-light" title="Xem thông tin"><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
-                      <button className="btn btn-light" title="Xóa"><DeleteIcon></DeleteIcon></button>
-                      <button className="btn  btn-light" title="Sửa thông tin" ><BuildIcon></BuildIcon></button>
+                  {listPlayer.map((i, index) => (
 
-                    </td>
-                  </tr>
+                    <tr key={`player_${index}`}>
+                      <th style={{ verticalAlign: "middle" }} scope="row">{index + 1}</th>
+                      <td>
+                        <img className="avatar img-thumbnail" alt=""
+                          src={`http://localhost:5000${i.image}`}>
+                        </img>
+                      </td>
+                      <td>{i.name}</td>
+                      <td>{i.position}</td>
+                      <td>Manchester City</td>
+                      <td>
+                        <button className="btn btn-light" title="Xem thông tin" onClick={() => {
+                          handleOnClick1();
+                          localStorage.setItem("playerSelected", i._id);
+
+                        }}><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
+                        <button className="btn btn-light" title="Xóa"><DeleteIcon></DeleteIcon></button>
+                        {/* <button className="btn  btn-light" title="Sửa thông tin" ><BuildIcon></BuildIcon></button> */}
+
+                      </td>
+                    </tr>
+                  ))}
+
                 </tbody>
               </table>
               <nav>
@@ -145,7 +157,7 @@ function AddPlayer() {
   return (
     <div className="contentUser">
       <Content />
-      <div className="main">
+      <div className="main-wrapper">
 
 
         <div className="d-flex flex-column gap-4 p-4">
@@ -197,7 +209,7 @@ function AddPlayer() {
                     <div>
                       <label className="fs-8 mb-1">Vị trí</label>
                       <select className="form-select" aria-label="Default select example">
-                        <option selected>--- Chọn vị trí ---</option>
+                        <option defaultValue="">--- Chọn vị trí ---</option>
                         <option value="1">Hậu vệ</option>
                         <option value="2">Tiền vệ</option>
                         <option value="3">Tiền đạo</option>
@@ -206,7 +218,7 @@ function AddPlayer() {
                     <div>
                       <label className="fs-8 mb-1">Đội bóng</label>
                       <select className="form-select" aria-label="Default select example">
-                        <option selected>--- Chọn đội bóng ---</option>
+                        <option defaultValue="">--- Chọn đội bóng ---</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>
@@ -220,6 +232,168 @@ function AddPlayer() {
                 <button className="btn btn-primary float-end d-block mb-4">Đăng ký</button>
               </div>
             </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+function InfoPlayer() {
+  const [player, setPLayer] = useState(null);
+  const idPlayer = localStorage.getItem("playerSelected");
+  // const idSeason = localStorage.getItem("seasonIDSelected");
+
+  useEffect(() => {
+
+
+    axios.get(`${API}/${idPlayer}`, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      }
+    }).
+      then(response => {
+        setPLayer(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
+
+  const formatDate = (dateString) => {
+    return moment(dateString).format("DD-MM-YYYY");
+  };
+
+  return (
+    <div className="contentUser">
+      <Content />
+      <div className="main-wrapper">
+
+
+        <div className="d-flex flex-column gap-4 p-4">
+          <h5 className="m-0">Chi tiết cầu thủ</h5>
+          <div className="bg-white rounded-2">
+            <div className="d-flex flex-column gap-4 p-4">
+              <div className="d-flex align-items-end justify-content-between">
+                <div className="d-flex gap-4 align-items-end">
+                  <img className="player-image img-thumbnail" alt="" style={{ height: 400, width: 400, objectFit: "cover" }}
+                    src={`http://localhost:5000${player?.image}`}></img>
+                  <div className="d-flex flex-column gap-1">
+                    <h1 className="mb-4">{player?.name}</h1>
+                    <h5><b>Ngày sinh:</b> {formatDate(player?.dob)}</h5>
+                    <h5><b>Quốc tịch:</b> {player?.nationality}</h5>
+                    <h5><b>Vị trí:</b> {player?.position}</h5>
+                  </div>
+                </div>
+                <button className="btn btn-light" data-bs-toggle="modal"
+                  data-bs-target="#edit-player-modal"><BuildIcon></BuildIcon>&emsp;Chỉnh
+                  sửa</button>
+                <div className="modal fade" id="edit-player-modal" tabIndex="-1" aria-hidden="true">
+                  <div className="modal-dialog modal-lg">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h1 className="modal-title fs-5">Biểu mẫu thông tin cầu thủ</h1>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal"
+                          aria-label="Close"></button>
+                      </div>
+                      <div className="modal-body p-4">
+                        <form>
+                          <div className="row g-4 p-4">
+                            <div className="col-6">
+                              <div className="mb-3">
+                                <label className="fs-8 mb-1">Ảnh chụp chân dung</label>
+                                <input className="form-control" type="file" id="formFile" />
+                              </div>
+                              <div className="image-preview img-thumbnail"
+                                style={{ height: 308, width: "auto" }}>
+                                <img className="d-block" alt=""
+                                  src="https://www.mancity.com/meta/media/vw0b1q45/ruben-dias.png" />
+                              </div>
+                            </div>
+                            <div className="col-6">
+                              <div className="d-flex flex-column gap-3">
+                                <div>
+                                  <label className="fs-8 mb-1">Tên cầu thủ</label>
+                                  <div className="input-group">
+                                    <input type="text" className="form-control" />
+                                  </div>
+                                </div>
+                                <div>
+                                  <label className="fs-8 mb-1">Ngày sinh</label>
+                                  <div className="input-group">
+                                    <input type="date" className="form-control" />
+                                  </div>
+                                </div>
+                                <div>
+                                  <label className="fs-8 mb-1">Quốc tịch</label>
+                                  <div className="input-group">
+                                    <input type="text" className="form-control" />
+                                  </div>
+                                </div>
+                                <div>
+                                  <label className="fs-8 mb-1">Vị trí</label>
+                                  <select className="form-select"
+                                    aria-label="Default select example">
+                                    <option defaultValue="">--- Chọn vị trí ---</option>
+                                    <option value="1">Hậu vệ</option>
+                                    <option value="2">Tiền vệ</option>
+                                    <option value="3">Tiền đạo</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className="fs-8 mb-1">Đội bóng</label>
+                                  <select className="form-select"
+                                    aria-label="Default select example">
+                                    <option defaultValue="">--- Chọn đội bóng ---</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div className="modal-footer">
+                        <button type="button" className="btn btn-light"
+                          data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" className="btn btn-primary">Lưu</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h5 className="mt-4 mb-3 text-muted">Lịch sử thi đấu</h5>
+              <table className="table table-hover player-club-table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Mùa giải</th>
+                    <th scope="col">Đội bóng</th>
+                    <th scope="col">Bàn thắng</th>
+                    <th scope="col">Kiến tạo</th>
+                  </tr>
+                </thead>
+                <tbody className="table-group-divider">
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>2023</td>
+                    <td className="player-club" style={{ display: "flex" }}>
+
+                      <h6 className="m-0">Manchester City</h6>
+                    </td>
+                    <td>2</td>
+                    <td>
+                      0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -385,18 +559,28 @@ function AddPlayer() {
 // }
 
 function Content(props) {
+  const [league, setLeague] = useState('')
+  const name = localStorage.getItem("seasonNameSelected");
+  useEffect(() => {
+
+
+    setLeague(name);
+
+
+
+  }, [])
   return (
-    <>
-      <div >
-        <header className="header d-flex flex-column justify-content-center px-4">
-          <h5 className="m-0 fw-semibold text-uppercase">Vô địch quốc gia Night Wolf 2023</h5>
-        </header>
+    <div >
+      <header className="header d-flex flex-column justify-content-center px-4">
+        <h5 className="m-0 fw-semibold text-uppercase">{league}</h5>
+      </header>
 
 
 
 
-      </div>
-    </>
+    </div>
+
+
   );
 }
 
