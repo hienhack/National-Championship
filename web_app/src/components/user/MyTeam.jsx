@@ -8,6 +8,8 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "../../style/myteam.css";
 import "../../css/content.css";
+import "../../css/style.css"
+
 import { Col, Row, Select } from "antd";
 import axios from "axios"
 
@@ -74,7 +76,7 @@ function AllTeam() {
               {listTeam.map((i, index) => (
 
                 <div className="col-4 col-xl-3" key={`club_${index}`}>
-                  <div className="club-card" onClick={() => {
+                  <div className="club-card" style={{ cursor: "pointer" }} onClick={() => {
                     handleOnClick1();
                     localStorage.setItem("clubSelected", i._id);
 

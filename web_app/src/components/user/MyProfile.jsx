@@ -4,8 +4,7 @@ import axios from "axios";
 import "../../css/content.css";
 import { Navigate, Routes, Route, useNavigate } from "react-router-dom";
 import "../../style/myteam.css";
-import { Col, Row } from "antd";
-import muImage from "../../assets/imgs/mu.png";
+import "../../css/style.css"
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BuildIcon from "@mui/icons-material/Build";
@@ -47,6 +46,16 @@ function AllLeague() {
   const openNotificationWithIcon = (type) => {
     api[type]({
       message: "Chọn mùa giải thành công",
+    });
+  };
+  const openNotificationWithIcon1 = (type) => {
+    api[type]({
+      message: type === "success" ? "Thêm thành công" : "Vui lòng điền đủ thông tin",
+    });
+  };
+  const openNotificationWithIcon2 = (type) => {
+    api[type]({
+      message: "Xóa thành công",
     });
   };
 
@@ -94,7 +103,10 @@ function AllLeague() {
                   >
                     <RemoveRedEyeIcon></RemoveRedEyeIcon>
                   </button>
-                  <button className="btn btn-light" title="Xóa">
+                  <button className="btn btn-light" title="Xóa" onClick={() => {
+                    openNotificationWithIcon2("success");
+
+                  }}>
                     <DeleteIcon></DeleteIcon>
                   </button>
                   <button
@@ -158,26 +170,26 @@ function AllLeague() {
                       <div>
                         <label className="fs-8 mb-1">Tên mùa giải</label>
                         <div className="input-group">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" id="seasonName" />
                         </div>
                       </div>
                       <div className="row row-cols-3 gx-3">
                         <div className="col">
                           <label className="fs-8 mb-1">Năm</label>
                           <div className="input-group">
-                            <input type="number" className="form-control" />
+                            <input type="number" className="form-control" id="seasonYear" />
                           </div>
                         </div>
                         <div className="col">
                           <label className="fs-8 mb-1">Ngày bắt đầu</label>
                           <div className="input-group">
-                            <input type="date" className="form-control" />
+                            <input type="date" className="form-control" id="seasonStart" />
                           </div>
                         </div>
                         <div className="col">
                           <label className="fs-8 mb-1">Ngày kết thúc</label>
                           <div className="input-group">
-                            <input type="date" className="form-control" />
+                            <input type="date" className="form-control" id="seasonEnd" />
                           </div>
                         </div>
                       </div>
@@ -189,29 +201,22 @@ function AllLeague() {
                         <div className="col">
                           <label className="fs-8 mb-1">Số đội bóng</label>
                           <div className="input-group">
-                            <input type="number" className="form-control" />
+                            <input type="number" className="form-control" id="seasonClub" />
                           </div>
                         </div>
-                        <div className="col">
-                          <label className="fs-8 mb-1">
-                            Số cầu thủ tối đa/đội
-                          </label>
-                          <div className="input-group">
-                            <input type="number" className="form-control" />
-                          </div>
-                        </div>
+
                         <div className="col">
                           <label className="fs-8 mb-1">
                             Số ngoại binh tối đa/đội
                           </label>
                           <div className="input-group">
-                            <input type="number" className="form-control" />
+                            <input type="number" className="form-control" id="seasonForeigner" />
                           </div>
                         </div>
                         <div className="col">
                           <label className="fs-8 mb-1">Vị trí xuống hạng</label>
                           <div className="input-group">
-                            <input type="number" className="form-control" />
+                            <input type="number" className="form-control" id="seasonDemotedPosition" />
                           </div>
                         </div>
                         <div className="col">
@@ -219,7 +224,7 @@ function AllLeague() {
                             Số trận treo giò/thẻ đỏ
                           </label>
                           <div className="input-group">
-                            <input type="number" className="form-control" />
+                            <input type="number" className="form-control" id="seasonRedCard" />
                           </div>
                         </div>
                         <div className="col">
@@ -227,7 +232,7 @@ function AllLeague() {
                             Tuổi cầu thủ nhỏ nhất
                           </label>
                           <div className="input-group">
-                            <input type="number" className="form-control" />
+                            <input type="number" className="form-control" id="seasonMinAge" />
                           </div>
                         </div>
                       </div>
@@ -242,7 +247,38 @@ function AllLeague() {
                   >
                     Hủy
                   </button>
-                  <button type="button" className="btn btn-primary">
+                  <button type="button" className="btn btn-primary" onClick={() => {
+                    let name = $("#seasonName").val();
+                    let year = $("#seasonYear").val();
+                    let start = $("#seasonStart").val();
+                    let end = $("#seasonEnd").val();
+                    let totalClub = $("#seasonClub").val();
+                    let totalPlayer = $("#seasonPlayer").val();
+                    let totalForeigner = $("#seasonForeigner").val();
+                    let demotedPosition = $("#seasonDemotedPosition").val();
+                    let redCard = $("#seasonRedCard").val();
+                    let minAge = $("#seasonMinAge").val();
+
+                    if (
+                      name === "" ||
+                      year === "" ||
+                      start === "" ||
+                      end === "" ||
+                      totalClub === "" ||
+                      totalPlayer === "" ||
+                      totalForeigner === "" ||
+                      demotedPosition === "" ||
+                      redCard === "" ||
+                      minAge === ""
+                    ) {
+                      openNotificationWithIcon1("error");
+
+                      return;
+                    } else {
+                      openNotificationWithIcon1("success");
+
+                    }
+                  }}>
                     Lưu
                   </button>
                 </div>
