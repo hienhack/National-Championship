@@ -80,7 +80,8 @@ function AllTeam() {
 
                   }}>
                     <img
-                      src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png"
+                      src={i.image}
+                      alt=""
                       className="club-logo"></img>
                     <div className="club-card-body">
                       <h6 className="club-name">{i.name}</h6>
@@ -151,52 +152,52 @@ function AddTeam() {
     <div className="contentUser">
       <Content />
       <div className="main-wrapper">
-        <div class="d-flex flex-column gap-4 p-4">
-          <h5 class="m-0">Đăng ký đội bóng</h5>
+        <div className="d-flex flex-column gap-4 p-4">
+          <h5 className="m-0">Đăng ký đội bóng</h5>
 
-          <div class="m-auto bg-white shadow rounded-2" style={{ width: "800px;" }}>
-            <div class="d-flex justify-content-between p-4">
-              <div class="input-group w-50">
-                <i class="fa-solid fa-magnifying-glass input-group-text pt-2"></i>
-                <input type="text" class="form-control" placeholder="Tìm đội bóng các mùa trước..." />
+          <div className="m-auto bg-white shadow rounded-2" style={{ width: "800px" }}>
+            <div className="d-flex justify-content-between p-4">
+              <div className="input-group w-50">
+                <i className="fa-solid fa-magnifying-glass input-group-text pt-2"></i>
+                <input type="text" className="form-control" placeholder="Tìm đội bóng các mùa trước..." />
               </div>
-              <button id="new-club-btn" class="fs-6 active"><i class="fa-solid fa-circle-check"></i> Đăng
+              <button id="new-club-btn" className="fs-6 active"><i className="fa-solid fa-circle-check"></i> Đăng
                 ký mới</button>
             </div>
-            <hr class="m-0" />
+            <hr className="m-0" />
             <form>
-              <div class="p-4 d-flex flex-column gap-3">
+              <div className="p-4 d-flex flex-column gap-3">
                 <div>
-                  <img class="d-block mb-3 m-auto"
-                    style={{ maxHeight: "250px", maxWidth: "250px", objectFit: "cover," }}
+                  <img className="d-block mb-3 m-auto"
+                    style={{ maxHeight: "250px", maxWidth: "250px", objectFit: "cover" }}
                     src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
                   </img>
-                  <div class="input-group">
-                    <input type="file" class="form-control" />
+                  <div className="input-group">
+                    <input type="file" className="form-control" />
                   </div>
                 </div>
                 <div>
-                  <label class="fs-8 mb-1">Tên câu lạc bộ</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" />
+                  <label className="fs-8 mb-1">Tên câu lạc bộ</label>
+                  <div className="input-group">
+                    <input type="text" className="form-control" />
                   </div>
                 </div>
                 <div>
-                  <label class="fs-8 mb-1">Sân nhà</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" />
+                  <label className="fs-8 mb-1">Sân nhà</label>
+                  <div className="input-group">
+                    <input type="text" className="form-control" />
                   </div>
                 </div>
                 <div>
-                  <label class="fs-8 mb-1">Huấn luyện viên</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" />
+                  <label className="fs-8 mb-1">Huấn luyện viên</label>
+                  <div className="input-group">
+                    <input type="text" className="form-control" />
                   </div>
                 </div>
               </div>
-              <hr class="m-0" />
-              <div class="p-4">
-                <button class="btn btn-primary float-end d-block mb-4">Đăng ký</button>
+              <hr className="m-0" />
+              <div className="p-4">
+                <button className="btn btn-primary float-end d-block mb-4">Đăng ký</button>
               </div>
             </form>
           </div>
@@ -335,22 +336,27 @@ function InfoTeam() {
                   </tr>
                 </thead>
                 <tbody className="table-group-divider">
-                  <tr>
-                    <th style={{ verticalAlign: "middle" }} scope="row">03</th>
-                    <td>
-                      <img className="avatar img-thumbnail"
-                        src="https://www.mancity.com/meta/media/vw0b1q45/ruben-dias.png">
-                      </img>
-                    </td>
-                    <td>Ruben Dias</td>
-                    <td>Hậu vệ</td>
-                    <td>
-                      <div className="actions">
-                        <button><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
-                        <button><DeleteIcon></DeleteIcon></button>
-                      </div>
-                    </td>
-                  </tr>
+                  {club?.seasons[0]?.playerList?.map((i, index) => (
+
+                    <tr key={`club_player_${index}`}>
+                      <th style={{ verticalAlign: "middle" }} scope="row">{i?.shirt_number}</th>
+                      <td>
+                        <img className="avatar img-thumbnail"
+                          alt=""
+                          src={`http://localhost:5000${i?.image}`}>
+                        </img>
+                      </td>
+                      <td>{i.name}</td>
+                      <td>{i.position}</td>
+                      <td>
+                        <div className="actions">
+                          <button title="Xem thông tin"><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
+                          <button title="Xóa cầu thủ"><DeleteIcon></DeleteIcon></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+
                 </tbody>
               </table>
 
