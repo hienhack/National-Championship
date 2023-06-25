@@ -262,7 +262,7 @@ function InfoTeam() {
                 <button className="btn btn-light" data-bs-toggle="modal"
                   data-bs-target="#edit-club-modal"><BuildIcon></BuildIcon>&emsp;Chỉnh
                   sửa</button>
-                <div className="modal fade" id="edit-club-modal" tabindex="-1" aria-hidden="true">
+                <div className="modal fade" id="edit-club-modal" tabIndex="-1" aria-hidden="true">
                   <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                       <div className="modal-header">
