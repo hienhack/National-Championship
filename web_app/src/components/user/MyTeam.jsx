@@ -6,6 +6,8 @@ import ArrowCircleLeftSharpIcon from '@mui/icons-material/ArrowCircleLeftSharp';
 import BuildIcon from '@mui/icons-material/Build';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+
 import "../../style/myteam.css";
 import "../../css/content.css";
 import "../../css/style.css"
@@ -166,8 +168,8 @@ function ContentPreview() {
         />
       )}
       <div >
-        <div class="input-group">
-          <input type="file" class="form-control" onChange={handlePreviewAvatar} id="contentPDF" />
+        <div className="input-group">
+          <input type="file" className="form-control" onChange={handlePreviewAvatar} id="contentPDF" />
         </div>
       </div>
     </>
@@ -238,8 +240,8 @@ function ContentPreviewAdd() {
         />
       )}
       <div >
-        <div class="input-group">
-          <input type="file" class="form-control" onChange={handlePreviewAvatar} id="contentPDFAdd" />
+        <div className="input-group">
+          <input type="file" className="form-control" onChange={handlePreviewAvatar} id="contentPDFAdd" />
         </div>
       </div>
     </>
@@ -366,7 +368,7 @@ function InfoTeam() {
                   </div>
                 </div>
                 <button className="btn btn-light" data-bs-toggle="modal"
-                  data-bs-target="#edit-club-modal"><BuildIcon></BuildIcon>&emsp;Chỉnh
+                  data-bs-target="#edit-club-modal"><EditNoteIcon></EditNoteIcon>&emsp;Chỉnh
                   sửa</button>
                 <div className="modal fade" id="edit-club-modal" tabIndex="-1" aria-hidden="true">
                   <div className="modal-dialog modal-lg">
