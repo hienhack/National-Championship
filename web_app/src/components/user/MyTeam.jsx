@@ -470,7 +470,7 @@ function InfoTeam() {
                             <div>
                               <label className="fs-8 mb-1">Huấn luyện viên</label>
                               <div className="input-group">
-                                <input type="text" className="form-control" defaultValue={club?.seasons[0]?.coach_name} />
+                                <input type="text" className="form-control" defaultValue={club?.season?.coachName} />
                               </div>
                             </div>
                           </div>
