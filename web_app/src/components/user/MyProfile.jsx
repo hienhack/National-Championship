@@ -11,6 +11,7 @@ import BuildIcon from "@mui/icons-material/Build";
 import $ from "jquery";
 import moment from "moment";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 const API = "http://127.0.0.1:5000/api/season";
 
 function MyProfile() {
@@ -178,7 +179,7 @@ function AllLeague() {
             data-bs-toggle="modal"
             data-bs-target="#add-season-modal"
           >
-            <i className="fa-solid fa-circle-plus"></i>&emsp;Thêm mùa giải
+            <AddCircleOutlineIcon></AddCircleOutlineIcon>Thêm mùa giải
           </div>
           <div
             className="modal fade"

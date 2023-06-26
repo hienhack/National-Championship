@@ -94,20 +94,9 @@ function UserPage() {
                   <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
                 <ul className="collapse" id="schedule-menu">
-                  <li className="menu-item"><a href="#">Xem lịch thi đấu</a></li>
-                  <li className="menu-item"><a href="#">Tạo lịch thi đấu</a></li>
-                </ul>
-              </div>
-              <div className="submenu">
-                <div className="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#result-menu"
-                  aria-expanded="false">
-                  <i className="fa-solid fa-clipboard"><ContentPasteIcon></ContentPasteIcon></i>&emsp;Kết quả
-                  <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
-                </div>
-                <ul className="collapse" id="result-menu">
-                  <li className="menu-item"><a href="#">ds</a></li>
-                  <li className="menu-item"><a href="#">dsf</a></li>
-                  <li className="menu-item"><a href="#">sdf</a></li>
+                  <li className={`menu-item ${activeMenuItem === 'schedule' ? 'active' : ''}`} onClick={() => handleMenuClick('schedule')}><Link to="/schedule">Tạo lịch thi đấu</Link></li>
+                  <li className={`menu-item ${activeMenuItem === 'schedule/add' ? 'active' : ''}`} onClick={() => handleMenuClick('schedule/all')}><Link to="/schedule/add">Trận đấu</Link></li>
+
                 </ul>
               </div>
               <div className="submenu">

@@ -23,7 +23,7 @@ function User() {
         <Route path="player/*" element={<MyPlayer />} />
         <Route path="rule/*" element={<MyRule />} />
         <Route path="report/*" element={<MyReport />} />
-        <Route path="calendar/*" element={<MyCalendar />} />
+        <Route path="schedule/*" element={<MyCalendar />} />
 
       </Route>
 

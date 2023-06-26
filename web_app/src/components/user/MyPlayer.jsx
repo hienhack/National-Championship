@@ -11,6 +11,9 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
 import muImage from "../../assets/imgs/mu.png";
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+
 const API = 'http://127.0.0.1:5000/api/player'
 
 function MyTeam() {
@@ -153,6 +156,78 @@ function AllPlayer() {
   );
 }
 
+function ContentPreviewAdd() {
+  const [avatar, setAvatar] = useState();
+  // const [club, setClub] = useState(null);
+  // const idClub = localStorage.getItem("clubSelected");
+  // const idSeason = localStorage.getItem("seasonIDSelected");
+
+  // useEffect(() => {
+
+
+  //   axios.get(`${API}/${idClub}/${idSeason}`, {
+  //     headers: {
+  //       'content-type': 'application/json',
+  //       'accept': 'application/json',
+  //     }
+  //   }).
+  //     then(response => {
+  //       setClub(response.data.data);
+  //       console.log(response.data.data)
+
+  //     }).catch(err => {
+  //     })
+
+
+  // }, [])
+
+  useEffect(() => {
+    return () => avatar && URL.revokeObjectURL(avatar.preview);
+  }, [avatar]);
+
+  const handlePreviewAvatar = (e) => {
+    const file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+
+    setAvatar(file);
+  };
+
+  return (
+    <>
+      {/* {!avatar && (
+        <img
+          style={{
+            marginLeft: "70px",
+            height: "290px",
+            marginBottom: "10px",
+          }}
+          src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg"
+          alt=""
+          width="80%"
+        />
+      )} */}
+
+      {avatar && (
+        <img
+          style={{
+            marginLeft: "60px",
+            height: "290px",
+            marginBottom: "10px",
+          }}
+          src={avatar.preview}
+          alt=""
+          width="50%"
+        />
+      )}
+      <div >
+        <div class="input-group">
+          <input type="file" class="form-control" onChange={handlePreviewAvatar} id="contentPDFAdd" />
+        </div>
+      </div>
+    </>
+  );
+}
+
 function AddPlayer() {
   return (
     <div className="contentUser">
@@ -166,11 +241,10 @@ function AddPlayer() {
           <div className="m-auto bg-white shadow rounded-2" style={{ width: 800 }}>
             <div className="d-flex justify-content-between p-4">
               <div className="input-group w-50">
-                <i className="fa-solid fa-magnifying-glass input-group-text pt-2"></i>
+                <i className="fa-solid fa-magnifying-glass input-group-text pt-2"><SearchIcon></SearchIcon> </i>
                 <input type="text" className="form-control" placeholder="Tìm cầu thủ các mùa trước..." />
               </div>
-              <button id="new-player-btn" className="fs-6 active"><i className="fa-solid fa-circle-check"></i>
-                Đăng
+              <button id="new-club-btn" className="fs-6 active" style={{ background: "#21e758", paddingRight: 5, borderRadius: 5, color: "white" }}><AddIcon></AddIcon> Đăng
                 ký mới</button>
             </div>
             <hr className="m-0" />
@@ -179,12 +253,11 @@ function AddPlayer() {
                 <div className="col-6">
                   <div className="mb-3">
                     <label className="fs-8 mb-1">Ảnh chụp chân dung</label>
-                    <input className="form-control" type="file" id="formFile" />
+
                   </div>
-                  <div className="image-preview img-thumbnail" >
-                    <img className="d-block" style={{ objectFit: "cover", width: "100%", height: "100%" }}
-                      src="https://www.mancity.com/meta/media/vw0b1q45/ruben-dias.png"></img>
-                  </div>
+
+                  <ContentPreviewAdd></ContentPreviewAdd>
+
                 </div>
                 <div className="col-6">
                   <div className="d-flex flex-column gap-3">
