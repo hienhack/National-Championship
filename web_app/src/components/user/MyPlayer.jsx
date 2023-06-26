@@ -5,6 +5,7 @@ import axios from "axios"
 import "../../style/myteam.css";
 import { Col, Row } from "antd";
 import moment from "moment";
+import { notification } from "antd";
 
 import "../../css/style.css";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -15,6 +16,7 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 
 const API = 'http://127.0.0.1:5000/api/player'
+const API1 = 'http://127.0.0.1:5000/api/club'
 
 function MyTeam() {
   return (
@@ -228,7 +230,71 @@ function ContentPreviewAdd() {
   );
 }
 
+const submitAddPlayer = async () => {
+  let name = $("#playerAdd").val();
+  let dob = $("#dobAdd").val();
+  let position = $("#positionAdd").val();
+  let nationality = $("#nationalityAdd").val();
+  let club = $("#clubAdd").val();
+  let idSeason = localStorage.getItem("seasonIDSelected");
+
+  let content = $("#contentPDFAdd").prop("files")[0];
+
+  console.log(content);
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("dob", dob);
+  formData.append("position", position);
+  formData.append("nationality", nationality);
+  formData.append("clubId", club);
+  formData.append("seasonId", idSeason);
+  formData.append("image", content);
+
+  await fetch("http://127.0.0.1:5000/api/club/create", {
+    method: "POST",
+    body: formData,
+    headers: {
+      "Accept": "application/json",
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+  // window.location.reload(false);
+};
+
 function AddPlayer() {
+  const [listTeam, setListTeam] = useState([]);
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotificationWithIcon1 = (type) => {
+    api[type]({
+      message: type === "success" ? "Thêm thành công" : "Vui lòng điền đủ thông tin",
+    });
+  };
+  const openNotificationWithIcon2 = (type) => {
+    api[type]({
+      message: "Xóa thành công",
+    });
+  };
+  useEffect(() => {
+
+
+    axios.get(API1, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      }
+    }).
+      then(response => {
+        setListTeam(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
+
   return (
     <div className="contentUser">
       <Content />
@@ -264,37 +330,41 @@ function AddPlayer() {
                     <div>
                       <label className="fs-8 mb-1">Tên cầu thủ</label>
                       <div className="input-group">
-                        <input type="text" className="form-control" />
+                        <input type="text" className="form-control" id="playerAdd" />
                       </div>
                     </div>
                     <div>
                       <label className="fs-8 mb-1">Ngày sinh</label>
                       <div className="input-group">
-                        <input type="date" className="form-control" />
+                        <input type="date" className="form-control" id="dobAdd" />
                       </div>
                     </div>
                     <div>
                       <label className="fs-8 mb-1">Quốc tịch</label>
                       <div className="input-group">
-                        <input type="text" className="form-control" />
+                        <input type="text" className="form-control" id="nationalityAdd" />
                       </div>
                     </div>
                     <div>
                       <label className="fs-8 mb-1">Vị trí</label>
-                      <select className="form-select" aria-label="Default select example">
+                      <select className="form-select" aria-label="Default select example" id="positionAdd">
                         <option defaultValue="">--- Chọn vị trí ---</option>
-                        <option value="1">Hậu vệ</option>
-                        <option value="2">Tiền vệ</option>
-                        <option value="3">Tiền đạo</option>
+                        <option value="Hậu vệ">Hậu vệ</option>
+                        <option value="Tiền vệ">Tiền vệ</option>
+                        <option value="Tiền đạo">Tiền đạo</option>
+                        <option value="Thủ môn">Thủ môn</option>
+
                       </select>
                     </div>
                     <div>
                       <label className="fs-8 mb-1">Đội bóng</label>
-                      <select className="form-select" aria-label="Default select example">
+                      <select className="form-select" aria-label="Default select example" id="clubAdd">
                         <option defaultValue="">--- Chọn đội bóng ---</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        {listTeam.map((i, index) => (
+
+                          <option value={i._id} key={`player_club_${index}`}>{i.name}</option>
+                        ))}
+
                       </select>
                     </div>
                   </div>
@@ -302,7 +372,34 @@ function AddPlayer() {
               </div>
               <hr className="m-0" />
               <div className="p-4">
-                <button className="btn btn-primary float-end d-block mb-4">Đăng ký</button>
+                {contextHolder}
+
+                <button className="btn btn-primary float-end d-block mb-4" onClick={() => {
+                  let name = $("#playerAdd").val();
+                  let dob = $("#dobAdd").val();
+                  let position = $("#positionAdd").val();
+                  let nationality = $("#nationalityAdd").val();
+                  let club = $("#clubAdd").val();
+
+                  let content = $("#contentPDFAdd").prop("files")[0];
+
+                  if (
+                    name === "" ||
+                    dob === "" ||
+                    position === "" ||
+                    content === undefined ||
+                    nationality === "" ||
+                    club === ""
+
+                  ) {
+                    openNotificationWithIcon1("error");
+
+                    return;
+                  } else {
+                    openNotificationWithIcon1("success");
+                    submitAddPlayer();
+                  }
+                }}>Đăng ký</button>
               </div>
             </form>
           </div>
