@@ -25,6 +25,42 @@ function MyProfile() {
   );
 }
 
+// const submitNewSeason = async () => {
+//   let name = $("#seasonName").val();
+//   let year = $("#seasonYear").val();
+//   let start = $("#seasonStart").val();
+//   let end = $("#seasonEnd").val();
+//   let totalClub = $("#seasonClub").val();
+//   let totalPlayer = $("#seasonPlayer").val();
+//   let totalForeigner = $("#seasonForeigner").val();
+//   let demotedPosition = $("#seasonDemotedPosition").val();
+//   let redCard = $("#seasonRedCard").val();
+//   let minAge = $("#seasonMinAge").val();
+//   const formData = new FormData();
+//   formData.append("name", name);
+//   formData.append("year", year);
+
+//   formData.append("start", start);
+//   formData.append("end", end);
+//   formData.append("year", totalClub);
+//   formData.append("year", totalForeigner);
+//   formData.append("year", demotedPosition);
+//   formData.append("year", redCard);
+//   formData.append("year", minAge);
+
+//   let id = localStorage.getItem("bookAddChapter");
+
+//   await fetch(`https://ebook4u-server.onrender.com/api/chapter/${id}`, {
+//     method: "POST",
+//     body: formData,
+//     headers: {
+//       Authorization: jwts,
+//     },
+//   })
+//     .then((result) => { })
+//     .catch((error) => { });
+// };
+
 function AllLeague() {
   const [listAccount, setList] = useState([]);
   useEffect(() => {
@@ -253,7 +289,6 @@ function AllLeague() {
                     let start = $("#seasonStart").val();
                     let end = $("#seasonEnd").val();
                     let totalClub = $("#seasonClub").val();
-                    let totalPlayer = $("#seasonPlayer").val();
                     let totalForeigner = $("#seasonForeigner").val();
                     let demotedPosition = $("#seasonDemotedPosition").val();
                     let redCard = $("#seasonRedCard").val();
@@ -265,7 +300,6 @@ function AllLeague() {
                       start === "" ||
                       end === "" ||
                       totalClub === "" ||
-                      totalPlayer === "" ||
                       totalForeigner === "" ||
                       demotedPosition === "" ||
                       redCard === "" ||
