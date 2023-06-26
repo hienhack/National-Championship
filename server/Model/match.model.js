@@ -10,11 +10,13 @@ const matchSchema = mongoose.Schema({
     club2Id: Schema.Types.ObjectId,
     isPlayed: Boolean,
     result: {
+        _id: false,
         club1: Number,
         club2: Number,
     },
     goals: [Schema.Types.ObjectId],
     cards: [{
+        _id: false,
         playerId: Schema.Types.ObjectId,
         time: Number
     }]
