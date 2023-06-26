@@ -46,7 +46,7 @@ class SeasonController {
         const document = new seasonModel(season);
         try {
             await document.save();
-        } catch(error) {
+        } catch (error) {
             res.status(400).send({ message: "invalid season" });
             return;
         }
@@ -55,9 +55,9 @@ class SeasonController {
     }
 
     async update(req, res) {
-        const { _id, ...updated} = req.body;
-        
-        const rs = await seasonModel.findOneAndUpdate({ _id: _id }, updated, { new: true});
+        const { _id, ...updated } = req.body;
+
+        const rs = await seasonModel.findOneAndUpdate({ _id: _id }, updated, { new: true });
         res.status(200).send({ message: "updated successfully" });
     }
 
@@ -80,7 +80,7 @@ class SeasonController {
         club.seasons.push(seasonId);
         club.save();
 
-        res.status(200).send({ message: "added successfully"});
+        res.status(200).send({ message: "added successfully" });
     }
 
     async removeClub(req, res) {
@@ -95,7 +95,7 @@ class SeasonController {
         club.seasons.splice(club.seasons.indexOf(seasonId), 1);
         club.save();
 
-        res.status(200).send({ message: "removed successfully"});
+        res.status(200).send({ message: "removed successfully" });
     }
 }
 

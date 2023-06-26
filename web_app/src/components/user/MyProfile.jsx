@@ -34,12 +34,12 @@ const deleteSeason = async () => {
   await fetch("http://127.0.0.1:5000/api/season/delete", {
     method: "POST",
     headers: {
-
+      "Content-Type": "application/json"
     },
     body: JSON.stringify(idBook),
   })
     .then((result) => {
-      // window.location.reload(false);
+      window.location.reload(false);
     })
     .catch((error) => { });
 };
@@ -50,35 +50,39 @@ const submitNewSeason = async () => {
   let start = $("#seasonStart").val();
   let end = $("#seasonEnd").val();
   let totalClub = $("#seasonClub").val();
+  let totalPlayer = $("#seasonPlayer").val();
   let totalForeigner = $("#seasonForeigner").val();
   let demotedPosition = $("#seasonDemotedPosition").val();
   let redCard = $("#seasonRedCard").val();
   let minAge = $("#seasonMinAge").val();
 
-  const formData = new FormData();
-  const ruleData = {
-    demotedPosition: parseInt(demotedPosition),
-    maxForeginPlayer: parseInt(totalForeigner),
-    minAge: parseInt(minAge),
-    redCardBanned: parseInt(redCard),
-    totalClubs: parseInt(totalClub)
+  const requestData = {
+    seasonName: name,
+    year: parseInt(year),
+    start: moment(start).toISOString(),
+    end: moment(end).toISOString(),
+    rule: {
+      demotedPosition: parseInt(demotedPosition),
+      minAge: parseInt(minAge),
+      redCardBanned: parseInt(redCard),
+      totalClubs: parseInt(totalClub),
+      maxForeignPlayer: parseInt(totalForeigner),
+      maxClubPlayer: parseInt(totalPlayer)
+    }
   };
-
-  formData.append("seasonName", name);
-  formData.append("year", year);
-  formData.append("start", moment(start).toISOString());
-  formData.append("end", moment(end).toISOString());
-  formData.append("rule", JSON.stringify(ruleData));
 
   await fetch("http://127.0.0.1:5000/api/season/create", {
     method: "POST",
-    body: formData,
+    body: JSON.stringify(requestData),
     headers: {
-      // Các header mà bạn muốn bổ sung (nếu có)
+      "Content-Type": "application/json",
+      "Accept": "application/json",
     },
   })
     .then((result) => { })
     .catch((error) => { });
+  window.location.reload(false);
+
 };
 
 function AllLeague() {
@@ -155,6 +159,8 @@ function AllLeague() {
                     onClick={() => {
                       handleOnClick1();
                       localStorage.setItem("seasonSelected", i.year);
+                      localStorage.setItem("seasonIDSelected", i._id);
+
                     }}
                   >
                     <RemoveRedEyeIcon></RemoveRedEyeIcon>
@@ -253,7 +259,12 @@ function AllLeague() {
                             <input type="number" className="form-control" id="seasonClub" />
                           </div>
                         </div>
-
+                        <div className="col">
+                          <label className="fs-8 mb-1">Số cầu thủ tối đa/đội</label>
+                          <div className="input-group">
+                            <input type="number" className="form-control" id="seasonPlayer" />
+                          </div>
+                        </div>
                         <div className="col">
                           <label className="fs-8 mb-1">
                             Số ngoại binh tối đa/đội
@@ -384,6 +395,46 @@ function ContentPreview() {
   );
 }
 
+const submitUpdateSeason = async () => {
+  let id = localStorage.getItem("seasonIDSelected");
+  let name = $("#name").val();
+  let year = $("#year").val();
+  let start = $("#start").val();
+  let end = $("#end").val();
+  let totalClub = $("#totalClub").val();
+  let totalPlayer = $("#totalPlayer").val();
+  let totalForeigner = $("#totalForeigner").val();
+  let demotedPosition = $("#demotedPosition").val();
+  let redCard = $("#redCard").val();
+  let minAge = $("#minAge").val();
+
+  const requestData = {
+    _id: id,
+    seasonName: name,
+    year: parseInt(year),
+    start: moment(start).toISOString(),
+    end: moment(end).toISOString(),
+    rule: {
+      demotedPosition: parseInt(demotedPosition),
+      minAge: parseInt(minAge),
+      redCardBanned: parseInt(redCard),
+      totalClubs: parseInt(totalClub),
+      maxForeignPlayer: parseInt(totalForeigner),
+      maxClubPlayer: parseInt(totalPlayer)
+    }
+  };
+  await fetch("http://127.0.0.1:5000/api/season/update", {
+    method: "POST",
+    body: JSON.stringify(requestData),
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+  // window.location.reload(false);
+}
 function EditLeague() {
   const [season, setSeason] = useState(null);
   const id = localStorage.getItem("seasonSelected");
@@ -489,7 +540,18 @@ function EditLeague() {
                         />
                       </div>
                     </div>
+                    <div className="col">
+                      <label className="fs-8 mb-1">Số cầu thủ tối đa/đội</label>
+                      <div className="input-group">
+                        <input
+                          type="number"
+                          className="form-control"
+                          defaultValue={season?.rule.maxClubPlayer}
+                          id="totalPlayer"
 
+                        />
+                      </div>
+                    </div>
                     <div className="col">
                       <label className="fs-8 mb-1">
                         Số ngoại binh tối đa/đội
@@ -553,7 +615,7 @@ function EditLeague() {
                       let start = $("#start").val();
                       let end = $("#end").val();
                       let totalClub = $("#totalClub").val();
-                      let totalPlayer = $("#totalPlayer").val();
+                      // let totalPlayer = $("#totalPlayer").val();
                       let totalForeigner = $("#totalForeigner").val();
                       let demotedPosition = $("#demotedPosition").val();
                       let redCard = $("#redCard").val();
@@ -565,7 +627,7 @@ function EditLeague() {
                         start === "" ||
                         end === "" ||
                         totalClub === "" ||
-                        totalPlayer === "" ||
+                        // totalPlayer === "" ||
                         totalForeigner === "" ||
                         demotedPosition === "" ||
                         redCard === "" ||
@@ -576,7 +638,7 @@ function EditLeague() {
                         return;
                       } else {
                         openNotificationWithIcon("success");
-
+                        submitUpdateSeason();
                       }
                     }}
                   >
@@ -692,7 +754,17 @@ function InfoLeague() {
                         />
                       </div>
                     </div>
-
+                    <div className="col">
+                      <label className="fs-8 mb-1">Số cầu thủ tối đa/đội</label>
+                      <div className="input-group">
+                        <input
+                          type="number"
+                          className="form-control"
+                          disabled
+                          defaultValue={season?.rule.maxClubPlayer}
+                        />
+                      </div>
+                    </div>
                     <div className="col">
                       <label className="fs-8 mb-1">
                         Số ngoại binh tối đa/đội
