@@ -9,7 +9,10 @@ class ClubController {
     async createClub(req, res) {
         const club = req.body;
         club.seasons = [];
-
+        club.seasons.push({
+            seasonId: req.body.seasonId,
+            coachName: req.body.coachName
+        })
         if (req.file) {
             club.image = `Images/club/${req.file.filename}`;
         }
