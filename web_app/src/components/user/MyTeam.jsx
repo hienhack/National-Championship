@@ -7,6 +7,7 @@ import BuildIcon from '@mui/icons-material/Build';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import { notification } from "antd";
 
 import "../../style/myteam.css";
 import "../../css/content.css";
@@ -233,6 +234,7 @@ function ContentPreviewAdd() {
             marginLeft: "180px",
             height: "290px",
             marginBottom: "10px",
+            objectFit: "contain"
           }}
           src={avatar.preview}
           alt=""
@@ -248,7 +250,55 @@ function ContentPreviewAdd() {
   );
 }
 
+const submitAddClub = async () => {
+  let name = $("#clubAdd").val();
+  let stadium = $("#stadiumAdd").val();
+  let mentor = $("#mentorAdd").val();
+  let content = $("#contentPDFAdd").prop("files")[0];
+  let idSeason = localStorage.getItem("seasonIDSelected");
+
+  console.log(content);
+  const requestData = {
+    name: name,
+    stadium: stadium,
+    image: content,
+    season: {
+      coachName: mentor,
+      seasonId: idSeason,
+    }
+
+  }
+};
+
+
+// await fetch("http://127.0.0.1:5000/api/club/create", {
+//   method: "POST",
+//   body: JSON.stringify(requestData),
+//   headers: {
+//     "Content-Type": "application/json",
+//     "Accept": "application/json",
+//   },
+// })
+//   .then((result) => { })
+//   .catch((error) => { });
+// window.location.reload(false);
+
+
+
+
 function AddTeam() {
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotificationWithIcon1 = (type) => {
+    api[type]({
+      message: type === "success" ? "Thêm thành công" : "Vui lòng điền đủ thông tin",
+    });
+  };
+  const openNotificationWithIcon2 = (type) => {
+    api[type]({
+      message: "Xóa thành công",
+    });
+  };
   return (
     <div className="contentUser">
       <Content />
@@ -263,7 +313,28 @@ function AddTeam() {
                 <input type="text" className="form-control" placeholder="Tìm đội bóng các mùa trước..." />
               </div>
 
-              <button id="new-club-btn" className="fs-6 active" style={{ background: "#21e758", paddingRight: 5, borderRadius: 5, color: "white" }}><AddIcon></AddIcon> Đăng
+              <button id="new-club-btn" className="fs-6 active" style={{ background: "#21e758", paddingRight: 5, borderRadius: 5, color: "white" }} onClick={() => {
+                let name = $("#clubAdd").val();
+                let stadium = $("#stadiumAdd").val();
+                let mentor = $("#mentorAdd").val();
+                let content = $("#contentPDFAdd").prop("files")[0];
+                console.log(content);
+
+                if (
+                  name === "" ||
+                  stadium === "" ||
+                  mentor === "" ||
+                  content === undefined
+
+                ) {
+                  openNotificationWithIcon1("error");
+
+                  return;
+                } else {
+                  openNotificationWithIcon1("success");
+                  submitAddClub();
+                }
+              }}><AddIcon></AddIcon> Đăng
                 ký mới</button>
             </div>
             <hr className="m-0" />
@@ -276,25 +347,48 @@ function AddTeam() {
                 <div>
                   <label className="fs-8 mb-1">Tên câu lạc bộ</label>
                   <div className="input-group">
-                    <input type="text" className="form-control" />
+                    <input type="text" className="form-control" id="clubAdd" />
                   </div>
                 </div>
                 <div>
                   <label className="fs-8 mb-1">Sân nhà</label>
                   <div className="input-group">
-                    <input type="text" className="form-control" />
+                    <input type="text" className="form-control" id="stadiumAdd" />
                   </div>
                 </div>
                 <div>
                   <label className="fs-8 mb-1">Huấn luyện viên</label>
                   <div className="input-group">
-                    <input type="text" className="form-control" />
+                    <input type="text" className="form-control" id="mentorAdd" />
                   </div>
                 </div>
               </div>
               <hr className="m-0" />
               <div className="p-4">
-                <button className="btn btn-primary float-end d-block mb-4">Đăng ký</button>
+                {contextHolder}
+
+                <button className="btn btn-primary float-end d-block mb-4" onClick={() => {
+                  let name = $("#clubAdd").val();
+                  let stadium = $("#stadiumAdd").val();
+                  let mentor = $("#mentorAdd").val();
+                  let content = $("#contentPDFAdd").prop("files")[0];
+
+
+                  if (
+                    name === "" ||
+                    stadium === "" ||
+                    mentor === "" ||
+                    content === ""
+
+                  ) {
+                    openNotificationWithIcon1("error");
+
+                    return;
+                  } else {
+                    openNotificationWithIcon1("success");
+                    submitAddClub();
+                  }
+                }}>Đăng ký</button>
               </div>
             </form>
           </div>
