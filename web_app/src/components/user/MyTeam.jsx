@@ -284,7 +284,7 @@ function AddTeam() {
                 <input type="text" className="form-control" placeholder="Tìm đội bóng các mùa trước..." />
               </div>
 
-              <button id="new-club-btn" className="fs-6 active" style={{ background: "#21e758", paddingRight: 5, borderRadius: 5, color: "white" }} onClick={() => {
+              {/* <button id="new-club-btn" className="fs-6 active" style={{ background: "#21e758", paddingRight: 5, borderRadius: 5, color: "white" }} onClick={() => {
                 let name = $("#clubAdd").val();
                 let stadium = $("#stadiumAdd").val();
                 let mentor = $("#mentorAdd").val();
@@ -305,7 +305,7 @@ function AddTeam() {
                   submitAddClub();
                 }
               }}><AddIcon></AddIcon> Đăng
-                ký mới</button>
+                ký mới</button> */}
             </div>
             <hr className="m-0" />
             <form>
@@ -343,12 +343,11 @@ function AddTeam() {
                   let mentor = $("#mentorAdd").val();
                   let content = $("#contentPDFAdd").prop("files")[0];
 
-
                   if (
                     name === "" ||
                     stadium === "" ||
                     mentor === "" ||
-                    content === ""
+                    content === undefined
 
                   ) {
                     openNotificationWithIcon1("error");

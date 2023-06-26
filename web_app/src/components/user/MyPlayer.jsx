@@ -244,8 +244,8 @@ function AddPlayer() {
                 <i className="fa-solid fa-magnifying-glass input-group-text pt-2"><SearchIcon></SearchIcon> </i>
                 <input type="text" className="form-control" placeholder="Tìm cầu thủ các mùa trước..." />
               </div>
-              <button id="new-club-btn" className="fs-6 active" style={{ background: "#21e758", paddingRight: 5, borderRadius: 5, color: "white" }}><AddIcon></AddIcon> Đăng
-                ký mới</button>
+              {/* <button id="new-club-btn" className="fs-6 active" style={{ background: "#21e758", paddingRight: 5, borderRadius: 5, color: "white" }}><AddIcon></AddIcon> Đăng
+                ký mới</button> */}
             </div>
             <hr className="m-0" />
             <form>
