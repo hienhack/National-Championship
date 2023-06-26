@@ -62,7 +62,7 @@ class SeasonController {
     }
 
     async delete(req, res) {
-        const id = req.body.id;
+        const id = req.body._id;
         await seasonModel.deleteOne({ _id: id });
 
         res.status(200).send({ message: "deleted successfully" });
