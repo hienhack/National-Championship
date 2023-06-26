@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trận đấu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js"
+        integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+    <link href="./css/style.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/8a19b96b6e.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <!-- Sidebar -->
+        <div class="sidebar d-flex flex-column">
+            <div class="sidebar-header ps-4">
+                <image src="./assets/logo.png" class="app-logo"></image>
+            </div>
+            <hr class="mt-0 mx-4 text-secondary" />
+            <div class="menu flex-fill px-4">
+                <div class="submenu">
+                    <div class="submenu-btn active" data-bs-toggle="collapse" data-bs-target="#home-menu"
+                        aria-expanded="true">
+                        <i class="fa-solid fa-flag"></i>&emsp;Mùa giải
+                        <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                    </div>
+                    <ul class="collapse show" id="home-menu">
+                        <li class="menu-item active"><a href="#">Danh sách mùa giải</a></li>
+                    </ul>
+                </div>
+                <h6 class="text-secondary mt-3">Hồ sơ mùa giải</h6>
+                <hr class="text-secondary" />
+                <div class="d-flex flex-column gap-2">
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#club-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-users"></i>&emsp;Đội bóng
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="club-menu">
+                            <li class="menu-item"><a href="#">Danh sách đội bóng</a></li>
+                            <li class="menu-item"><a href="#">Đăng ký đội bóng</a></li>
+                        </ul>
+                    </div>
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#player-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>&emsp;Cầu thủ
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="player-menu">
+                            <li class="menu-item"><a href="#">Danh sách cầu thủ</a></li>
+                            <li class="menu-item"><a href="#">Đăng ký cầu thủ</a></li>
+                        </ul>
+                    </div>
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#schedule-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-calendar"></i>&emsp;Lịch thi đấu
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="schedule-menu">
+                            <li class="menu-item"><a href="#">Tạo lịch thi đấu</a></li>
+                            <li class="menu-item"><a href="#">Trận đấu</a></li>
+                        </ul>
+                    </div>
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#report-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-paste"></i></i>&emsp;Báo cáo
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="report-menu">
+                            <li class="menu-item"><a href="#">Bảng xếp hạng</a></li>
+                            <li class="menu-item"><a href="#">Danh sách ghi bàn</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-wrapper">
+            <!-- Header -->
+            <header class="header d-flex flex-column justify-content-center px-4">
+                <h5 class="m-0 fw-semibold text-uppercase">Vô địch quốc gia Night Wolf 2023</h5>
+            </header>
+
+            <style>
+                .match .club-logo {
+                    width: 25px;
+                    height: 25px;
+                    object-fit: cover;
+                    display: inline-block;
+                    margin-right: 10px;
+                }
+
+                .match .update-match {
+                    display: none;
+                }
+
+                .match:hover .update-match {
+                    height: auto;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .match * {
+                    font-size: 14px;
+                }
+
+                .round-select * {
+                    font-size: 14px;
+                }
+
+                .club-win * {
+                    font-weight: bolder;
+                }
+            </style>
+
+            <!-- Main -->
+            <div class="main">
+
+                <!-- Đăng ký đội bóng -->
+
+                <div class="d-flex flex-column gap-4 p-4">
+                    <h5 class="m-0">Trận đấu</h5>
+                    <div class="m-auto bg-white shadow-sm rounded-2" style="width: 800px;">
+                        <div class="p-4">
+                            <div class="round-select input-group" style="width: 180px;">
+                                <label class="input-group-text" for="inputGroupSelect01">Vòng đấu</label>
+                                <select class="form-select" id="inputGroupSelect01">
+                                    <option value="all" selected>Tất cả</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr class="m-0" />
+                        <div class="d-flex flex-column py-4">
+                            <div class="round">
+                                <h6 class="m-0 px-4 py-2 fs-8 text-secondary">Vòng: 1/38</h6>
+                                <div class="row row-cols-2 g-0 px-4">
+                                    <div class="col">
+                                        <div class="match d-flex border">
+                                            <div
+                                                class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                                                <div class="club-win">
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                    <span class="goal float-end">1</span>
+                                                </div>
+                                                <div class="club-lose">
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                    <span class="goal float-end">0</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                                                <small>KT</small>
+                                                <div class="fs-8">20/01</div>
+                                                <div class="fs-8">19:00</div>
+                                            </div>
+                                            <div class="update-match p-3 bg-success">
+                                                <button class="text-light"><i
+                                                        class="fa-solid fa-pen-to-square"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="match d-flex border">
+                                            <div
+                                                class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                                                <small>CD</small>
+                                                <div class="fs-8">20/01</div>
+                                                <div class="fs-8">19:00</div>
+                                            </div>
+                                            <div class="update-match p-3 bg-success">
+                                                <button class="text-light"><i
+                                                        class="fa-solid fa-pen-to-square"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="match d-flex border">
+                                            <div
+                                                class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                                                <div class="fs-8">20/01</div>
+                                                <div class="fs-8">19:00</div>
+                                            </div>
+                                            <div class="update-match p-3 bg-success">
+                                                <button class="text-light"><i
+                                                        class="fa-solid fa-pen-to-square"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="match d-flex border">
+                                            <div
+                                                class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                                                <div class="fs-8">20/01</div>
+                                                <div class="fs-8">19:00</div>
+                                            </div>
+                                            <div class="update-match p-3 bg-success">
+                                                <button class="text-light"><i
+                                                        class="fa-solid fa-pen-to-square"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="round">
+                                <h6 class="m-0 px-4 py-2 fs-8 text-secondary">Vòng: 2/38</h6>
+                                <div class="row row-cols-2 g-0 px-4">
+                                    <div class="col">
+                                        <div class="match d-flex border">
+                                            <div
+                                                class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                                                <div class="club-win">
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                    <span class="goal float-end">1</span>
+                                                </div>
+                                                <div class="club-lose">
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                    <span class="goal float-end">0</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                                                <small>KT</small>
+                                                <div class="fs-8">20/01</div>
+                                                <div class="fs-8">19:00</div>
+                                            </div>
+                                            <div class="update-match p-3 bg-success">
+                                                <button class="text-light"><i
+                                                        class="fa-solid fa-pen-to-square"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="match d-flex border">
+                                            <div
+                                                class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                                                <small>CD</small>
+                                                <div class="fs-8">20/01</div>
+                                                <div class="fs-8">19:00</div>
+                                            </div>
+                                            <div class="update-match p-3 bg-success">
+                                                <button class="text-light"><i
+                                                        class="fa-solid fa-pen-to-square"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="match d-flex border">
+                                            <div
+                                                class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                                                <div class="fs-8">20/01</div>
+                                                <div class="fs-8">19:00</div>
+                                            </div>
+                                            <div class="update-match p-3 bg-success">
+                                                <button class="text-light"><i
+                                                        class="fa-solid fa-pen-to-square"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="match d-flex border">
+                                            <div
+                                                class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                                <div>
+                                                    <img class="club-logo"
+                                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                                    <span>Manchester City</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                                                <div class="fs-8">20/01</div>
+                                                <div class="fs-8">19:00</div>
+                                            </div>
+                                            <div class="update-match p-3 bg-success">
+                                                <button class="text-light"><i
+                                                        class="fa-solid fa-pen-to-square"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        $(() => {
+            // Sidebar
+            $('.menu-item').on({
+                click: function (event) {
+                    $('.menu-item').removeClass('active');
+                    $(this).addClass('active');
+                    $('.submenu').removeClass('active');
+                    $(this).parent().parent('.submenu').addClass('active');
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
