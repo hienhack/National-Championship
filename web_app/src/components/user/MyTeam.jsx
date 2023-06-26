@@ -86,7 +86,7 @@ function AllTeam() {
 
                   }}>
                     <img
-                      src={`http://localhost:5000${i.image}`}
+                      src={`http://localhost:5000/${i.image}`}
                       alt=""
                       className="club-logo"></img>
                     <div className="club-card-body">
