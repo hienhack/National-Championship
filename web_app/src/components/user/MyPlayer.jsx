@@ -97,7 +97,7 @@ function AllPlayer() {
                     <th scope="col">Ảnh</th>
                     <th scope="col">Họ tên</th>
                     <th scope="col">Vị trí</th>
-                    <th scope="col">Đội bóng</th>
+                    <th scope="col">Quốc tịch</th>
                     <th scope="col">Hoạt động</th>
                   </tr>
                 </thead>
@@ -113,7 +113,7 @@ function AllPlayer() {
                       </td>
                       <td>{i.name}</td>
                       <td>{i.position}</td>
-                      <td>Manchester City</td>
+                      <td>{i.nationality}</td>
                       <td>
                         <button className="btn btn-light" title="Xem thông tin" onClick={() => {
                           handleOnClick1();
@@ -220,8 +220,8 @@ function ContentPreviewAdd() {
         />
       )}
       <div >
-        <div class="input-group">
-          <input type="file" class="form-control" onChange={handlePreviewAvatar} id="contentPDFAdd" />
+        <div className="input-group">
+          <input type="file" className="form-control" onChange={handlePreviewAvatar} id="contentPDFAdd" />
         </div>
       </div>
     </>
