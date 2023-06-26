@@ -428,7 +428,7 @@ function InfoTeam() {
                   <div>
                     <h2 className="text-light mb-4">{club?.name}</h2>
                     <h6>Sân nhà: {club?.stadium}</h6>
-                    <h6>Huấn luyện viên: {club?.seasons[0]?.coach_name}</h6>
+                    <h6>Huấn luyện viên: {club?.season?.coachName}</h6>
                   </div>
                 </div>
                 <button className="btn btn-light" data-bs-toggle="modal"
@@ -497,7 +497,7 @@ function InfoTeam() {
                   </tr>
                 </thead>
                 <tbody className="table-group-divider">
-                  {club?.seasons[0]?.playerList?.map((i, index) => (
+                  {club?.season?.playerList?.map((i, index) => (
 
                     <tr key={`club_player_${index}`}>
                       <th style={{ verticalAlign: "middle" }} scope="row">{i?.shirt_number}</th>
