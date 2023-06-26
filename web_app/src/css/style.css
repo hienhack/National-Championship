@@ -189,3 +189,29 @@ button:hover {
 .play-list-table .player-detail-btn:hover {
 	opacity: 80%;
 }
+
+.match .club-logo {
+	width: 25px;
+	height: 25px;
+	object-fit: cover;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.match .remove-match {
+	display: none;
+}
+
+.match:hover .remove-match {
+	height: auto;
+	display: flex;
+	align-items: center;
+}
+
+.match * {
+	font-size: 14px;
+}
+
+.round-select * {
+	font-size: 14px;
+}

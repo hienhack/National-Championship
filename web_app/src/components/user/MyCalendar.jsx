@@ -2,11 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Navigate, Routes, Route, useNavigate } from "react-router-dom";
 import $ from "jquery";
 import axios from "axios";
+import "../../css/style.css";
 
 import "../../style/myteam.css";
-import { Col, Row } from "antd";
-import muImage from "../../assets/imgs/mu.png";
 
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 const API = "http://127.0.0.1:5000/match";
 
 function MyCalendar() {
@@ -56,89 +57,205 @@ function AllCalendar() {
   return (
     <div className="contentUser">
       <Content />
-      <div className="allTeamTitle">
-        <div style={{ fontWeight: "bold" }}>Lịch thi đấu</div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {/* <button type="button" className="btn btn-danger" style={{ width: 80 }}>
-            Sửa
-          </button> */}
-          <button
-            type="button"
-            className="btn btn-danger"
-            style={{ marginLeft: "15px", width: 140 }}
-            onClick={() => {
-              handleOnClick();
-            }}
-          >
-            Tạo lịch đấu
-          </button>
-        </div>
-      </div>
-      <div
-        class="animated fadeIn"
-        style={{ margin: "0px 20px", marginTop: 20 }}
-      >
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <strong class="card-title">Thông tin trận đấu</strong>
+      <div className="main-wrapper">
+
+
+        <div className="d-flex flex-column gap-4 p-4">
+          <h5 className="m-0">Tạo lịch thi đấu</h5>
+
+          <div className="m-auto bg-white shadow rounded-2" style={{ width: 800 }}>
+            <div className="d-flex justify-content-between p-4">
+              <div className="round-select input-group" style={{ width: 180 }}>
+                <label className="input-group-text" for="inputGroupSelect01">Vòng đấu</label>
+                <select className="form-select" id="inputGroupSelect01">
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
               </div>
-              <div class="card-body">
-                <table
-                  id="bootstrap-data-table-export"
-                  class="table table-striped table-bordered"
-                >
-                  <thead class="thead-dark">
-                    <tr>
-                      <th>
-                        <i className="fa fa-users"></i> Vòng
-                      </th>
-                      <th>
-                        <i className="fa fa-users"></i> Đội nhà
-                      </th>
+              <button className="btn btn-success fs-7" data-bs-toggle="modal"
+                data-bs-target="#add-match-modal"><AddIcon></AddIcon> Thêm trận
+                đấu</button>
+              <div className="modal fade" id="add-match-modal" tabIndex="-1" aria-hidden="true">
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header px-4">
+                      <h1 className="modal-title fs-6" id="exampleModalLabel">Biểu mẫu thêm trận đấu
+                      </h1>
+                      <button type="button" className="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body px-4">
+                      <form>
+                        <div className="d-flex flex-column gap-3">
+                          <div>
+                            <label className="fs-8 mb-1">Vòng</label>
+                            <div className="input-group">
+                              <input type="number" className="form-control" value="1"
+                                readonly />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="fs-8 mb-1">Đội bóng 1</label>
+                            <select className="form-select" aria-label="Default select example">
+                              <option selected>Chọn đội bóng</option>
+                              <option value="1">Manchester City</option>
+                              <option value="2">Manchester United</option>
+                              <option value="3">Liverpool</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="fs-8 mb-1">Đội bóng 1</label>
+                            <select className="form-select" aria-label="Default select example">
+                              <option selected>Chọn đội bóng</option>
+                              <option value="1">Manchester City</option>
+                              <option value="2">Manchester United</option>
+                              <option value="3">Liverpool</option>
+                            </select>
+                          </div>
 
-                      <th>
-                        <i className="fa fa-users"></i> Đội khách
-                      </th>
-
-                      <th>
-                        <i className="fa fa-users"></i> Địa điểm
-                      </th>
-
-                      <th>
-                        <i className="fa fa-users"></i> Thời gian
-                      </th>
-                      <th>
-                        <i className="fa fa-users"></i> Cập nhật
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {listMatch.map((i, index) => (
-                      <tr key={`match_${index}`}>
-                        <td>{i.round}</td>
-                        <td>MU</td>
-                        <td>MCI</td>
-                        <td>{i.stadium}</td>
-                        <td>{convertToLocalDate(i.date_time)}</td>
-                        <td>
-                          <button
-                            type="button"
-                            className="btn btn-danger"
-                            onClick={() => {
-                              handleOnClick1();
-                            }}
-                          >
-                            Sửa
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                          <div className="d-flex gap-3">
+                            <div>
+                              <label className="fs-8 mb-1">Giờ</label>
+                              <div className="input-group">
+                                <input type="number" className="form-control" value="1" />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="fs-8 mb-1">Phút</label>
+                              <div className="input-group">
+                                <input type="number" className="form-control" value="1" />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="fs-8 mb-1">Ngày</label>
+                              <div className="input-group">
+                                <input type="date" className="form-control" />
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <label className="fs-8 mb-1">Sân đấu</label>
+                            <div className="input-group">
+                              <input type="text" className="form-control" />
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div className="modal-footer py-2 px-4">
+                      <button type="button" className="btn btn-light"
+                        data-bs-dismiss="modal">Hủy</button>
+                      <button type="button" className="btn btn-primary">Lưu</button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+            <hr className="m-0" />
+            <div className="row row-cols-2 g-0 p-4">
+              <div className="col">
+                <div className="match d-flex border">
+                  <div className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                    <div>
+                      <img className="club-logo" alt="" style={{ height: 25, width: 25 }}
+                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                      <span>Manchester City</span>
+                    </div>
+                    <div>
+                      <img className="club-logo" alt="" style={{ height: 25, width: 25 }}
+                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                      <span>Manchester City</span>
+                    </div>
+                  </div>
+                  <div
+                    className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                    <span className="fs-8 text-secondary">20/01</span>
+                    <span className="fs-8 text-secondary">19:00</span>
+                    <span className="fs-8 text-secondary">Sân Hàng Đẫy</span>
+                  </div>
+                  <div className="remove-match p-3 bg-danger">
+                    <button className="text-muted"><DeleteIcon></DeleteIcon></button>
+                  </div>
+                </div>
+              </div>
+              <div className="col">
+                <div className="match d-flex border">
+                  <div className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                    <div>
+                      <img className="club-logo" alt="" style={{ height: 25, width: 25 }}
+                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                      <span>Manchester City</span>
+                    </div>
+                    <div>
+                      <img className="club-logo" alt="" style={{ height: 25, width: 25 }}
+                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                      <span>Manchester City</span>
+                    </div>
+                  </div>
+                  <div
+                    className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                    <span className="fs-8 text-secondary">20/01</span>
+                    <span className="fs-8 text-secondary">19:00</span>
+                    <span className="fs-8 text-secondary">Sân Hàng Đẫy</span>
+                  </div>
+                  <div className="remove-match p-3 bg-danger">
+                    <button className="text-muted"><DeleteIcon></DeleteIcon></button>
+                  </div>
+                </div>
+              </div>
+              <div className="col">
+                <div className="match d-flex border">
+                  <div className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                    <div>
+                      <img className="club-logo" alt="" style={{ height: 25, width: 25 }}
+                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                      <span>Manchester City</span>
+                    </div>
+                    <div>
+                      <img className="club-logo" alt="" style={{ height: 25, width: 25 }}
+                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                      <span>Manchester City</span>
+                    </div>
+                  </div>
+                  <div
+                    className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                    <span className="fs-8 text-secondary">20/01</span>
+                    <span className="fs-8 text-secondary">19:00</span>
+                    <span className="fs-8 text-secondary">Sân Hàng Đẫy</span>
+                  </div>
+                  <div className="remove-match p-3 bg-danger">
+                    <button className="text-muted"><DeleteIcon></DeleteIcon></button>
+                  </div>
+                </div>
+              </div>
+              <div className="col">
+                <div className="match d-flex border">
+                  <div className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                    <div>
+                      <img className="club-logo" alt="" style={{ height: 25, width: 25 }}
+                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                      <span>Manchester City</span>
+                    </div>
+                    <div>
+                      <img className="club-logo" alt="" style={{ height: 25, width: 25 }}
+                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                      <span>Manchester City</span>
+                    </div>
+                  </div>
+                  <div
+                    className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                    <span className="fs-8 text-secondary">20/01</span>
+                    <span className="fs-8 text-secondary">19:00</span>
+                    <span className="fs-8 text-secondary">Sân Hàng Đẫy</span>
+                  </div>
+                  <div className="remove-match p-3 bg-danger">
+                    <button className="text-muted"><DeleteIcon></DeleteIcon></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -501,92 +618,17 @@ function EditMatch() {
 }
 
 function Content(props) {
+  const [league, setLeague] = useState("");
+  const name = localStorage.getItem("seasonNameSelected");
+  useEffect(() => {
+    setLeague(name);
+  }, []);
   return (
-    <>
-      <div>
-        <div id="right-panel" className="right-panel">
-          <header id="header" className="header bg-light text-dark">
-            <div className="header-menu ">
-              <div
-                className="col-sm-24 "
-                style={{
-                  marginTop: "30px",
-                  borderBottom: "1px solid black",
-                  width: "100%",
-                  textAlign: "center",
-                  paddingBottom: 24,
-                }}
-              >
-                <h3 className="">GIẢI BÓNG ĐÁ VÔ ĐỊCH QUỐC GIA</h3>
-              </div>
-            </div>
-          </header>
-        </div>
-        <div className="animated fadeIn">
-          {/* <div className="row">
-            <div className="col-lg-2">
-            </div>
-            <div className="col-lg-8">
-              <div className="card">
-                <div className="card-header">
-                  <strong>Form đăng ký</strong>
-                </div>
-                <div className="card-body card-block">
-                  <form id="register" action="/club/add/<%=idSeason%>" method="post" className="form-horizontal">
-
-                    <div className="row form-group">
-                      <div className="col col-md-3 "><label for="tendoibong" className=" form-control-label ">Tên đội
-                        bóng</label>
-                      </div>
-                      <div className="col-12 col-md-9">
-                        <input type="text" id="tendoibong" name="tendoibong" placeholder="Tên đội bóng"
-                          className="form-control" required />
-                      </div>
-                    </div>
-                    <div className="row form-group">
-                      <div className="col col-md-3 "><label for="svd" className=" form-control-label ">Sân vận
-                        động</label>
-                      </div>
-                      <div className="col-12 col-md-9">
-                        <input type="text" id="svd" name="svd" placeholder="Sân vận động" className="form-control" required />
-                      </div>
-                    </div>
-                    <div className="row form-group">
-
-                      <div className="col col-md-3 "><label for="hlv" className=" form-control-label ">Huấn luyện
-                        viên </label>
-                      </div>
-                      <div className="col-12 col-md-9">
-                        <input type="text" id="hlv" name="hlv" placeholder="Huấn luyện viên"
-                          className="form-control" required />
-                      </div>
-                    </div>
-                    <div className="row form-group">
-                      <div className="col col-md-3"><label for="logo" className=" form-control-label">Logo</label></div>
-                      <div className="col-12 col-md-9">
-                        <div className="file-loading">
-                          <input value="" id="logo" name="logo" type="file" multiple />
-                        </div>
-                      </div>
-                      <input type="hidden" id="imgPath" name="imgPath" value="" />
-                    </div>
-                  </form>
-                </div>
-                <div className="card-footer">
-                  <button form="register" type="submit" className="btn btn-primary btn-sm">
-                    <i className="fa fa-check"></i> Đăng ký
-                  </button>
-                  <button form="register" type="reset" className="btn btn-danger btn-sm">
-                    <i className="fa fa-ban"> </i> Hủy đăng ký
-                  </button>
-
-                </div>
-              </div>
-            </div> */}
-          {/* </div> */}
-        </div>
-      </div>
-    </>
+    <div>
+      <header className="header d-flex flex-column justify-content-center px-4">
+        <h5 className="m-0 fw-semibold text-uppercase">{league}</h5>
+      </header>
+    </div>
   );
 }
 

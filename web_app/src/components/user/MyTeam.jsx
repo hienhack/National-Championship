@@ -9,9 +9,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import "../../style/myteam.css";
 import "../../css/content.css";
 import "../../css/style.css"
-
+import SearchIcon from '@mui/icons-material/Search';
 import { Col, Row, Select } from "antd";
 import axios from "axios"
+import AddIcon from '@mui/icons-material/Add';
 
 import muImage from "../../assets/imgs/mu.png";
 const API = 'http://127.0.0.1:5000/api/club';
@@ -103,6 +104,104 @@ function AllTeam() {
 
 function ContentPreview() {
   const [avatar, setAvatar] = useState();
+  const [club, setClub] = useState(null);
+  const idClub = localStorage.getItem("clubSelected");
+  const idSeason = localStorage.getItem("seasonIDSelected");
+
+  useEffect(() => {
+
+
+    axios.get(`${API}/${idClub}/${idSeason}`, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      }
+    }).
+      then(response => {
+        setClub(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
+
+  useEffect(() => {
+    return () => avatar && URL.revokeObjectURL(avatar.preview);
+  }, [avatar]);
+
+  const handlePreviewAvatar = (e) => {
+    const file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+
+    setAvatar(file);
+  };
+
+  return (
+    <>
+      {!avatar && (
+        <img
+          style={{
+            marginLeft: "70px",
+            height: "290px",
+            marginBottom: "10px",
+          }}
+          src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg"
+          alt=""
+          width="80%"
+        />
+      )}
+
+      {avatar && (
+        <img
+          style={{
+            marginLeft: "180px",
+            height: "290px",
+            marginBottom: "10px",
+          }}
+          src={avatar.preview}
+          alt=""
+          width="50%"
+        />
+      )}
+      <div >
+        <div class="input-group">
+          <input type="file" class="form-control" onChange={handlePreviewAvatar} id="contentPDF" />
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ContentPreviewAdd() {
+  const [avatar, setAvatar] = useState();
+  // const [club, setClub] = useState(null);
+  // const idClub = localStorage.getItem("clubSelected");
+  // const idSeason = localStorage.getItem("seasonIDSelected");
+
+  // useEffect(() => {
+
+
+  //   axios.get(`${API}/${idClub}/${idSeason}`, {
+  //     headers: {
+  //       'content-type': 'application/json',
+  //       'accept': 'application/json',
+  //     }
+  //   }).
+  //     then(response => {
+  //       setClub(response.data.data);
+  //       console.log(response.data.data)
+
+  //     }).catch(err => {
+  //     })
+
+
+  // }, [])
+
+  useEffect(() => {
+    return () => avatar && URL.revokeObjectURL(avatar.preview);
+  }, [avatar]);
 
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
@@ -116,12 +215,11 @@ function ContentPreview() {
       {/* {!avatar && (
         <img
           style={{
-            marginTop: 8,
-            marginLeft: "10px",
+            marginLeft: "70px",
             height: "290px",
             marginBottom: "10px",
           }}
-          src={listAccount.image}
+          src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg"
           alt=""
           width="80%"
         />
@@ -130,9 +228,8 @@ function ContentPreview() {
       {avatar && (
         <img
           style={{
-            marginTop: 8,
-
-            height: "140px",
+            marginLeft: "180px",
+            height: "290px",
             marginBottom: "10px",
           }}
           src={avatar.preview}
@@ -141,13 +238,13 @@ function ContentPreview() {
         />
       )}
       <div >
-        <input type="file" onChange={handlePreviewAvatar} id="contentPDF" />
+        <div class="input-group">
+          <input type="file" class="form-control" onChange={handlePreviewAvatar} id="contentPDFAdd" />
+        </div>
       </div>
     </>
   );
 }
-
-
 
 function AddTeam() {
   return (
@@ -160,23 +257,19 @@ function AddTeam() {
           <div className="m-auto bg-white shadow rounded-2" style={{ width: "800px" }}>
             <div className="d-flex justify-content-between p-4">
               <div className="input-group w-50">
-                <i className="fa-solid fa-magnifying-glass input-group-text pt-2"></i>
+                <i className="fa-solid fa-magnifying-glass input-group-text pt-2"><SearchIcon></SearchIcon></i>
                 <input type="text" className="form-control" placeholder="Tìm đội bóng các mùa trước..." />
               </div>
-              <button id="new-club-btn" className="fs-6 active"><i className="fa-solid fa-circle-check"></i> Đăng
+
+              <button id="new-club-btn" className="fs-6 active" style={{ background: "#21e758", paddingRight: 5, borderRadius: 5, color: "white" }}><AddIcon></AddIcon> Đăng
                 ký mới</button>
             </div>
             <hr className="m-0" />
             <form>
               <div className="p-4 d-flex flex-column gap-3">
                 <div>
-                  <img className="d-block mb-3 m-auto"
-                    style={{ maxHeight: "250px", maxWidth: "250px", objectFit: "cover" }}
-                    src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
-                  </img>
-                  <div className="input-group">
-                    <input type="file" className="form-control" />
-                  </div>
+                  <ContentPreviewAdd></ContentPreviewAdd>
+
                 </div>
                 <div>
                   <label className="fs-8 mb-1">Tên câu lạc bộ</label>
@@ -252,7 +345,7 @@ function InfoTeam() {
         <div className="d-flex flex-column gap-4 p-4">
           <h5 className="m-0">Thông tin đội bóng</h5>
           <div className="bg-white rounded-1">
-            <img className="club-cover-img rounded-top-1"
+            <img className="club-cover-img rounded-top-1" alt=""
               src="https://media.istockphoto.com/id/472347896/photo/striped-soccer-field.jpg?s=612x612&w=0&k=20&c=wgeavCCOimF1b5mrv9QNQuuJqs1ERX67pDjPT3yv8j8=">
             </img>
             <div className="p-4 m" style={{ marginTop: "-200px" }}>
@@ -263,7 +356,7 @@ function InfoTeam() {
               <div className="d-flex align-items-end justify-content-between w-100" style={{ marginTop: "65px" }}>
                 <div className="d-flex gap-4 align-items-end">
                   <div style={{ width: "50px" }}></div>
-                  <img className="club-logo"
+                  <img className="club-logo" alt=""
                     src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
                   </img>
                   <div>
@@ -287,14 +380,14 @@ function InfoTeam() {
                         <form>
                           <div className="d-flex flex-column gap-3">
                             <div>
-                              <img className="d-block mb-3 m-auto"
+                              {/* <img className="d-block mb-3 m-auto" alt=""
                                 style={{ maxHeight: 250, maxWidth: 250, objectFit: "cover" }}
                                 src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
 
-                              </img>
-                              <div className="input-group">
-                                <input type="file" className="form-control" />
-                              </div>
+                              </img> */}
+                              <ContentPreview />
+
+
                             </div>
                             <div>
                               <label className="fs-8 mb-1">Tên câu lạc bộ</label>
