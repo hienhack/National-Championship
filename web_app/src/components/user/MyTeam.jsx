@@ -86,7 +86,7 @@ function AllTeam() {
 
                   }}>
                     <img
-                      src={i.image}
+                      src={`http://localhost:5000${i.image}`}
                       alt=""
                       className="club-logo"></img>
                     <div className="club-card-body">
@@ -179,28 +179,7 @@ function ContentPreview() {
 
 function ContentPreviewAdd() {
   const [avatar, setAvatar] = useState();
-  // const [club, setClub] = useState(null);
-  // const idClub = localStorage.getItem("clubSelected");
-  // const idSeason = localStorage.getItem("seasonIDSelected");
 
-  // useEffect(() => {
-
-
-  //   axios.get(`${API}/${idClub}/${idSeason}`, {
-  //     headers: {
-  //       'content-type': 'application/json',
-  //       'accept': 'application/json',
-  //     }
-  //   }).
-  //     then(response => {
-  //       setClub(response.data.data);
-  //       console.log(response.data.data)
-
-  //     }).catch(err => {
-  //     })
-
-
-  // }, [])
 
   useEffect(() => {
     return () => avatar && URL.revokeObjectURL(avatar.preview);
@@ -258,32 +237,24 @@ const submitAddClub = async () => {
   let idSeason = localStorage.getItem("seasonIDSelected");
 
   console.log(content);
-  const requestData = {
-    name: name,
-    stadium: stadium,
-    image: content,
-    season: {
-      coachName: mentor,
-      seasonId: idSeason,
-    }
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("stadium", stadium);
+  formData.append("image", content);
+  formData.append("coachName", mentor);
+  formData.append("seasonId", idSeason);
 
-  }
+  await fetch("http://127.0.0.1:5000/api/club/create", {
+    method: "POST",
+    body: formData,
+    headers: {
+      "Accept": "application/json",
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+  // window.location.reload(false);
 };
-
-
-// await fetch("http://127.0.0.1:5000/api/club/create", {
-//   method: "POST",
-//   body: JSON.stringify(requestData),
-//   headers: {
-//     "Content-Type": "application/json",
-//     "Accept": "application/json",
-//   },
-// })
-//   .then((result) => { })
-//   .catch((error) => { });
-// window.location.reload(false);
-
-
 
 
 function AddTeam() {
@@ -318,7 +289,6 @@ function AddTeam() {
                 let stadium = $("#stadiumAdd").val();
                 let mentor = $("#mentorAdd").val();
                 let content = $("#contentPDFAdd").prop("files")[0];
-                console.log(content);
 
                 if (
                   name === "" ||

@@ -8,6 +8,9 @@ class ClubController {
 
     async createClub(req, res) {
         const club = req.body;
+        console.log(req.body);
+        console.log(req.file);
+
         club.seasons = [];
         club.seasons.push({
             seasonId: req.body.seasonId,
@@ -239,16 +242,16 @@ class ClubController {
     // }
 
     async deletePlayerFromClub(req, res) {
-        const {_id , season} = req.body;
+        const { _id, season } = req.body;
         const club = await clubModel.findById(_id);
         for (let index = 0; index < club.seasons.length; index++) {
             if (club.seasons[index].seasonId.equals(season.seasonId)) {
                 for (let i = 0; i < season.playersId.length; i++) {
                     const Id = season.playersId[i];
-                    club.seasons[index].players.pull({playerId: Id})
+                    club.seasons[index].players.pull({ playerId: Id })
                 }
             }
-            
+
         }
         res.status(201).send({ message: "Deleted Player from Club Successfully" });
         return;
@@ -267,8 +270,8 @@ class ClubController {
 
 
         // if (club) {
-            // res.status(201).send({ message: "Deleted Player from Club Successfully" });
-            // return;
+        // res.status(201).send({ message: "Deleted Player from Club Successfully" });
+        // return;
         // } else {
         //     res.status(400).send({ message: "Deleted Player from Club Failed" });
         //     return;
@@ -309,13 +312,13 @@ class ClubController {
 
         const seasonId = req.params.seasonId;
         const clubId = req.params.clubId;
-       // const season = await seasonModel.findById(seasonId);
+        // const season = await seasonModel.findById(seasonId);
 
         const club = await clubModel.findById(clubId);
         var data = new Object();
         const size = club.seasons.length;
         for (let i = 0; i < size; i++) {
-            if(club.seasons[i].seasonId.equals(seasonId)){
+            if (club.seasons[i].seasonId.equals(seasonId)) {
                 data._id = club._id;
                 data.name = club.name;
                 data.stadium = club.stadium;
@@ -326,9 +329,9 @@ class ClubController {
                 data.season.playerList = [];
                 for (let index = 0; index < club.seasons[i].players.length; index++) {
                     const p = club.seasons[i].players[index];
-        
+
                     const player = await playerModel.findOne({ _id: p.playerId }).lean();
-        
+
                     if (player) {
                         delete player.seasons;
                         player.shirt_number = p.shirt_number;
@@ -338,10 +341,10 @@ class ClubController {
                 res.status(200).send({ message: "Showed club's infomation successfully", data: data });
                 return;
             }
-            
+
         }
         res.status(400).send({ message: "Club not found" });
-            return;
+        return;
 
         // result.seasons[0].playerList = [];
 
