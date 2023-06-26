@@ -8,6 +8,7 @@ import "../../css/style.css"
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BuildIcon from "@mui/icons-material/Build";
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import $ from "jquery";
 import moment from "moment";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -26,41 +27,59 @@ function MyProfile() {
   );
 }
 
-// const submitNewSeason = async () => {
-//   let name = $("#seasonName").val();
-//   let year = $("#seasonYear").val();
-//   let start = $("#seasonStart").val();
-//   let end = $("#seasonEnd").val();
-//   let totalClub = $("#seasonClub").val();
-//   let totalPlayer = $("#seasonPlayer").val();
-//   let totalForeigner = $("#seasonForeigner").val();
-//   let demotedPosition = $("#seasonDemotedPosition").val();
-//   let redCard = $("#seasonRedCard").val();
-//   let minAge = $("#seasonMinAge").val();
-//   const formData = new FormData();
-//   formData.append("name", name);
-//   formData.append("year", year);
+const deleteSeason = async () => {
+  const id = localStorage.getItem("seasonDeleteSelected");
+  let idBook = { _id: id };
 
-//   formData.append("start", start);
-//   formData.append("end", end);
-//   formData.append("year", totalClub);
-//   formData.append("year", totalForeigner);
-//   formData.append("year", demotedPosition);
-//   formData.append("year", redCard);
-//   formData.append("year", minAge);
+  await fetch("http://127.0.0.1:5000/api/season/delete", {
+    method: "POST",
+    headers: {
 
-//   let id = localStorage.getItem("bookAddChapter");
+    },
+    body: JSON.stringify(idBook),
+  })
+    .then((result) => {
+      // window.location.reload(false);
+    })
+    .catch((error) => { });
+};
 
-//   await fetch(`https://ebook4u-server.onrender.com/api/chapter/${id}`, {
-//     method: "POST",
-//     body: formData,
-//     headers: {
-//       Authorization: jwts,
-//     },
-//   })
-//     .then((result) => { })
-//     .catch((error) => { });
-// };
+const submitNewSeason = async () => {
+  let name = $("#seasonName").val();
+  let year = $("#seasonYear").val();
+  let start = $("#seasonStart").val();
+  let end = $("#seasonEnd").val();
+  let totalClub = $("#seasonClub").val();
+  let totalForeigner = $("#seasonForeigner").val();
+  let demotedPosition = $("#seasonDemotedPosition").val();
+  let redCard = $("#seasonRedCard").val();
+  let minAge = $("#seasonMinAge").val();
+
+  const formData = new FormData();
+  const ruleData = {
+    demotedPosition: parseInt(demotedPosition),
+    maxForeginPlayer: parseInt(totalForeigner),
+    minAge: parseInt(minAge),
+    redCardBanned: parseInt(redCard),
+    totalClubs: parseInt(totalClub)
+  };
+
+  formData.append("seasonName", name);
+  formData.append("year", year);
+  formData.append("start", moment(start).toISOString());
+  formData.append("end", moment(end).toISOString());
+  formData.append("rule", JSON.stringify(ruleData));
+
+  await fetch("http://127.0.0.1:5000/api/season/create", {
+    method: "POST",
+    body: formData,
+    headers: {
+      // Các header mà bạn muốn bổ sung (nếu có)
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+};
 
 function AllLeague() {
   const [listAccount, setList] = useState([]);
@@ -142,19 +161,12 @@ function AllLeague() {
                   </button>
                   <button className="btn btn-light" title="Xóa" onClick={() => {
                     openNotificationWithIcon2("success");
-
+                    localStorage.setItem("seasonDeleteSelected", i._id);
+                    deleteSeason();
                   }}>
                     <DeleteIcon></DeleteIcon>
                   </button>
-                  <button
-                    className="btn  btn-light"
-                    title="Sửa thông tin"
-                    onClick={() => {
-                      handleOnClick();
-                    }}
-                  >
-                    <BuildIcon></BuildIcon>
-                  </button>
+
                 </div>
                 {contextHolder}
                 <button
@@ -311,7 +323,7 @@ function AllLeague() {
                       return;
                     } else {
                       openNotificationWithIcon1("success");
-
+                      submitNewSeason();
                     }
                   }}>
                     Lưu
