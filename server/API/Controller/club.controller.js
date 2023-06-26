@@ -9,7 +9,10 @@ class ClubController {
     async createClub(req, res) {
         const club = req.body;
         club.seasons = [];
-
+        club.seasons.push({
+            seasonId: req.body.seasonId,
+            coachName: req.body.coachName
+        })
         if (req.file) {
             club.image = `Images/club/${req.file.filename}`;
         }
@@ -272,33 +275,89 @@ class ClubController {
         // }
     }
 
+    // async getClub(req, res) {
+
+    //     const seasonId = req.params.seasonId;
+    //     const clubId = req.params.clubId;
+    //     const season = await seasonModel.findById(seasonId);
+
+    //     var result = await clubModel.findOne({ _id: clubId, 'seasons.seasonId': season._id }, { _id: 1, name: 1, stadium: 1, image: 1, 'seasons.$': 1 }).lean();
+    //     if (result === null) {
+    //         res.status(400).send({ message: "Club not found" });
+    //         return;
+    //     }
+
+    //     result.seasons[0].playerList = [];
+
+    //     for (let index = 0; index < result.seasons[0].players.length; index++) {
+    //         const p = result.seasons[0].players[index];
+
+    //         const player = await playerModel.findOne({ _id: p.playerId }).lean();
+
+    //         if (player) {
+    //             delete player.seasons;
+    //             player.shirt_number = p.shirt_number;
+    //         }
+    //         result.seasons[0].playerList.push(player);
+    //     }
+    //     delete result.seasons[0].players;
+    //     res.status(200).send({ message: "Showed club's infomation successfully", data: result });
+
+    // }
+
     async getClub(req, res) {
 
         const seasonId = req.params.seasonId;
         const clubId = req.params.clubId;
-        const season = await seasonModel.findById(seasonId);
+       // const season = await seasonModel.findById(seasonId);
 
-        var result = await clubModel.findOne({ _id: clubId, 'seasons.seasonId': season._id }, { _id: 1, name: 1, stadium: 1, image: 1, 'seasons.$': 1 }).lean();
-        if (result === null) {
-            res.status(400).send({ message: "Club not found" });
-            return;
-        }
-
-        result.seasons[0].playerList = [];
-
-        for (let index = 0; index < result.seasons[0].players.length; index++) {
-            const p = result.seasons[0].players[index];
-
-            const player = await playerModel.findOne({ _id: p.playerId }).lean();
-
-            if (player) {
-                delete player.seasons;
-                player.shirt_number = p.shirt_number;
+        const club = await clubModel.findById(clubId);
+        var data = new Object();
+        const size = club.seasons.length;
+        for (let i = 0; i < size; i++) {
+            if(club.seasons[i].seasonId.equals(seasonId)){
+                data._id = club._id;
+                data.name = club.name;
+                data.stadium = club.stadium;
+                data.image = club.image;
+                data.season = {};
+                data.season.seasonId = club.seasons[i].seasonId;
+                data.season.coachName = club.seasons[i].coachName;
+                data.season.playerList = [];
+                for (let index = 0; index < club.seasons[i].players.length; index++) {
+                    const p = club.seasons[i].players[index];
+        
+                    const player = await playerModel.findOne({ _id: p.playerId }).lean();
+        
+                    if (player) {
+                        delete player.seasons;
+                        player.shirt_number = p.shirt_number;
+                    }
+                    data.season.playerList.push(player);
+                }
+                res.status(200).send({ message: "Showed club's infomation successfully", data: data });
+                return;
             }
-            result.seasons[0].playerList.push(player);
+            
         }
-        delete result.seasons[0].players;
-        res.status(200).send({ message: "Showed club's infomation successfully", data: result });
+        res.status(400).send({ message: "Club not found" });
+            return;
+
+        // result.seasons[0].playerList = [];
+
+        // for (let index = 0; index < result.seasons[0].players.length; index++) {
+        //     const p = result.seasons[0].players[index];
+
+        //     const player = await playerModel.findOne({ _id: p.playerId }).lean();
+
+        //     if (player) {
+        //         delete player.seasons;
+        //         player.shirt_number = p.shirt_number;
+        //     }
+        //     result.seasons[0].playerList.push(player);
+        // }
+        // delete result.seasons[0].players;
+        // res.status(200).send({ message: "Showed club's infomation successfully", data: result });
 
     }
 
