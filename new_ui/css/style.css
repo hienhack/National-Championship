@@ -98,3 +98,7 @@ button:hover {
 	display: block;
 	margin: auto;
 }
+
+.bg-success {
+	background-color: rgb(9, 196, 9) !important;
+}
