@@ -95,6 +95,8 @@ function UserPage() {
                 </div>
                 <ul className="collapse" id="schedule-menu">
                   <li className={`menu-item ${activeMenuItem === 'schedule' ? 'active' : ''}`} onClick={() => handleMenuClick('schedule')}><Link to="/schedule">Tạo lịch thi đấu</Link></li>
+                  <li className={`menu-item ${activeMenuItem === 'schedule/add' ? 'active' : ''}`} onClick={() => handleMenuClick('schedule/all')}><Link to="/schedule/add">Trận đấu</Link></li>
+
                 </ul>
               </div>
               <div className="submenu">
