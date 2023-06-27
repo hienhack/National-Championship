@@ -197,6 +197,7 @@ class ClubController {
     async deleteClub(req, res) {
         const clubId = req.body.clubId;
         const seasonId = req.body.seasonId;
+        console.log(clubId);
         const club = await clubModel.findById(clubId);
         const season = await seasonModel.findById(seasonId);
 

@@ -38,7 +38,7 @@ function MyTeam() {
 
 function AllTeam() {
   const [listTeam, setListTeam] = useState([]);
-
+  const id = localStorage.getItem("seasonIDSelected");
   useEffect(() => {
 
 
@@ -46,7 +46,11 @@ function AllTeam() {
       headers: {
         'content-type': 'application/json',
         'accept': 'application/json',
+      },
+      params: {
+        seasonId: id
       }
+
     }).
       then(response => {
         setListTeam(response.data.data);
@@ -62,8 +66,8 @@ function AllTeam() {
     const id = localStorage.getItem("clubDeleteSelected");
     const id1 = localStorage.getItem("seasonIDSelected")
     const formData = new FormData();
-    formData.append("clubID", id);
-    formData.append("seasonID", id1);
+    formData.append("clubId", id);
+    formData.append("seasonId", id1);
     await fetch("http://127.0.0.1:5000/api/club/delete", {
       method: "POST",
       headers: {
@@ -124,7 +128,7 @@ function AllTeam() {
                         className="club-logo"></img>
                       {contextHolder}
 
-                      <button className="btn btn-danger" title="Xóa" onClick={() => {
+                      <button className="btn btn-danger" title="Xóa" style={{ height: 50, width: 50 }} onClick={() => {
                         openNotificationWithIcon2("success");
                         localStorage.setItem("clubDeleteSelected", i._id);
                         deleteClub();
@@ -197,8 +201,10 @@ function ContentPreview() {
             marginLeft: "70px",
             height: "290px",
             marginBottom: "10px",
+            objectFit: "contain",
+
           }}
-          src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg"
+          src={`http://localhost:5000/${club?.image}`}
           alt=""
           width="80%"
         />
@@ -209,6 +215,7 @@ function ContentPreview() {
           style={{
             marginLeft: "180px",
             height: "290px",
+            objectFit: "contain",
             marginBottom: "10px",
           }}
           src={avatar.preview}
@@ -218,7 +225,7 @@ function ContentPreview() {
       )}
       <div >
         <div className="input-group">
-          <input type="file" className="form-control" onChange={handlePreviewAvatar} id="contentPDF" />
+          <input type="file" className="form-control" onChange={handlePreviewAvatar} id="contentPDFUpdate" />
         </div>
       </div>
     </>
@@ -418,11 +425,48 @@ function AddTeam() {
   );
 }
 
+const submitUpdateClub = async () => {
+  let id = localStorage.getItem("clubSelected");
+  let name = $("#clubUpdate").val();
+  let stadium = $("#stadiumUpdate").val();
+  let logo;
+  if (!($("#contenPDFUpdate").prop("files") === undefined)) {
+    logo = $("#contenPDFUpdate").prop("files")[0];
+
+  }
+
+
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("stadium", stadium);
+  formData.append("_id", id);
+  if (!(logo === undefined)) {
+    formData.append("image", logo);
+
+  }
+
+  await fetch("http://127.0.0.1:5000/api/club/update", {
+    method: "POST",
+    body: formData,
+    headers: {
+      "Accept": "application/json",
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+  // window.location.reload(false);
+}
+
 function InfoTeam() {
   const [club, setClub] = useState(null);
   const idClub = localStorage.getItem("clubSelected");
   const idSeason = localStorage.getItem("seasonIDSelected");
-
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type) => {
+    api[type]({
+      message: type === "success" ? "Chỉnh sửa thành công" : "Vui lòng điền đủ thông tin",
+    });
+  };
   useEffect(() => {
 
 
@@ -473,12 +517,11 @@ function InfoTeam() {
                 <div className="d-flex gap-4 align-items-end">
                   <div style={{ width: "50px" }}></div>
                   <img className="club-logo" alt=""
-                    src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                    src={`http://localhost:5000/${club?.image}`}>
                   </img>
                   <div>
                     <h2 className="text-light mb-4">{club?.name}</h2>
                     <h6>Sân nhà: {club?.stadium}</h6>
-                    <h6>Huấn luyện viên: {club?.season?.coachName}</h6>
                   </div>
                 </div>
                 <button className="btn btn-light" data-bs-toggle="modal"
@@ -508,28 +551,43 @@ function InfoTeam() {
                             <div>
                               <label className="fs-8 mb-1">Tên câu lạc bộ</label>
                               <div className="input-group">
-                                <input type="text" className="form-control" defaultValue={club?.name} />
+                                <input type="text" className="form-control" defaultValue={club?.name} id="clubUpdate" />
                               </div>
                             </div>
                             <div>
                               <label className="fs-8 mb-1">Sân nhà</label>
                               <div className="input-group">
-                                <input type="text" className="form-control" defaultValue={club?.stadium} />
+                                <input type="text" className="form-control" defaultValue={club?.stadium} id="stadiumUpdate" />
                               </div>
                             </div>
-                            <div>
-                              <label className="fs-8 mb-1">Huấn luyện viên</label>
-                              <div className="input-group">
-                                <input type="text" className="form-control" defaultValue={club?.season?.coachName} />
-                              </div>
-                            </div>
+
                           </div>
                         </form>
                       </div>
                       <div className="modal-footer">
                         <button type="button" className="btn btn-light"
                           data-bs-dismiss="modal">Hủy</button>
-                        <button type="button" className="btn btn-primary">Lưu</button>
+                        {contextHolder}
+
+                        <button type="button" className="btn btn-primary"
+                          onClick={() => {
+                            let name = $("#clubUpdate").val();
+                            let stadium = $("#stadiumUpdate").val();
+
+                            if (
+                              name === "" ||
+                              stadium === ""
+
+                            ) {
+                              openNotificationWithIcon("error");
+
+                              return;
+                            } else {
+                              openNotificationWithIcon("success");
+                              submitUpdateClub();
+                            }
+                          }}
+                        >Lưu</button>
                       </div>
                     </div>
                   </div>
