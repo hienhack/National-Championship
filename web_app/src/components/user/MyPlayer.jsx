@@ -32,11 +32,11 @@ function MyTeam() {
 }
 
 const deletePlayer = async () => {
-  const id = localStorage.getItem("clubDeleteSelected");
+  // const id = localStorage.getItem("clubDeleteSelected");
   const id1 = localStorage.getItem("seasonIDSelected");
   const idPlayer = localStorage.getItem("playerSelected");
   const requestData = {
-    clubId: id,
+    // clubId: id,
     seasonId: id1,
     playerId: idPlayer
   }
