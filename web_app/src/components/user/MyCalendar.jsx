@@ -9,15 +9,15 @@ import BuildIcon from "@mui/icons-material/Build";
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-const API = "http://127.0.0.1:5000/match";
+const API = "http://127.0.0.1:5000/api/match";
 
 function MyCalendar() {
   return (
     <Routes>
       <Route index element={<Navigate to="all" replace />} />
 
-      <Route path="all" element={<AllCalendar />} />
-      <Route path="add" element={<AddMatch />} />
+      <Route path="all" element={<AddMatch />} />
+      <Route path="add" element={<AllCalendar />} />
       <Route path="edit" element={<EditMatch />} />
     </Routes>
   );
@@ -25,21 +25,21 @@ function MyCalendar() {
 
 function AllCalendar() {
   const [listMatch, setListMatch] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(API, {
-        headers: {
-          "content-type": "application/json",
-          accept: "application/json",
-        },
-      })
-      .then((response) => {
-        setListMatch(response.data.data);
-        console.log(response.data.data);
-      })
-      .catch((err) => { });
-  }, []);
+  // const [round, setRound] = useState("Tất cả");
+  // useEffect(() => {
+  //   axios
+  //     .get(API, {
+  //       headers: {
+  //         "content-type": "application/json",
+  //         accept: "application/json",
+  //       },
+  //     })
+  //     .then((response) => {
+  //       // setListMatch(response.data.data);
+  //       console.log(response.data.data);
+  //     })
+  //     .catch((err) => { });
+  // }, []);
 
   function convertToLocalDate(utcDateTime) {
     var utcDate = new Date(utcDateTime);
@@ -67,9 +67,9 @@ function AllCalendar() {
           <div className="m-auto bg-white shadow rounded-2" style={{ width: 800 }}>
             <div className="d-flex justify-content-between p-4">
               <div className="round-select input-group" style={{ width: 180 }}>
-                <label className="input-group-text" for="inputGroupSelect01">Vòng đấu</label>
+                <label className="input-group-text" htmlFor="inputGroupSelect01">Vòng đấu</label>
                 <select className="form-select" id="inputGroupSelect01">
-                  <option value="1" selected>1</option>
+                  <option defaultValue="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
                 </select>
@@ -93,13 +93,13 @@ function AllCalendar() {
                             <label className="fs-8 mb-1">Vòng</label>
                             <div className="input-group">
                               <input type="number" className="form-control" value="1"
-                                readonly />
+                                readOnly />
                             </div>
                           </div>
                           <div>
                             <label className="fs-8 mb-1">Đội bóng 1</label>
                             <select className="form-select" aria-label="Default select example">
-                              <option selected>Chọn đội bóng</option>
+                              <option defaultValue="">Chọn đội bóng</option>
                               <option value="1">Manchester City</option>
                               <option value="2">Manchester United</option>
                               <option value="3">Liverpool</option>
@@ -108,7 +108,7 @@ function AllCalendar() {
                           <div>
                             <label className="fs-8 mb-1">Đội bóng 1</label>
                             <select className="form-select" aria-label="Default select example">
-                              <option selected>Chọn đội bóng</option>
+                              <option defaultValue="">Chọn đội bóng</option>
                               <option value="1">Manchester City</option>
                               <option value="2">Manchester United</option>
                               <option value="3">Liverpool</option>
@@ -311,239 +311,259 @@ function ContentPreview() {
 }
 
 function AddMatch() {
+  const [round, setRound] = useState("Tất cả");
+  const id = localStorage.getItem("seasonIDSelected");
+
+  useEffect(() => {
+    axios
+      .get(API, {
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+        },
+        params: {
+          seasonId: id
+        }
+      })
+      .then((response) => {
+        // setListMatch(response.data.data);
+        console.log(response.data.data);
+      })
+      .catch((err) => { });
+  }, []);
   return (
     <div className="contentUser">
       <Content />
-      <div class="main-wrapper">
-        <div class="d-flex flex-column gap-4 p-4">
-          <h5 class="m-0">Trận đấu</h5>
-          <div class="m-auto bg-white shadow-sm rounded-2" style={{ width: 800 }}>
-            <div class="p-4">
-              <div class="round-select input-group" style={{ width: 180 }}>
-                <label class="input-group-text" for="inputGroupSelect01">Vòng đấu</label>
-                <select class="form-select" id="inputGroupSelect01">
-                  <option value="all" selected>Tất cả</option>
+      <div className="main-wrapper">
+        <div className="d-flex flex-column gap-4 p-4">
+          <h5 className="m-0">Trận đấu</h5>
+          <div className="m-auto bg-white shadow-sm rounded-2" style={{ width: 800 }}>
+            <div className="p-4">
+              <div className="round-select input-group" style={{ width: 180 }}>
+                <label className="input-group-text" htmlFor="inputGroupSelect01">Vòng đấu</label>
+                <select className="form-select" id="inputGroupSelect01">
+                  <option defaultValue="all" >Tất cả</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
                 </select>
               </div>
             </div>
-            <hr class="m-0" />
-            <div class="d-flex flex-column py-4">
-              <div class="round">
-                <h6 class="m-0 px-4 py-2 fs-8 text-secondary">Vòng: 1/38</h6>
-                <div class="row row-cols-2 g-0 px-4">
-                  <div class="col">
-                    <div class="match d-flex border">
+            <hr className="m-0" />
+            <div className="d-flex flex-column py-4">
+              <div className="round">
+                <h6 className="m-0 px-4 py-2 fs-8 text-secondary">Vòng: 1/38</h6>
+                <div className="row row-cols-2 g-0 px-4">
+                  <div className="col">
+                    <div className="match d-flex border">
                       <div
-                        class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div class="club-win">
-                          <img class="club-logo" alt=""
+                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                        <div className="club-win">
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
-                          <span class="goal float-end">1</span>
+                          <span className="goal float-end">1</span>
                         </div>
-                        <div class="club-lose">
-                          <img class="club-logo" alt=""
+                        <div className="club-lose">
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
-                          <span class="goal float-end">0</span>
+                          <span className="goal float-end">0</span>
                         </div>
                       </div>
                       <div
-                        class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
                         <small>KT</small>
-                        <div class="fs-8">20/01</div>
-                        <div class="fs-8">19:00</div>
+                        <div className="fs-8">20/01</div>
+                        <div className="fs-8">19:00</div>
                       </div>
-                      <div class="update-match p-3 bg-success">
-                        <button class="text-light"><BuildIcon></BuildIcon></button>
+                      <div className="update-match p-3 bg-success">
+                        <button className="text-light"><BuildIcon></BuildIcon></button>
                       </div>
                     </div>
                   </div>
-                  <div class="col">
-                    <div class="match d-flex border">
+                  <div className="col">
+                    <div className="match d-flex border">
                       <div
-                        class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
                         <div>
-                          <img class="club-logo" alt=""
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
                         </div>
                         <div>
-                          <img class="club-logo" alt=""
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
                         </div>
                       </div>
                       <div
-                        class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
                         <small>CD</small>
-                        <div class="fs-8">20/01</div>
-                        <div class="fs-8">19:00</div>
+                        <div className="fs-8">20/01</div>
+                        <div className="fs-8">19:00</div>
                       </div>
-                      <div class="update-match p-3 bg-success">
-                        <button class="text-light"><BuildIcon></BuildIcon></button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="match d-flex border">
-                      <div
-                        class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div>
-                          <img class="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                        </div>
-                        <div>
-                          <img class="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                        </div>
-                      </div>
-                      <div
-                        class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <div class="fs-8">20/01</div>
-                        <div class="fs-8">19:00</div>
-                      </div>
-                      <div class="update-match p-3 bg-success">
-                        <button class="text-light"><BuildIcon></BuildIcon></button>
+                      <div className="update-match p-3 bg-success">
+                        <button className="text-light"><BuildIcon></BuildIcon></button>
                       </div>
                     </div>
                   </div>
-                  <div class="col">
-                    <div class="match d-flex border">
+                  <div className="col">
+                    <div className="match d-flex border">
                       <div
-                        class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
                         <div>
-                          <img class="club-logo" alt=""
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
                         </div>
                         <div>
-                          <img class="club-logo" alt=""
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
                         </div>
                       </div>
                       <div
-                        class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <div class="fs-8">20/01</div>
-                        <div class="fs-8">19:00</div>
+                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                        <div className="fs-8">20/01</div>
+                        <div className="fs-8">19:00</div>
                       </div>
-                      <div class="update-match p-3 bg-success">
-                        <button class="text-light"><BuildIcon></BuildIcon></button>
+                      <div className="update-match p-3 bg-success">
+                        <button className="text-light"><BuildIcon></BuildIcon></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="match d-flex border">
+                      <div
+                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                        <div>
+                          <img className="club-logo" alt=""
+                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                          <span>Manchester City</span>
+                        </div>
+                        <div>
+                          <img className="club-logo" alt=""
+                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                          <span>Manchester City</span>
+                        </div>
+                      </div>
+                      <div
+                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                        <div className="fs-8">20/01</div>
+                        <div className="fs-8">19:00</div>
+                      </div>
+                      <div className="update-match p-3 bg-success">
+                        <button className="text-light"><BuildIcon></BuildIcon></button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="round">
-                <h6 class="m-0 px-4 py-2 fs-8 text-secondary">Vòng: 2/38</h6>
-                <div class="row row-cols-2 g-0 px-4">
-                  <div class="col">
-                    <div class="match d-flex border">
+              <div className="round">
+                <h6 className="m-0 px-4 py-2 fs-8 text-secondary">Vòng: 2/38</h6>
+                <div className="row row-cols-2 g-0 px-4">
+                  <div className="col">
+                    <div className="match d-flex border">
                       <div
-                        class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div class="club-win">
-                          <img class="club-logo" alt=""
+                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                        <div className="club-win">
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
-                          <span class="goal float-end">1</span>
+                          <span className="goal float-end">1</span>
                         </div>
-                        <div class="club-lose">
-                          <img class="club-logo" alt=""
+                        <div className="club-lose">
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
-                          <span class="goal float-end">0</span>
+                          <span className="goal float-end">0</span>
                         </div>
                       </div>
                       <div
-                        class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
                         <small>KT</small>
-                        <div class="fs-8">20/01</div>
-                        <div class="fs-8">19:00</div>
+                        <div className="fs-8">20/01</div>
+                        <div className="fs-8">19:00</div>
                       </div>
-                      <div class="update-match p-3 bg-success">
-                        <button class="text-light"><BuildIcon></BuildIcon></button>
+                      <div className="update-match p-3 bg-success">
+                        <button className="text-light"><BuildIcon></BuildIcon></button>
                       </div>
                     </div>
                   </div>
-                  <div class="col">
-                    <div class="match d-flex border">
+                  <div className="col">
+                    <div className="match d-flex border">
                       <div
-                        class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
                         <div>
-                          <img class="club-logo" alt=""
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
                         </div>
                         <div>
-                          <img class="club-logo" alt=""
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
                         </div>
                       </div>
                       <div
-                        class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
                         <small>CD</small>
-                        <div class="fs-8">20/01</div>
-                        <div class="fs-8">19:00</div>
+                        <div className="fs-8">20/01</div>
+                        <div className="fs-8">19:00</div>
                       </div>
-                      <div class="update-match p-3 bg-success">
-                        <button class="text-light"><BuildIcon></BuildIcon></button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="match d-flex border">
-                      <div
-                        class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div>
-                          <img class="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                        </div>
-                        <div>
-                          <img class="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                        </div>
-                      </div>
-                      <div
-                        class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <div class="fs-8">20/01</div>
-                        <div class="fs-8">19:00</div>
-                      </div>
-                      <div class="update-match p-3 bg-success">
-                        <button class="text-light"><BuildIcon></BuildIcon></button>
+                      <div className="update-match p-3 bg-success">
+                        <button className="text-light"><BuildIcon></BuildIcon></button>
                       </div>
                     </div>
                   </div>
-                  <div class="col">
-                    <div class="match d-flex border">
+                  <div className="col">
+                    <div className="match d-flex border">
                       <div
-                        class="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
                         <div>
-                          <img class="club-logo" alt=""
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
                         </div>
                         <div>
-                          <img class="club-logo" alt=""
+                          <img className="club-logo" alt=""
                             src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
                           <span>Manchester City</span>
                         </div>
                       </div>
                       <div
-                        class="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <div class="fs-8">20/01</div>
-                        <div class="fs-8">19:00</div>
+                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                        <div className="fs-8">20/01</div>
+                        <div className="fs-8">19:00</div>
                       </div>
-                      <div class="update-match p-3 bg-success">
-                        <button class="text-light"><BuildIcon></BuildIcon></button>
+                      <div className="update-match p-3 bg-success">
+                        <button className="text-light"><BuildIcon></BuildIcon></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="match d-flex border">
+                      <div
+                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                        <div>
+                          <img className="club-logo" alt=""
+                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                          <span>Manchester City</span>
+                        </div>
+                        <div>
+                          <img className="club-logo" alt=""
+                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                          <span>Manchester City</span>
+                        </div>
+                      </div>
+                      <div
+                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                        <div className="fs-8">20/01</div>
+                        <div className="fs-8">19:00</div>
+                      </div>
+                      <div className="update-match p-3 bg-success">
+                        <button className="text-light"><BuildIcon></BuildIcon></button>
                       </div>
                     </div>
                   </div>
@@ -586,7 +606,7 @@ function EditMatch() {
                 >
                   <div className="row form-group" style={{ marginBottom: 15 }}>
                     <div className="col col-md-3 ">
-                      <label for="tendoibong" className=" form-control-label ">
+                      <label htmlFor="tendoibong" className=" form-control-label ">
                         Vòng
                       </label>
                     </div>
@@ -597,13 +617,13 @@ function EditMatch() {
                         className="form-control"
                         required="required"
                       >
-                        <option value="1" selected>
+                        <option defaultValue="1">
                           1
                         </option>
-                        <option value="2" selected>
+                        <option value="2" >
                           2
                         </option>
-                        <option value="3" selected>
+                        <option value="3" >
                           3
                         </option>
                       </select>
@@ -611,7 +631,7 @@ function EditMatch() {
                   </div>
                   <div className="row form-group" style={{ marginBottom: 15 }}>
                     <div className="col col-md-3 ">
-                      <label for="svd" className=" form-control-label ">
+                      <label htmlFor="svd" className=" form-control-label ">
                         Đội nhà
                       </label>
                     </div>
@@ -622,7 +642,7 @@ function EditMatch() {
                         className="form-control"
                         required="required"
                       >
-                        <option value="1" selected>
+                        <option defaultValue="1" >
                           MU
                         </option>
                         <option value="0">MCI</option>
@@ -631,7 +651,7 @@ function EditMatch() {
                   </div>
                   <div className="row form-group" style={{ marginBottom: 15 }}>
                     <div className="col col-md-3 ">
-                      <label for="svd" className=" form-control-label ">
+                      <label htmlFor="svd" className=" form-control-label ">
                         Đội khách
                       </label>
                     </div>
@@ -642,7 +662,7 @@ function EditMatch() {
                         className="form-control"
                         required="required"
                       >
-                        <option value="1" selected>
+                        <option value="1" >
                           MU
                         </option>
                         <option value="0">MCI</option>
@@ -651,7 +671,7 @@ function EditMatch() {
                   </div>
                   <div className="row form-group" style={{ marginBottom: 15 }}>
                     <div className="col col-md-3 ">
-                      <label for="hlv" className=" form-control-label ">
+                      <label htmlFor="hlv" className=" form-control-label ">
                         Địa điểm{" "}
                       </label>
                     </div>
@@ -667,7 +687,7 @@ function EditMatch() {
                   </div>
                   <div className="row form-group" style={{ marginBottom: 15 }}>
                     <div className="col col-md-3 ">
-                      <label for="tendoibong" className=" form-control-label ">
+                      <label htmlFor="tendoibong" className=" form-control-label ">
                         Thời gian
                       </label>
                     </div>
