@@ -119,7 +119,7 @@ class PlayerController {
         }
 
         const oldPlayer = await playerModel.findOneAndUpdate({ _id: _id }, updated, { returnDocument: "before" });
-        if (req.file != "") {
+        if (req.file) {
             fs.unlink(`Public${oldPlayer.image}`, (err) => {
                 console.log(err);
             });
