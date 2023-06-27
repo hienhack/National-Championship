@@ -94,8 +94,8 @@ function UserPage() {
                   <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
                 <ul className="collapse" id="schedule-menu">
-                  <li className={`menu-item ${activeMenuItem === 'schedule' ? 'active' : ''}`} onClick={() => handleMenuClick('schedule')}><Link to="/schedule">Tạo lịch thi đấu</Link></li>
-                  <li className={`menu-item ${activeMenuItem === 'schedule/add' ? 'active' : ''}`} onClick={() => handleMenuClick('schedule/all')}><Link to="/schedule/add">Trận đấu</Link></li>
+                  <li className={`menu-item ${activeMenuItem === 'schedule/add' ? 'active' : ''}`} onClick={() => handleMenuClick('schedule/add')}><Link to="/schedule/add">Tạo lịch thi đấu</Link></li>
+                  <li className={`menu-item ${activeMenuItem === 'schedule/all' ? 'active' : ''}`} onClick={() => handleMenuClick('schedule/all')}><Link to="/schedule/all">Trận đấu</Link></li>
 
                 </ul>
               </div>

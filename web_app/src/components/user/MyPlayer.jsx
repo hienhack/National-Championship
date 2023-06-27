@@ -31,12 +31,50 @@ function MyTeam() {
   );
 }
 
+const deletePlayer = async () => {
+  // const id = localStorage.getItem("clubDeleteSelected");
+  const id1 = localStorage.getItem("seasonIDSelected");
+  const idPlayer = localStorage.getItem("playerDeleteSelected");
+  const requestData = {
+    // clubId: id,
+    seasonId: id1,
+    playerId: idPlayer
+  }
 
+
+  await fetch("http://127.0.0.1:5000/api/player/delete", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+    body: JSON.stringify(requestData),
+  })
+    .then((result) => {
+      // window.location.reload(false);
+    })
+    .catch((error) => { });
+};
 
 function AllPlayer() {
   const [listPlayer, setListPlayer] = useState([]);
   const id = localStorage.getItem("seasonIDSelected");
-
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type) => {
+    api[type]({
+      message: "Chọn mùa giải thành công",
+    });
+  };
+  const openNotificationWithIcon1 = (type) => {
+    api[type]({
+      message: type === "success" ? "Thêm thành công" : "Vui lòng điền đủ thông tin",
+    });
+  };
+  const openNotificationWithIcon2 = (type) => {
+    api[type]({
+      message: "Xóa thành công",
+    });
+  };
   useEffect(() => {
 
 
@@ -127,7 +165,14 @@ function AllPlayer() {
                           localStorage.setItem("playerSelected", i._id);
 
                         }}><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
-                        <button className="btn btn-light" title="Xóa" ><DeleteIcon></DeleteIcon></button>
+                        {contextHolder}
+
+                        <button className="btn btn-light" title="Xóa" onClick={() => {
+                          openNotificationWithIcon2("success");
+                          localStorage.setItem("playerDeleteSelected", i._id);
+                          deletePlayer();
+
+                        }}><DeleteIcon></DeleteIcon></button>
                         {/* <button className="btn  btn-light" title="Sửa thông tin" ><BuildIcon></BuildIcon></button> */}
 
                       </td>
@@ -284,6 +329,8 @@ function AddPlayer() {
       message: "Xóa thành công",
     });
   };
+  const id = localStorage.getItem("seasonIDSelected");
+
   useEffect(() => {
 
 
@@ -291,6 +338,9 @@ function AddPlayer() {
       headers: {
         'content-type': 'application/json',
         'accept': 'application/json',
+      },
+      params: {
+        seasonId: id
       }
     }).
       then(response => {
