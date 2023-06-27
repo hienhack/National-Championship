@@ -438,8 +438,8 @@ const submitUpdateClub = async () => {
   let mentor = $("#mentorAdd").val();
   let stadium = $("#stadiumUpdate").val();
   let logo;
-  if (!($("#contenPDFUpdate").prop("files") === undefined)) {
-    logo = $("#contenPDFUpdate").prop("files")[0];
+  if (!($("#contentPDFUpdate").prop("files") === undefined)) {
+    logo = $("#contentPDFUpdate").prop("files")[0];
 
   }
 

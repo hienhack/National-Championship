@@ -220,6 +220,7 @@ function ContentPreviewAdd() {
             marginLeft: "60px",
             height: "290px",
             marginBottom: "10px",
+            objectFit: "contain"
           }}
           src={avatar.preview}
           alt=""
@@ -249,7 +250,7 @@ const submitAddPlayer = async () => {
   console.log(content);
   const formData = new FormData();
   formData.append("name", name);
-  formData.append("dob", dob);
+  formData.append("dob", moment(dob).toISOString());
   formData.append("position", position);
   formData.append("shirtNumber", shirt);
   formData.append("nationality", nationality);
@@ -257,7 +258,7 @@ const submitAddPlayer = async () => {
   formData.append("seasonId", idSeason);
   formData.append("image", content);
 
-  await fetch("http://127.0.0.1:5000/api/club/create", {
+  await fetch("http://127.0.0.1:5000/api/player/create", {
     method: "POST",
     body: formData,
     headers: {
@@ -425,7 +426,8 @@ function AddPlayer() {
   );
 }
 
-function InfoPlayer() {
+function ContentPreview() {
+  const [avatar, setAvatar] = useState();
   const [player, setPLayer] = useState(null);
   const idPlayer = localStorage.getItem("playerSelected");
   // const idSeason = localStorage.getItem("seasonIDSelected");
@@ -449,8 +451,128 @@ function InfoPlayer() {
 
   }, [])
 
+  useEffect(() => {
+    return () => avatar && URL.revokeObjectURL(avatar.preview);
+  }, [avatar]);
+
+  const handlePreviewAvatar = (e) => {
+    const file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+
+    setAvatar(file);
+  };
+
+  return (
+    <>
+      {!avatar && (
+        <img
+          style={{
+            marginLeft: "70px",
+            height: "290px",
+            marginBottom: "10px",
+            objectFit: "contain",
+
+          }}
+          src={`http://localhost:5000/${player?.image}`}
+          alt=""
+          width="80%"
+        />
+      )}
+
+      {avatar && (
+        <img
+          style={{
+            marginLeft: "180px",
+            height: "290px",
+            objectFit: "contain",
+            marginBottom: "10px",
+          }}
+          src={avatar.preview}
+          alt=""
+          width="50%"
+        />
+      )}
+      <div >
+        <div className="input-group">
+          <input type="file" className="form-control" onChange={handlePreviewAvatar} id="contentPDFUpdate" />
+        </div>
+      </div>
+    </>
+  );
+}
+
+const submitUpdatePlayer = async () => {
+  let idPlayer = localStorage.getItem("playerSelected");
+  let name = $("#playerUpdate").val();
+  let dob = $("#dobUpdate").val();
+  let nationality = $("#nationalityUpdate").val();
+  let position = $("#positionUpdate").val();
+  let logo;
+  if (!($("#contentPDFUpdate").prop("files") === undefined)) {
+    logo = $("#contentPDFUpdate").prop("files")[0];
+
+  }
+
+
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("dob", moment(dob).toISOString());
+  formData.append("_id", idPlayer);
+  formData.append("nationality", nationality);
+  formData.append("position", position);
+
+  if (!(logo === undefined)) {
+    formData.append("image", logo);
+
+  }
+
+  await fetch("http://127.0.0.1:5000/api/player/update", {
+    method: "POST",
+    body: formData,
+    headers: {
+      "Accept": "application/json",
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+  // window.location.reload(false);
+}
+
+function InfoPlayer() {
+  const [player, setPLayer] = useState(null);
+  const idPlayer = localStorage.getItem("playerSelected");
+  // const idSeason = localStorage.getItem("seasonIDSelected");
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type) => {
+    api[type]({
+      message: type === "success" ? "Chỉnh sửa thành công" : "Vui lòng điền đủ thông tin",
+    });
+  };
+  useEffect(() => {
+
+
+    axios.get(`${API}/${idPlayer}`, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      }
+    }).
+      then(response => {
+        setPLayer(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
+
   const formatDate = (dateString) => {
     return moment(dateString).format("DD-MM-YYYY");
+  };
+
+  const formatDate1 = (dateString) => {
+    return moment(dateString).format("YYYY-MM-DD");
   };
 
   return (
@@ -488,7 +610,7 @@ function InfoPlayer() {
                       <div className="modal-body p-4">
                         <form>
                           <div className="row g-4 p-4">
-                            <div className="col-6">
+                            {/* <div className="col-6">
                               <div className="mb-3">
                                 <label className="fs-8 mb-1">Ảnh chụp chân dung</label>
                                 <input className="form-control" type="file" id="formFile" />
@@ -498,47 +620,52 @@ function InfoPlayer() {
                                 <img className="d-block" alt=""
                                   src="https://www.mancity.com/meta/media/vw0b1q45/ruben-dias.png" />
                               </div>
-                            </div>
+                            </div> */}
+                            <label className="fs-8 mb-1">Ảnh đại diện</label>
+
+                            <ContentPreview />
+
                             <div className="col-6">
                               <div className="d-flex flex-column gap-3">
                                 <div>
                                   <label className="fs-8 mb-1">Tên cầu thủ</label>
                                   <div className="input-group">
-                                    <input type="text" className="form-control" />
+                                    <input type="text" className="form-control" id="playerUpdate" defaultValue={player?.name} />
                                   </div>
                                 </div>
                                 <div>
                                   <label className="fs-8 mb-1">Ngày sinh</label>
                                   <div className="input-group">
-                                    <input type="date" className="form-control" />
+                                    <input type="date" className="form-control" id="dobUpdate" defaultValue={formatDate1(player?.dob)} />
                                   </div>
                                 </div>
                                 <div>
                                   <label className="fs-8 mb-1">Quốc tịch</label>
                                   <div className="input-group">
-                                    <input type="text" className="form-control" />
+                                    <input type="text" className="form-control" id="nationalityUpdate" defaultValue={player?.nationality} />
                                   </div>
                                 </div>
                                 <div>
                                   <label className="fs-8 mb-1">Vị trí</label>
                                   <select className="form-select"
-                                    aria-label="Default select example">
-                                    <option defaultValue="">--- Chọn vị trí ---</option>
-                                    <option value="1">Hậu vệ</option>
-                                    <option value="2">Tiền vệ</option>
-                                    <option value="3">Tiền đạo</option>
+                                    aria-label="Default select example" id="positionUpdate">
+                                    <option defaultValue={player?.position}>{player?.position}</option>
+                                    <option value="Hậu vệ">Hậu vệ</option>
+                                    <option value="Tiền vệ">Tiền vệ</option>
+                                    <option value="Tiền đạo">Tiền đạo</option>
+                                    <option value="Thủ môn">Thủ môn</option>
                                   </select>
                                 </div>
-                                <div>
+                                {/* <div>
                                   <label className="fs-8 mb-1">Đội bóng</label>
                                   <select className="form-select"
-                                    aria-label="Default select example">
+                                    aria-label="Default select example" id="playerClubUpdate">
                                     <option defaultValue="">--- Chọn đội bóng ---</option>
                                     <option value="1">One</option>
                                     <option value="2">Two</option>
                                     <option value="3">Three</option>
                                   </select>
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                           </div>
@@ -547,7 +674,33 @@ function InfoPlayer() {
                       <div className="modal-footer">
                         <button type="button" className="btn btn-light"
                           data-bs-dismiss="modal">Hủy</button>
-                        <button type="button" className="btn btn-primary">Lưu</button>
+                        {contextHolder}
+
+                        <button type="button" className="btn btn-primary"
+                          onClick={() => {
+                            let name = $("#playerUpdate").val();
+                            let dob = $("#dobUpdate").val();
+                            let nationality = $("#nationalityUpdate").val();
+                            let position = $("#positionUpdate").val();
+                            let playerClub = $("#playerClubUpdate").val();
+
+                            if (
+                              name === "" ||
+                              dob === "" ||
+                              nationality === "" ||
+                              position === "" ||
+                              playerClub === ""
+
+                            ) {
+                              openNotificationWithIcon("error");
+
+                              return;
+                            } else {
+                              openNotificationWithIcon("success");
+                              submitUpdatePlayer();
+                            }
+                          }}
+                        >Lưu</button>
                       </div>
                     </div>
                   </div>
