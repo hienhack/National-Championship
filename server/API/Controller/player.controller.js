@@ -8,54 +8,93 @@ class PlayerController {
     async playerDetail(req, res) {
         const playerId = req.params.playerId;
         
-        const player = await playerModel.findById(playerId).exec();
+        const doc = await playerModel.findOne({_id: playerId});
+        const player = doc.toObject();
         if (!player) {
             res.status(400).send({ message: "Player not found" });
             return;
         }
-
-        // Make a statistic 
-        player.seasons = player.seasons.map(async elem => {
+        
+        player.seasons = await Promise.all(player.seasons.map(async elem => {
             const seasonId = elem.seasonId;
             const clubId = elem.clubId;
 
             let goal = await goalModel.count({ seasonId: seasonId, scoredPlayer: player._id });
             let assist = await goalModel.count({ seasonId: seasonId, assistedPlayer: player._id });
 
-            let club = await clubModel.findById(clubId).select("_id name");
-            let season = await seasonModel.findById(seasonId).select("yearStart yearEnd");
+            let club = await clubModel.findOne({_id: clubId}).select("_id name image");
+            let season = await seasonModel.findOne({_id: seasonId}).select("year");
 
             return {
-                year: `${season.yearStart}-${season.yearEnd}`,
+                year: season.year,
                 club: club,
                 goal: goal,
                 assist: assist
             };
-        });
+        }));
 
         res.status(200).send({ message: "success", data: player });
     }
 
     async getAllPlayer(req, res) {
         const key = req.query.key;
+        const seasonId = req.query.seasonId;
+        
         const pattern = key == null ? /\w+/ : key;
         const regex = new RegExp(pattern);
+        let filter = { "name" : { $regex: regex, $options: 'i' }};
 
-        const players = await playerModel.find({ "name" : { $regex: regex, $options: 'i' }})
-            .select('_id name dob image nationality position');
-        
+        let players = [];
+        try {
+            if (seasonId) {
+                players = await playerModel.find(filter).elemMatch("seasons", { seasonId: req.query.seasonId })
+                    .select('_id name dob image nationality position');
+                
+            } else {
+                players = await playerModel.find(filter).select('_id name dob image nationality position');
+            }
+        } catch (error) {
+            // Do nothing
+        }
         res.status(200).send({ message: "success", data: players });
     }
 
     async create(req, res) {
-        const player = req.body;
-        player.seasons = [];
+        let { clubId, seasonId, shirtNumber, ...player } = req.body;
+
         const image = req.file.filename;
         player.image = image ? `/Images/player/${image}`: "";
         
         try {
             const doc = new playerModel(player);
-            await doc.save();
+            doc.seasons.push({seasonId: seasonId, clubId: clubId, shirtNumber: shirtNumber});
+            doc.save();
+
+            
+
+            // To do
+            // Add this player to club
+
+
+
+
+            // await doc.save(function(err, player) {
+            //     console.log(player);
+            // });
+
+            // const club = clubModel.findOne({_id: clubId});
+
+            // await doc.save().then(savedDoc => {
+            //     club.seasons.forEach(season => {
+            //         if (season.seasonId == seasonId) {
+            //             season.players.push()
+            //         }
+            //     })
+            // });
+
+
+            
+            
         } catch (error) {
             if (image) {
                 fs.unlink(`Public${player.image}`, (err) => { });
@@ -96,6 +135,10 @@ class PlayerController {
         if (player.image !== "") {
             fs.unlink(`Public${player.image}`, (err) => {});
         }
+
+        // To do
+        // Delete from the club
+
         
         await playerModel.deleteOne({ _id: playerId });
         res.status(200).send({ message: "Deleted successfully" });
