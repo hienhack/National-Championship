@@ -311,9 +311,9 @@ function ContentPreview() {
 }
 
 function AddMatch() {
-  const [round, setRound] = useState("Tất cả");
+  const [round, setRound] = useState("1");
   const id = localStorage.getItem("seasonIDSelected");
-
+  const [listRound, setListRound] = useState(null);
   useEffect(() => {
     axios
       .get(API, {
@@ -326,7 +326,7 @@ function AddMatch() {
         }
       })
       .then((response) => {
-        // setListMatch(response.data.data);
+        setListRound(response.data.data);
         console.log(response.data.data);
       })
       .catch((err) => { });
@@ -342,8 +342,7 @@ function AddMatch() {
               <div className="round-select input-group" style={{ width: 180 }}>
                 <label className="input-group-text" htmlFor="inputGroupSelect01">Vòng đấu</label>
                 <select className="form-select" id="inputGroupSelect01">
-                  <option defaultValue="all" >Tất cả</option>
-                  <option value="1">1</option>
+                  <option defaultValue="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
                 </select>
@@ -351,224 +350,124 @@ function AddMatch() {
             </div>
             <hr className="m-0" />
             <div className="d-flex flex-column py-4">
-              <div className="round">
-                <h6 className="m-0 px-4 py-2 fs-8 text-secondary">Vòng: 1/38</h6>
-                <div className="row row-cols-2 g-0 px-4">
-                  <div className="col">
-                    <div className="match d-flex border">
-                      <div
-                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div className="club-win">
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                          <span className="goal float-end">1</span>
+
+
+              {/* <h6 className="m-0 px-4 py-2 fs-8 text-secondary">Vòng: {i.round}</h6> */}
+              <div className="row row-cols-2 g-0 px-4">
+                {listRound?.map((i, index) => (
+                  i.round.toString() === round && (<div className="round" key={`round_${index}`}>
+                    <div className="col">
+                      <div className="match d-flex border">
+                        <div
+                          className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                          <div className="club-win">
+                            <img className="club-logo" alt=""
+                              src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                            <span>{i.club1.name}</span>
+                            <span className="goal float-end">{i.result.club1}</span>
+                          </div>
+                          <div className="club-lose">
+                            <img className="club-logo" alt=""
+                              src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                            <span>{i.club2.name}</span>
+                            <span className="goal float-end">{i.result.club2}</span>
+                          </div>
                         </div>
-                        <div className="club-lose">
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                          <span className="goal float-end">0</span>
+                        <div
+                          className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                          <div className="fs-8">20/01</div>
+                          <div className="fs-8">19:00</div>
                         </div>
-                      </div>
-                      <div
-                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <small>KT</small>
-                        <div className="fs-8">20/01</div>
-                        <div className="fs-8">19:00</div>
-                      </div>
-                      <div className="update-match p-3 bg-success">
-                        <button className="text-light"><BuildIcon></BuildIcon></button>
+                        <div className="update-match p-3 bg-success">
+                          <button className="text-light"><BuildIcon></BuildIcon></button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col">
-                    <div className="match d-flex border">
-                      <div
-                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
+                    <div className="col">
+                      <div className="match d-flex border">
+                        <div
+                          className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                          <div>
+                            <img className="club-logo" alt=""
+                              src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                            <span>Manchester City</span>
+                          </div>
+                          <div>
+                            <img className="club-logo" alt=""
+                              src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                            <span>Manchester City</span>
+                          </div>
                         </div>
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
+                        <div
+                          className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                          <small>CD</small>
+                          <div className="fs-8">20/01</div>
+                          <div className="fs-8">19:00</div>
                         </div>
-                      </div>
-                      <div
-                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <small>CD</small>
-                        <div className="fs-8">20/01</div>
-                        <div className="fs-8">19:00</div>
-                      </div>
-                      <div className="update-match p-3 bg-success">
-                        <button className="text-light"><BuildIcon></BuildIcon></button>
+                        <div className="update-match p-3 bg-success">
+                          <button className="text-light"><BuildIcon></BuildIcon></button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col">
-                    <div className="match d-flex border">
-                      <div
-                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
+                    <div className="col">
+                      <div className="match d-flex border">
+                        <div
+                          className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                          <div>
+                            <img className="club-logo" alt=""
+                              src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                            <span>Manchester City</span>
+                          </div>
+                          <div>
+                            <img className="club-logo" alt=""
+                              src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                            <span>Manchester City</span>
+                          </div>
                         </div>
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
+                        <div
+                          className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                          <div className="fs-8">20/01</div>
+                          <div className="fs-8">19:00</div>
                         </div>
-                      </div>
-                      <div
-                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <div className="fs-8">20/01</div>
-                        <div className="fs-8">19:00</div>
-                      </div>
-                      <div className="update-match p-3 bg-success">
-                        <button className="text-light"><BuildIcon></BuildIcon></button>
+                        <div className="update-match p-3 bg-success">
+                          <button className="text-light"><BuildIcon></BuildIcon></button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col">
-                    <div className="match d-flex border">
-                      <div
-                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
+                    <div className="col">
+                      <div className="match d-flex border">
+                        <div
+                          className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                          <div>
+                            <img className="club-logo" alt=""
+                              src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                            <span>Manchester City</span>
+                          </div>
+                          <div>
+                            <img className="club-logo" alt=""
+                              src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                            <span>Manchester City</span>
+                          </div>
                         </div>
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
+                        <div
+                          className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                          <div className="fs-8">20/01</div>
+                          <div className="fs-8">19:00</div>
                         </div>
-                      </div>
-                      <div
-                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <div className="fs-8">20/01</div>
-                        <div className="fs-8">19:00</div>
-                      </div>
-                      <div className="update-match p-3 bg-success">
-                        <button className="text-light"><BuildIcon></BuildIcon></button>
+                        <div className="update-match p-3 bg-success">
+                          <button className="text-light"><BuildIcon></BuildIcon></button>
+                        </div>
                       </div>
                     </div>
+
                   </div>
-                </div>
+                  )
+
+
+                ))}
               </div>
-              <div className="round">
-                <h6 className="m-0 px-4 py-2 fs-8 text-secondary">Vòng: 2/38</h6>
-                <div className="row row-cols-2 g-0 px-4">
-                  <div className="col">
-                    <div className="match d-flex border">
-                      <div
-                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div className="club-win">
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                          <span className="goal float-end">1</span>
-                        </div>
-                        <div className="club-lose">
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                          <span className="goal float-end">0</span>
-                        </div>
-                      </div>
-                      <div
-                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <small>KT</small>
-                        <div className="fs-8">20/01</div>
-                        <div className="fs-8">19:00</div>
-                      </div>
-                      <div className="update-match p-3 bg-success">
-                        <button className="text-light"><BuildIcon></BuildIcon></button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col">
-                    <div className="match d-flex border">
-                      <div
-                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                        </div>
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                        </div>
-                      </div>
-                      <div
-                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <small>CD</small>
-                        <div className="fs-8">20/01</div>
-                        <div className="fs-8">19:00</div>
-                      </div>
-                      <div className="update-match p-3 bg-success">
-                        <button className="text-light"><BuildIcon></BuildIcon></button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col">
-                    <div className="match d-flex border">
-                      <div
-                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                        </div>
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                        </div>
-                      </div>
-                      <div
-                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <div className="fs-8">20/01</div>
-                        <div className="fs-8">19:00</div>
-                      </div>
-                      <div className="update-match p-3 bg-success">
-                        <button className="text-light"><BuildIcon></BuildIcon></button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col">
-                    <div className="match d-flex border">
-                      <div
-                        className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                        </div>
-                        <div>
-                          <img className="club-logo" alt=""
-                            src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                          <span>Manchester City</span>
-                        </div>
-                      </div>
-                      <div
-                        className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                        <div className="fs-8">20/01</div>
-                        <div className="fs-8">19:00</div>
-                      </div>
-                      <div className="update-match p-3 bg-success">
-                        <button className="text-light"><BuildIcon></BuildIcon></button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
+
             </div>
           </div>
         </div>
