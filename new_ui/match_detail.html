@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết trận đấu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js"
+        integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+    <link href="./css/style.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/8a19b96b6e.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <!-- Sidebar -->
+        <div class="sidebar d-flex flex-column">
+            <div class="sidebar-header ps-4">
+                <image src="./assets/logo.png" class="app-logo"></image>
+            </div>
+            <hr class="mt-0 mx-4 text-secondary" />
+            <div class="menu flex-fill px-4">
+                <div class="submenu">
+                    <div class="submenu-btn active" data-bs-toggle="collapse" data-bs-target="#home-menu"
+                        aria-expanded="true">
+                        <i class="fa-solid fa-flag"></i>&emsp;Mùa giải
+                        <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                    </div>
+                    <ul class="collapse show" id="home-menu">
+                        <li class="menu-item active"><a href="#">Danh sách mùa giải</a></li>
+                    </ul>
+                </div>
+                <h6 class="text-secondary mt-3">Hồ sơ mùa giải</h6>
+                <hr class="text-secondary" />
+                <div class="d-flex flex-column gap-2">
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#club-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-users"></i>&emsp;Đội bóng
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="club-menu">
+                            <li class="menu-item"><a href="#">Danh sách đội bóng</a></li>
+                            <li class="menu-item"><a href="#">Đăng ký đội bóng</a></li>
+                        </ul>
+                    </div>
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#player-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>&emsp;Cầu thủ
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="player-menu">
+                            <li class="menu-item"><a href="#">Danh sách cầu thủ</a></li>
+                            <li class="menu-item"><a href="#">Đăng ký cầu thủ</a></li>
+                        </ul>
+                    </div>
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#schedule-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-calendar"></i>&emsp;Lịch thi đấu
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="schedule-menu">
+                            <li class="menu-item"><a href="#">Tạo lịch thi đấu</a></li>
+                            <li class="menu-item"><a href="#">Trận đấu</a></li>
+                        </ul>
+                    </div>
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#report-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-paste"></i></i>&emsp;Báo cáo
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="report-menu">
+                            <li class="menu-item"><a href="#">Bảng xếp hạng</a></li>
+                            <li class="menu-item"><a href="#">Danh sách ghi bàn</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-wrapper">
+            <!-- Header -->
+            <header class="header d-flex flex-column justify-content-center px-4">
+                <h5 class="m-0 fw-semibold text-uppercase">Vô địch quốc gia Night Wolf 2023</h5>
+            </header>
+
+            <style>
+                .match-detail-club {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    align-items: center;
+                }
+
+                .match-detail-club img {
+                    height: 80px;
+                    width: 80px;
+                    object-fit: cover;
+                    display: block;
+                }
+
+                .goal {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .goal .remove-btn {
+                    height: auto;
+                    display: none;
+                }
+
+                .goal:hover .remove-btn {
+                    display: block;
+                }
+
+                .goal[aria-label="club1"] {
+                    justify-content: space-between;
+                }
+
+                .goal[aria-label="club2"] {
+                    justify-content: end;
+                }
+
+                .goal[aria-label="club2"]>div {
+                    flex-direction: row-reverse;
+                }
+            </style>
+
+            <!-- Main -->
+            <div class="main">
+
+                <!-- Đăng ký đội bóng -->
+
+                <div class="d-flex flex-column gap-4 p-4">
+                    <h5 class="m-0">Chi tiết trận đấu</h5>
+                    <div class="m-auto bg-white shadow-sm rounded-2" style="width: 800px;">
+                        <div class="p-4">
+                            <h6 class="text-secondary fs-7">
+                                <button><i class="fa-solid fa-arrow-left"></i></button>&emsp;
+                                Vòng: 1/38
+                            </h6>
+                            <div class="d-flex justify-content-around">
+                                <div class="match-detail-club order-1">
+                                    <img
+                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                    <div class="fs-7">Manchester City</div>
+                                </div>
+                                <div class="match-detail-club order-5">
+                                    <img
+                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                    <div class="fs-7">Manchester United</div>
+                                </div>
+                                <div class="club-goal order-2 fs-1">2</div>
+                                <div class="club-goal order-4 fs-1">0</div>
+                                <div class="order-3 fs-1">-</div>
+                            </div>
+                            <hr />
+                            <div class="d-flex flex-column gap-2">
+                                <div class="goal border" aria-label="club1">
+                                    <div class="d-flex gap-2 align-items-center p-2">
+                                        <i class="fa-regular fa-futbol"></i>
+                                        <span class="fs-7">Erring Haaland (P) "10</span>
+                                    </div>
+                                    <button class="remove-btn bg-danger px-2"><i
+                                            class="fa-solid fa-trash-can"></i></i></button>
+                                </div>
+                                <div class="goal border" aria-label="club2">
+                                    <div class="d-flex gap-2 align-items-center p-2 flex-row-reverse">
+                                        <i class="fa-regular fa-futbol"></i>
+                                        <span class="fs-7">Erring Haaland (P) A. Kevin De Bruyne "19</span>
+                                    </div>
+                                    <button class="remove-btn bg-danger px-2"><i
+                                            class="fa-solid fa-trash-can"></i></i></button>
+                                </div>
+                                <!-- thẻ đỏ, giống như trên, thay icon-->
+                                <div class="goal border" aria-label="club1">
+                                    <div class="d-flex gap-2 align-items-center p-2">
+                                        <i class="text-danger fa-solid fa-mobile"></i>
+                                        <span class="fs-7">Erring Haaland "65</span>
+                                    </div>
+                                    <button class="remove-btn bg-danger px-2"><i
+                                            class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                                <div class="goal border" aria-label="club2">
+                                    <div class="d-flex gap-2 align-items-center p-2">
+                                        <i class="text-danger fa-solid fa-mobile"></i>
+                                        <span class="fs-7">Erring Haaland "65</span>
+                                    </div>
+                                    <button class="remove-btn bg-danger px-2"><i
+                                            class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="d-flex flex-row-reverse gap-2">
+                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#add-goal-modal">Thêm bàn thắng</button>
+                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#add-card-modal">Thêm thẻ đỏ</button>
+                            </div>
+                            <div class="modal fade" id="add-goal-modal" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-6">Thêm bàn thắng</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="d-flex flex-column px-2 gap-3">
+                                                <div class="d-flex justify-content-between py-4">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="clubId"
+                                                            checked>
+                                                        <label class="form-check-label">
+                                                            Đội bóng 1
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="clubId">
+                                                        <label class="form-check-label">
+                                                            Đội bóng 2
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="fs-8 mb-1">Cầu thủ ghi bàn</label>
+                                                    <select class="form-select" aria-label="Default select example">
+                                                        <option selected>Chọn cầu thủ</option>
+                                                        <option value="ádfds">advcxca adfds</option>
+                                                        <option value="adsf"> ádf ád f</option>
+                                                    </select>
+                                                </div>
+                                                <div class="d-flex gap-3">
+                                                    <div>
+                                                        <label class="fs-8 mb-1">Loại bàn thắng</label>
+                                                        <select class="form-select" aria-label="Default select example">
+                                                            <option selected>Chọn cầu thủ</option>
+                                                            <option value="N">Thông thường</option>
+                                                            <option value="P">Penalty</option>
+                                                            <option value="O">Phản lưới</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label class="fs-8 mb-1">Phút</label>
+                                                        <div class="input-group">
+                                                            <input type="number" class="form-control" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="fs-8 mb-1">Cầu thủ kiến tạo</label>
+                                                    <select class="form-select" aria-label="Default select example">
+                                                        <option selected>Chọn cầu thủ</option>
+                                                        <option value="dfds">advcxca adfds</option>
+                                                        <option value="adsf"> ádf ád f</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn light fs-7"
+                                                data-bs-dismiss="modal">Hủy</button>
+                                            <button type="button" class="btn btn-primary fs-7">Lưu</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="add-card-modal" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-6">Thêm thẻ đỏ</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="d-flex flex-column px-2 gap-3">
+                                                <div class="d-flex justify-content-between py-4">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="clubId"
+                                                            checked value="clubid1">
+                                                        <label class="form-check-label">
+                                                            Đội bóng 1
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="clubId"
+                                                            value="clubid2">
+                                                        <label class="form-check-label">
+                                                            Đội bóng 2
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="fs-8 mb-1">Cầu thủ nhận thẻ</label>
+                                                    <select class="form-select" aria-label="Default select example">
+                                                        <option selected>Chọn cầu thủ</option>
+                                                        <option value="dfds">advcxca adfds</option>
+                                                        <option value="adsf"> ádf ád f</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="fs-8 mb-1">phút</label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light fs-7"
+                                                data-bs-dismiss="modal">Hủy</button>
+                                            <button type="button" class="btn btn-primary fs-7">Thêm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        $(() => {
+            // Sidebar
+            $('.menu-item').on({
+                click: function (event) {
+                    $('.menu-item').removeClass('active');
+                    $(this).addClass('active');
+                    $('.submenu').removeClass('active');
+                    $(this).parent().parent('.submenu').addClass('active');
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
