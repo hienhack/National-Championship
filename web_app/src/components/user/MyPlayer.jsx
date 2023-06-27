@@ -329,6 +329,8 @@ function AddPlayer() {
       message: "Xóa thành công",
     });
   };
+  const id = localStorage.getItem("seasonIDSelected");
+
   useEffect(() => {
 
 
@@ -336,6 +338,9 @@ function AddPlayer() {
       headers: {
         'content-type': 'application/json',
         'accept': 'application/json',
+      },
+      params: {
+        seasonId: id
       }
     }).
       then(response => {
