@@ -15,7 +15,16 @@ class MatchController {
 
         const club1 = await clubModel.findById(match.club1Id);
         const club2 = await clubModel.findById(match.club2Id);
-
+        match.club1 = {
+            _id: match.club1Id,
+            name: club1.name,
+            image: club1.image
+        };
+        match.club2 = {
+            _id: match.club2Id,
+            name: club2.name,
+            image: club2.image
+        };
         // Find the starting and substitute players of these two clubs,
         // each player has shirt number, name, _id. type=app -> starting player, type=sub -> substitude player
         // Example
@@ -63,6 +72,7 @@ class MatchController {
         match.goals = await Promise.all(match.goals.map(async id => {
             const goal = await goalModel.findById(id);
             var rs = new Object();
+            rs._id = goal._id;
             rs.time = goal.time;
             rs.type = goal.type;
             const clubGoal = await clubModel.findById(goal.clubId);
@@ -81,7 +91,8 @@ class MatchController {
 
             return rs;
         }));
-
+        delete match.club1Id;
+        delete match.club2Id;
         // delete match.club1.appearances;
         // delete match.club1.substitutes;
         // delete match.club2.appearances;
@@ -93,7 +104,7 @@ class MatchController {
 
 
     async getAll(req, res) {
-        const { round, seasonId, clubId } = req.query;
+        const { round, seasonId, result } = req.query;
 
         // Tìm tất cả các trận đấu có round và seasonId hoặc clubId
         // Vì là query nên có thể có field = null
@@ -104,12 +115,34 @@ class MatchController {
         }
         if (seasonId) {
             queries.seasonId = seasonId;
+        }else {
+            res.status(400).send({message: "Request invalid"});
+            return;
         }
-        if (clubId) {
-            queries.$or = [{ "club1Id": clubId }, { "club2Id": clubId }];
-        }
+        // if (clubId) {
+        //     queries.$or = [{ "club1Id": clubId }, { "club2Id": clubId }];
+        // }
         console.log(queries);
-        const matches = await matchModel.find(queries);
+        if ( result ) {
+            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed").lean();
+        }else {
+            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed result").lean();
+        }
+        
+        for ( const match of matches ) {
+            const club1 = await clubModel.findById(match.club1Id);
+            const club2 = await clubModel.findById(match.club2Id);
+            match.club1 = {
+                _id: club1._id,
+                name: club1.name,
+                logo: club1.image
+            }
+            match.club2 = {
+                _id: club2._id,
+                name: club2.name,
+                logo: club2.image
+            };
+        }
         console.log(matches);
         res.status(200).send({ message: "success", data: matches });
         return;
