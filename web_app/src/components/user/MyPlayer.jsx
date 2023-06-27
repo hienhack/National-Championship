@@ -127,7 +127,7 @@ function AllPlayer() {
                           localStorage.setItem("playerSelected", i._id);
 
                         }}><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
-                        <button className="btn btn-light" title="Xóa"><DeleteIcon></DeleteIcon></button>
+                        <button className="btn btn-light" title="Xóa" ><DeleteIcon></DeleteIcon></button>
                         {/* <button className="btn  btn-light" title="Sửa thông tin" ><BuildIcon></BuildIcon></button> */}
 
                       </td>
