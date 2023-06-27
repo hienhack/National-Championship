@@ -58,6 +58,25 @@ function AllTeam() {
 
   }, [])
 
+  const deleteClub = async () => {
+    const id = localStorage.getItem("clubDeleteSelected");
+    const id1 = localStorage.getItem("seasonIDSelected")
+    const formData = new FormData();
+    formData.append("clubID", id);
+    formData.append("seasonID", id1);
+    await fetch("http://127.0.0.1:5000/api/club/delete", {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+      },
+      body: formData,
+    })
+      .then((result) => {
+        window.location.reload(false);
+      })
+      .catch((error) => { });
+  };
+
 
   const navigate = useNavigate();
   const handleOnClick = useCallback(
@@ -68,6 +87,23 @@ function AllTeam() {
     () => navigate("../info", { replace: true }),
     [navigate]
   );
+
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type) => {
+    api[type]({
+      message: "Chọn mùa giải thành công",
+    });
+  };
+  const openNotificationWithIcon1 = (type) => {
+    api[type]({
+      message: type === "success" ? "Thêm thành công" : "Vui lòng điền đủ thông tin",
+    });
+  };
+  const openNotificationWithIcon2 = (type) => {
+    api[type]({
+      message: "Xóa thành công",
+    });
+  };
   return (
     <div className="contentUser">
       <Content />
@@ -80,16 +116,28 @@ function AllTeam() {
               {listTeam.map((i, index) => (
 
                 <div className="col-4 col-xl-3" key={`club_${index}`}>
-                  <div className="club-card" style={{ cursor: "pointer" }} onClick={() => {
-                    handleOnClick1();
-                    localStorage.setItem("clubSelected", i._id);
+                  <div className="club-card" >
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <img
+                        src={`http://localhost:5000/${i.image}`}
+                        alt=""
+                        className="club-logo"></img>
+                      {contextHolder}
 
-                  }}>
-                    <img
-                      src={`http://localhost:5000/${i.image}`}
-                      alt=""
-                      className="club-logo"></img>
-                    <div className="club-card-body">
+                      <button className="btn btn-danger" title="Xóa" onClick={() => {
+                        openNotificationWithIcon2("success");
+                        localStorage.setItem("clubDeleteSelected", i._id);
+                        deleteClub();
+                      }}>
+                        <DeleteIcon></DeleteIcon>
+                      </button>
+                    </div>
+
+                    <div className="club-card-body" style={{ cursor: "pointer" }} onClick={() => {
+                      handleOnClick1();
+                      localStorage.setItem("clubSelected", i._id);
+
+                    }}>
                       <h6 className="club-name">{i.name}</h6>
                       <ArrowForwardIcon></ArrowForwardIcon>
                     </div>
@@ -278,7 +326,7 @@ function AddTeam() {
           <h5 className="m-0">Đăng ký đội bóng</h5>
 
           <div className="m-auto bg-white shadow rounded-2" style={{ width: "800px" }}>
-            <div className="d-flex justify-content-between p-4">
+            {/* <div className="d-flex justify-content-between p-4">
               <div className="input-group w-50">
                 <i className="fa-solid fa-magnifying-glass input-group-text pt-2"><SearchIcon></SearchIcon></i>
                 <input type="text" className="form-control" placeholder="Tìm đội bóng các mùa trước..." />
@@ -306,11 +354,14 @@ function AddTeam() {
                 }
               }}><AddIcon></AddIcon> Đăng
                 ký mới</button> */}
-            </div>
-            <hr className="m-0" />
+            {/* </div>  */}
+            {/* <hr className="m-0" /> */}
             <form>
               <div className="p-4 d-flex flex-column gap-3">
+
                 <div>
+                  <label className="fs-8 mb-1">Logo đội bóng</label>
+
                   <ContentPreviewAdd></ContentPreviewAdd>
 
                 </div>

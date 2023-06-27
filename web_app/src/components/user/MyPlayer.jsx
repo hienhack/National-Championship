@@ -237,6 +237,7 @@ const submitAddPlayer = async () => {
   let nationality = $("#nationalityAdd").val();
   let club = $("#clubAdd").val();
   let idSeason = localStorage.getItem("seasonIDSelected");
+  let shirt = $("#shirtAdd").val();
 
   let content = $("#contentPDFAdd").prop("files")[0];
 
@@ -245,6 +246,7 @@ const submitAddPlayer = async () => {
   formData.append("name", name);
   formData.append("dob", dob);
   formData.append("position", position);
+  formData.append("shirtNumber", shirt);
   formData.append("nationality", nationality);
   formData.append("clubId", club);
   formData.append("seasonId", idSeason);
@@ -305,15 +307,15 @@ function AddPlayer() {
           <h5 className="m-0">Đăng ký cầu thủ</h5>
 
           <div className="m-auto bg-white shadow rounded-2" style={{ width: 800 }}>
-            <div className="d-flex justify-content-between p-4">
+            {/* <div className="d-flex justify-content-between p-4">
               <div className="input-group w-50">
                 <i className="fa-solid fa-magnifying-glass input-group-text pt-2"><SearchIcon></SearchIcon> </i>
                 <input type="text" className="form-control" placeholder="Tìm cầu thủ các mùa trước..." />
               </div>
               {/* <button id="new-club-btn" className="fs-6 active" style={{ background: "#21e758", paddingRight: 5, borderRadius: 5, color: "white" }}><AddIcon></AddIcon> Đăng
                 ký mới</button> */}
-            </div>
-            <hr className="m-0" />
+            {/* </div> */}
+            {/* <hr className="m-0" />  */}
             <form>
               <div className="row g-4 p-4">
                 <div className="col-6">
@@ -357,6 +359,12 @@ function AddPlayer() {
                       </select>
                     </div>
                     <div>
+                      <label className="fs-8 mb-1">Số áo</label>
+                      <div className="input-group">
+                        <input type="number" className="form-control" id="shirtAdd" />
+                      </div>
+                    </div>
+                    <div>
                       <label className="fs-8 mb-1">Đội bóng</label>
                       <select className="form-select" aria-label="Default select example" id="clubAdd">
                         <option defaultValue="">--- Chọn đội bóng ---</option>
@@ -380,6 +388,7 @@ function AddPlayer() {
                   let position = $("#positionAdd").val();
                   let nationality = $("#nationalityAdd").val();
                   let club = $("#clubAdd").val();
+                  let shirt = $("#shirtAdd").val();
 
                   let content = $("#contentPDFAdd").prop("files")[0];
 
@@ -389,7 +398,8 @@ function AddPlayer() {
                     position === "" ||
                     content === undefined ||
                     nationality === "" ||
-                    club === ""
+                    club === "" ||
+                    shirt === ""
 
                   ) {
                     openNotificationWithIcon1("error");
