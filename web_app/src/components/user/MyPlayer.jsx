@@ -35,6 +35,7 @@ function MyTeam() {
 
 function AllPlayer() {
   const [listPlayer, setListPlayer] = useState([]);
+  const id = localStorage.getItem("seasonIDSelected");
 
   useEffect(() => {
 
@@ -43,7 +44,11 @@ function AllPlayer() {
       headers: {
         'content-type': 'application/json',
         'accept': 'application/json',
+      },
+      params: {
+        seasonId: id
       }
+
     }).
       then(response => {
         setListPlayer(response.data.data)

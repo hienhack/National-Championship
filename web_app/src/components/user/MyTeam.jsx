@@ -65,15 +65,20 @@ function AllTeam() {
   const deleteClub = async () => {
     const id = localStorage.getItem("clubDeleteSelected");
     const id1 = localStorage.getItem("seasonIDSelected")
-    const formData = new FormData();
-    formData.append("clubId", id);
-    formData.append("seasonId", id1);
+    const requestData = {
+      clubId: id,
+      seasonId: id1,
+
+    }
+
+
     await fetch("http://127.0.0.1:5000/api/club/delete", {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         "Accept": "application/json",
       },
-      body: formData,
+      body: JSON.stringify(requestData),
     })
       .then((result) => {
         window.location.reload(false);
@@ -287,6 +292,8 @@ function ContentPreviewAdd() {
 const submitAddClub = async () => {
   let name = $("#clubAdd").val();
   let stadium = $("#stadiumAdd").val();
+  let mentor = $("#mentorAdd").val();
+
   let content = $("#contentPDFAdd").prop("files")[0];
   let idSeason = localStorage.getItem("seasonIDSelected");
 
@@ -295,6 +302,8 @@ const submitAddClub = async () => {
   formData.append("name", name);
   formData.append("stadium", stadium);
   formData.append("image", content);
+  formData.append("coachName", mentor);
+
   formData.append("seasonId", idSeason);
 
   await fetch("http://127.0.0.1:5000/api/club/create", {
@@ -382,7 +391,12 @@ function AddTeam() {
                     <input type="text" className="form-control" id="stadiumAdd" />
                   </div>
                 </div>
-
+                <div>
+                  <label className="fs-8 mb-1">Huấn luyện viên</label>
+                  <div className="input-group">
+                    <input type="text" className="form-control" id="mentorAdd" />
+                  </div>
+                </div>
               </div>
               <hr className="m-0" />
               <div className="p-4">
@@ -392,10 +406,12 @@ function AddTeam() {
                   let name = $("#clubAdd").val();
                   let stadium = $("#stadiumAdd").val();
                   let content = $("#contentPDFAdd").prop("files")[0];
+                  let mentor = $("#mentorAdd").val();
 
                   if (
                     name === "" ||
                     stadium === "" ||
+                    mentor === "" ||
                     content === undefined
 
                   ) {
@@ -419,6 +435,7 @@ function AddTeam() {
 const submitUpdateClub = async () => {
   let id = localStorage.getItem("clubSelected");
   let name = $("#clubUpdate").val();
+  let mentor = $("#mentorAdd").val();
   let stadium = $("#stadiumUpdate").val();
   let logo;
   if (!($("#contenPDFUpdate").prop("files") === undefined)) {
@@ -431,6 +448,7 @@ const submitUpdateClub = async () => {
   formData.append("name", name);
   formData.append("stadium", stadium);
   formData.append("_id", id);
+  formData.append("coachName", mentor);
   if (!(logo === undefined)) {
     formData.append("image", logo);
 
@@ -513,6 +531,8 @@ function InfoTeam() {
                   <div>
                     <h2 className="text-light mb-4">{club?.name}</h2>
                     <h6>Sân nhà: {club?.stadium}</h6>
+                    <h6>Huấn luyện viên: {club?.season?.coachName}</h6>
+
                   </div>
                 </div>
                 <button className="btn btn-light" data-bs-toggle="modal"
