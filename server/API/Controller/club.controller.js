@@ -180,7 +180,10 @@ class ClubController {
     async deleteClub(req, res) {
         const clubId = req.body.clubId;
         const seasonId = req.body.seasonId;
+        console.log(clubId);
         const club = await clubModel.findById(clubId);
+        console.log(club);
+
         var size = club.seasons.length;
         for (let index = 0; index < club.seasons.length; index++) {
             if (club.seasons[index].seasonId.equals(seasonId)) {
