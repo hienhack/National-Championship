@@ -124,9 +124,9 @@ class MatchController {
         // }
         console.log(queries);
         if ( result ) {
-            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed").lean();
+            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round").lean();
         }else {
-            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed result").lean();
+            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round result").lean();
         }
         
         for ( const match of matches ) {

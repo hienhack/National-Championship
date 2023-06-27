@@ -168,7 +168,7 @@ class PlayerController {
     async delete(req, res) {
         const playerId = req.body.playerId;
         const seasonId = req.body.seasonId;
-
+        console.log(req.body);
         const player = await playerModel.findById(playerId);
         if (player == null) {
             res.status(400).send({ message: "Player not found" });
