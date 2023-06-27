@@ -51,7 +51,7 @@ const deletePlayer = async () => {
     body: JSON.stringify(requestData),
   })
     .then((result) => {
-      // window.location.reload(false);
+      window.location.reload(false);
     })
     .catch((error) => { });
 };

@@ -286,25 +286,58 @@ const submitAddMatch = async () => {
   let stadium = $("#stadiumMatchAdd").val();
   let idSeason = localStorage.getItem("seasonIDSelected");
 
-  const formData = new FormData();
-  formData.append("round", round);
-  formData.append("datetime", combineDateTime(date, hour, minute));
-  formData.append("club1Id", club1);
-  formData.append("club2Id", club2);
-  formData.append("stadium", stadium);
-  formData.append("seasonId", idSeason);
+  const requestData = {
+    round: round,
+    datetime: combineDateTime(date, hour, minute),
+    club1Id: club1,
+    club2Id: club2,
+    stadium: stadium,
+    seasonId: idSeason
+  };
+
+  // const formData = new FormData();
+  // formData.append("round", round);
+  // formData.append("datetime", combineDateTime(date, hour, minute));
+  // formData.append("club1Id", club1);
+  // formData.append("club2Id", club2);
+  // formData.append("stadium", stadium);
+  // formData.append("seasonId", idSeason);
 
 
   await fetch("http://127.0.0.1:5000/api/match/create", {
     method: "POST",
-    body: formData,
+    body: JSON.stringify(requestData),
     headers: {
+      "Content-Type": "application/json",
       "Accept": "application/json",
     },
   })
     .then((result) => { })
     .catch((error) => { });
   // window.location.reload(false);
+};
+
+const deleteMatch = async () => {
+  // const id = localStorage.getItem("clubDeleteSelected");
+  const id = localStorage.getItem("matchDeleteSelected");
+  const requestData = {
+    // clubId: id,
+    matchId: id
+  }
+
+
+  await fetch("http://127.0.0.1:5000/api/match/delete", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+    body: JSON.stringify(requestData),
+  })
+    .then((result) => {
+      window.location.reload(false);
+    })
+    .catch((error) => { });
 };
 
 function AllCalendar() {
@@ -525,13 +558,13 @@ function AllCalendar() {
                             <img className="club-logo" alt=""
                               src={`http://localhost:5000${i.club1?.logo}`} />
                             <span>{i.club1.name}</span>
-                            <span className="goal float-end">{i.result?.club1}</span>
+                            {/* <span className="goal float-end">{i.result?.club1}</span> */}
                           </div>
                           <div className={i.result?.club1 < i.result?.club2 ? "club-win" : "club-lose"}>
                             <img className="club-logo" alt=""
                               src={`http://localhost:5000${i.club2?.logo}`} />
                             <span>{i.club2.name}</span>
-                            <span className="goal float-end">{i.result?.club2}</span>
+                            {/* <span className="goal float-end">{i.result?.club2}</span> */}
                           </div>
                         </div>
                         <div
@@ -540,7 +573,12 @@ function AllCalendar() {
                           <div className="fs-8">{tachNgayGio(i.datetime)}</div>
                         </div>
                         <div className="remove-match p-3 bg-danger">
-                          <button className="text-muted"><DeleteIcon></DeleteIcon></button>
+                          <button className="text-muted" onClick={() => {
+                            openNotificationWithIcon2("success");
+                            localStorage.setItem("matchDeleteSelected", i._id);
+                            deleteMatch();
+
+                          }}><DeleteIcon></DeleteIcon></button>
                         </div>
                       </div>
                     </div>
