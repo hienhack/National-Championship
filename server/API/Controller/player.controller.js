@@ -168,7 +168,6 @@ class PlayerController {
     async delete(req, res) {
         const playerId = req.body.playerId;
         const seasonId = req.body.seasonId;
-        const clubId = req.body.clubId;
 
         const player = await playerModel.findById(playerId);
         if (player == null) {
@@ -179,7 +178,16 @@ class PlayerController {
         if (player.image !== "") {
             fs.unlink(`Public${player.image}`, (err) => { });
         }
-
+        var clubId = null;
+        for (let index = 0; index < player.seasons.length; index++) {
+            if (player.seasons[index].seasonId.equals(seasonId)) {
+                clubId = player.seasons[index].clubId;
+            }
+        }
+        if (clubId === null) {
+            res.status(400).send({ message: "Season Not Found" });
+            return;
+        }
         // To do
         // Delete from the club
         const club = await clubModel.findOne({ _id: clubId });
