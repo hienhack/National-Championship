@@ -69,11 +69,6 @@ class PlayerController {
             const doc = new playerModel(player);
             doc.seasons.push({seasonId: seasonId, clubId: clubId, shirtNumber: shirtNumber});
             
-
-            
-
-            // To do
-            // Add this player to club
             const club = await clubModel.findOne({_id: clubId});
             const season = await seasonModel.findOne({_id: seasonId});
             const playerNumber = Number(shirtNumber);
@@ -103,43 +98,11 @@ class PlayerController {
                     club.save();
                     res.status(201).send({ message: "Add Player Successfully" });
                     return;
-                    // try {
-                    //     player.seasons.push({
-                    //         seasonId: seasonId,
-                    //         clubId: clubId
-                    //     })
-                    //     player.save();
-                    //     club.save();
-                    //     res.status(201).send({ message: "Add Player Successfully" });
-                    //     return;
-    
-                    // } catch (error) {
-                    //     res.status(400).send({ message: "Add Player Failed" });
-                    //     return;
-                    // }
                 }
             }
             res.status(400).send({ message: "Season Not Found" });
             return;
 
-
-            // await doc.save(function(err, player) {
-            //     console.log(player);
-            // });
-
-            // const club = clubModel.findOne({_id: clubId});
-
-            // await doc.save().then(savedDoc => {
-            //     club.seasons.forEach(season => {
-            //         if (season.seasonId == seasonId) {
-            //             season.players.push()
-            //         }
-            //     })
-            // });
-
-
-            
-            
         } catch (error) {
             if (image) {
                 fs.unlink(`Public${player.image}`, (err) => { });
@@ -147,8 +110,6 @@ class PlayerController {
             res.status(500).send({ message: "Unable to create" });
             return;
         }
-
-        res.status(200).send({ message: "Created successfully" });
     }
 
     async update(req, res) {
@@ -158,7 +119,7 @@ class PlayerController {
         }
 
         const oldPlayer = await playerModel.findOneAndUpdate({ _id: _id }, updated, { returnDocument: "before" });
-        if (oldPlayer.image != "") {
+        if (req.file != "") {
             fs.unlink(`Public${oldPlayer.image}`, (err) => {
                 console.log(err);
             });
