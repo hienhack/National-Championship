@@ -34,7 +34,7 @@ function MyTeam() {
 const deletePlayer = async () => {
   // const id = localStorage.getItem("clubDeleteSelected");
   const id1 = localStorage.getItem("seasonIDSelected");
-  const idPlayer = localStorage.getItem("playerSelected");
+  const idPlayer = localStorage.getItem("playerDeleteSelected");
   const requestData = {
     // clubId: id,
     seasonId: id1,
@@ -51,7 +51,7 @@ const deletePlayer = async () => {
     body: JSON.stringify(requestData),
   })
     .then((result) => {
-      window.location.reload(false);
+      // window.location.reload(false);
     })
     .catch((error) => { });
 };
