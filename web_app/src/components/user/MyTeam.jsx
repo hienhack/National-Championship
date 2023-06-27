@@ -287,7 +287,6 @@ function ContentPreviewAdd() {
 const submitAddClub = async () => {
   let name = $("#clubAdd").val();
   let stadium = $("#stadiumAdd").val();
-  let mentor = $("#mentorAdd").val();
   let content = $("#contentPDFAdd").prop("files")[0];
   let idSeason = localStorage.getItem("seasonIDSelected");
 
@@ -296,7 +295,6 @@ const submitAddClub = async () => {
   formData.append("name", name);
   formData.append("stadium", stadium);
   formData.append("image", content);
-  formData.append("coachName", mentor);
   formData.append("seasonId", idSeason);
 
   await fetch("http://127.0.0.1:5000/api/club/create", {
@@ -384,12 +382,7 @@ function AddTeam() {
                     <input type="text" className="form-control" id="stadiumAdd" />
                   </div>
                 </div>
-                <div>
-                  <label className="fs-8 mb-1">Huấn luyện viên</label>
-                  <div className="input-group">
-                    <input type="text" className="form-control" id="mentorAdd" />
-                  </div>
-                </div>
+
               </div>
               <hr className="m-0" />
               <div className="p-4">
@@ -398,13 +391,11 @@ function AddTeam() {
                 <button className="btn btn-primary float-end d-block mb-4" onClick={() => {
                   let name = $("#clubAdd").val();
                   let stadium = $("#stadiumAdd").val();
-                  let mentor = $("#mentorAdd").val();
                   let content = $("#contentPDFAdd").prop("files")[0];
 
                   if (
                     name === "" ||
                     stadium === "" ||
-                    mentor === "" ||
                     content === undefined
 
                   ) {
