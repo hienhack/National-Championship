@@ -147,8 +147,6 @@ class PlayerController {
             res.status(500).send({ message: "Unable to create" });
             return;
         }
-
-        res.status(200).send({ message: "Created successfully" });
     }
 
     async update(req, res) {
@@ -158,7 +156,7 @@ class PlayerController {
         }
 
         const oldPlayer = await playerModel.findOneAndUpdate({ _id: _id }, updated, { returnDocument: "before" });
-        if (oldPlayer.image != "") {
+        if (req.file) {
             fs.unlink(`Public${oldPlayer.image}`, (err) => {
                 console.log(err);
             });
