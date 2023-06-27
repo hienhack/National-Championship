@@ -2,6 +2,7 @@ const matchModel = require('../../Model/match.model');
 const clubModel = require('../../Model/club.model');
 const goalModel = require('../../Model/goal.model');
 const playerModel = require('../../Model/player.model');
+const seasonModel = require('../../Model/season.model');
 class MatchController {
 
     async matchDetail(req, res) {
@@ -124,9 +125,9 @@ class MatchController {
         // }
         console.log(queries);
         if ( result ) {
-            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed").lean();
+            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round").lean();
         }else {
-            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed result").lean();
+            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round result").lean();
         }
         
         for ( const match of matches ) {
@@ -144,7 +145,10 @@ class MatchController {
             };
         }
         console.log(matches);
-        res.status(200).send({ message: "success", data: matches });
+        const season = await seasonModel.findOne({_id: seasonId});
+        const numberOfClub = season.clubs.length;
+        const numberOfRound = numberOfClub * 2 - 2 ;
+        res.status(200).send({ message: "success", data: {matches, numberOfRound} });
         return;
 
     }
