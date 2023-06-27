@@ -401,7 +401,6 @@ function AddTeam() {
               <hr className="m-0" />
               <div className="p-4">
                 {contextHolder}
-
                 <button className="btn btn-primary float-end d-block mb-4" onClick={() => {
                   let name = $("#clubAdd").val();
                   let stadium = $("#stadiumAdd").val();
