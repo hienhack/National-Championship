@@ -48,60 +48,60 @@ class ClubController {
     }
 
     // add Player exists 
-    async addPlayer(req, res) {
-        const seasonId = req.body.seasonId;
-        const clubId = req.body.clubId;
-        const playerId = req.body.playerId;
-        const playerNumber = Number(req.body.playerNumber);
+    // async addPlayer(req, res) {
+    //     const seasonId = req.body.seasonId;
+    //     const clubId = req.body.clubId;
+    //     const playerId = req.body.playerId;
+    //     const playerNumber = Number(req.body.playerNumber);
 
-        const club = await clubModel.findById(clubId);
-        const player = await playerModel.findById(playerId);
-        const season = await seasonModel.findById(seasonId);
+    //     const club = await clubModel.findById(clubId);
+    //     const player = await playerModel.findById(playerId);
+    //     const season = await seasonModel.findById(seasonId);
 
-        for (let index = 0; index < club.seasons.length; index++) {
-            if (club.seasons[index].seasonId.equals(seasonId)) {
-                if(club.seasons[index].players.length === season.rule.maxClubPlayer) {
-                    res.status(400).send({message: "Max club players"});
-                    return;
-                }
+    //     for (let index = 0; index < club.seasons.length; index++) {
+    //         if (club.seasons[index].seasonId.equals(seasonId)) {
+    //             if(club.seasons[index].players.length === season.rule.maxClubPlayer) {
+    //                 res.status(400).send({message: "Max club players"});
+    //                 return;
+    //             }
 
-                for (const p of club.seasons[index].players) {
-                    if (playerNumber === Number(p.shirt_number)) {
-                        res.status(400).send({ message: "Player number already exists" });
-                        return;
-                    }
-                    if (player._id.equals(p.playerId)) {
-                        res.status(400).send({ message: "Player already exists" });
-                        return;
-                    }
-                }
+    //             for (const p of club.seasons[index].players) {
+    //                 if (playerNumber === Number(p.shirt_number)) {
+    //                     res.status(400).send({ message: "Player number already exists" });
+    //                     return;
+    //                 }
+    //                 if (player._id.equals(p.playerId)) {
+    //                     res.status(400).send({ message: "Player already exists" });
+    //                     return;
+    //                 }
+    //             }
 
-                club.seasons[index].players.push({
-                    playerId: player._id,
-                    shirt_number: playerNumber
-                });
+    //             club.seasons[index].players.push({
+    //                 playerId: player._id,
+    //                 shirt_number: playerNumber
+    //             });
 
-                try {
-                    player.seasons.push({
-                        seasonId: seasonId,
-                        clubId: clubId
-                    })
-                    player.save();
-                    club.save();
-                    res.status(201).send({ message: "Add Player Successfully" });
-                    return;
+    //             try {
+    //                 player.seasons.push({
+    //                     seasonId: seasonId,
+    //                     clubId: clubId
+    //                 })
+    //                 player.save();
+    //                 club.save();
+    //                 res.status(201).send({ message: "Add Player Successfully" });
+    //                 return;
 
-                } catch (error) {
-                    res.status(400).send({ message: "Add Player Failed" });
-                    return;
-                }
-            }
-        }
-        res.status(400).send({ message: "Season Not Found" });
-        return;
+    //             } catch (error) {
+    //                 res.status(400).send({ message: "Add Player Failed" });
+    //                 return;
+    //             }
+    //         }
+    //     }
+    //     res.status(400).send({ message: "Season Not Found" });
+    //     return;
 
 
-    }
+    // }
     // async addPlayer(req, res) {
     //     const seasonId = req.body.seasonId;
     //     const clubId = req.body.clubId;

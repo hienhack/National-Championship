@@ -61,21 +61,66 @@ class PlayerController {
 
     async create(req, res) {
         let { clubId, seasonId, shirtNumber, ...player } = req.body;
-
+        
         const image = req.file.filename;
         player.image = image ? `/Images/player/${image}`: "";
         
         try {
             const doc = new playerModel(player);
             doc.seasons.push({seasonId: seasonId, clubId: clubId, shirtNumber: shirtNumber});
-            doc.save();
+            
 
             
 
             // To do
             // Add this player to club
-
-
+            const club = await clubModel.findOne({_id: clubId});
+            const season = await seasonModel.findOne({_id: seasonId});
+            const playerNumber = Number(shirtNumber);
+            for (let index = 0; index < club.seasons.length; index++) {
+                if (club.seasons[index].seasonId.equals(seasonId)) {
+                    if(club.seasons[index].players.length === season.rule.maxClubPlayer) {
+                        res.status(400).send({message: "Max club players"});
+                        return;
+                    }
+    
+                    for (const p of club.seasons[index].players) {
+                        if (playerNumber === Number(p.shirt_number)) {
+                            res.status(400).send({ message: "Player number already exists" });
+                            return;
+                        }
+                        if (doc._id.equals(p.playerId)) {
+                            res.status(400).send({ message: "Player already exists" });
+                            return;
+                        }
+                    }
+    
+                    club.seasons[index].players.push({
+                        playerId: doc._id,
+                        shirt_number: playerNumber
+                    });
+                    doc.save();
+                    club.save();
+                    res.status(201).send({ message: "Add Player Successfully" });
+                    return;
+                    // try {
+                    //     player.seasons.push({
+                    //         seasonId: seasonId,
+                    //         clubId: clubId
+                    //     })
+                    //     player.save();
+                    //     club.save();
+                    //     res.status(201).send({ message: "Add Player Successfully" });
+                    //     return;
+    
+                    // } catch (error) {
+                    //     res.status(400).send({ message: "Add Player Failed" });
+                    //     return;
+                    // }
+                }
+            }
+            res.status(400).send({ message: "Season Not Found" });
+            return;
 
 
             // await doc.save(function(err, player) {
@@ -108,9 +153,8 @@ class PlayerController {
 
     async update(req, res) {
         const { _id, ...updated } = req.body;
-        const image = req.file.filename;
-        if (image) {
-            updated.image = `/Images/player/${image}`;
+        if (req.file) {
+            updated.image = `/Images/player/${req.file.filename}`;
         }
 
         const oldPlayer = await playerModel.findOneAndUpdate({ _id: _id }, updated, { returnDocument: "before" });
@@ -125,6 +169,8 @@ class PlayerController {
 
     async delete(req, res) {
         const playerId = req.body.playerId;
+        const seasonId = req.body.seasonId;
+        const clubId = req.body.clubId;
         
         const player = await playerModel.findById(playerId);
         if (player == null) {
@@ -138,10 +184,57 @@ class PlayerController {
 
         // To do
         // Delete from the club
+        const club = await clubModel.findOne({_id: clubId});
+        for (let index = 0; index < club.seasons.length; index++) {
+                if (club.seasons[index].seasonId.equals(seasonId)) {
+                    club.seasons[index].players.pull({playerId: playerId});
+                    club.save();
+                    await playerModel.deleteOne({ _id: playerId });
+                    res.status(200).send({ message: "Deleted successfully" });
+                    return;
+                    // for (const p of club.seasons[index].players) {
+                    //     if (playerNumber === Number(p.shirt_number)) {
+                    //         res.status(400).send({ message: "Player number already exists" });
+                    //         return;
+                    //     }
+                    //     if (doc._id.equals(p.playerId)) {
+                    //         res.status(400).send({ message: "Player already exists" });
+                    //         return;
+                    //     }
+                    // }
+    
+                    // club.seasons[index].players.push({
+                    //     playerId: doc._id,
+                    //     shirt_number: playerNumber
+                    // });
+                    
+                    // club.save();
+                    // res.status(201).send({ message: "Add Player Successfully" });
+                    // return;
+                    // try {
+                    //     player.seasons.push({
+                    //         seasonId: seasonId,
+                    //         clubId: clubId
+                    //     })
+                    //     player.save();
+                    //     club.save();
+                    //     res.status(201).send({ message: "Add Player Successfully" });
+                    //     return;
+    
+                    // } catch (error) {
+                    //     res.status(400).send({ message: "Add Player Failed" });
+                    //     return;
+                    // }
+                }
+            }
+        res.status(400).send({ message: "Season Not Found" });
+        return;
+
+
 
         
-        await playerModel.deleteOne({ _id: playerId });
-        res.status(200).send({ message: "Deleted successfully" });
+        // await playerModel.deleteOne({ _id: playerId });
+        // res.status(200).send({ message: "Deleted successfully" });
     }
 }   
 
