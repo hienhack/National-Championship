@@ -107,19 +107,19 @@
             </header>
 
             <style>
-                .standings .club {
+                .scored-players .player {
                     display: flex;
                     align-items: center;
                     gap: 10px;
                 }
 
-                .club img {
+                .player img {
                     max-height: 30px;
                     max-width: 30px;
                     object-fit: cover;
                 }
 
-                .standings td {
+                .scored-players td {
                     vertical-align: middle;
                 }
             </style>
@@ -127,72 +127,45 @@
             <!-- Main -->
             <div class="main">
                 <div class="d-flex flex-column gap-4 p-4">
-                    <h5 class="m-0">Bảng xếp hạng</h5>
+                    <h5 class="m-0">Danh sách cầu thủ ghi bàn</h5>
 
                     <div class="bg-white rounded-2 p-4">
-                        <table class="standings table table-hover club-player-table">
+                        <table class="scored-players table table-hover club-player-table">
                             <thead>
                                 <tr>
                                     <th scope="col">STT</th>
+                                    <th scope="col">Cầu thủ</th>
                                     <th scope="col">Đội bóng</th>
-                                    <th scope="col">Đã đấu</th>
-                                    <th scope="col">Thắng</th>
-                                    <th scope="col">Thua</th>
-                                    <th scope="col">Hòa</th>
-                                    <th scope="col">Bàn thắng</th>
-                                    <th scope="col">Bàn thua</th>
-                                    <th scope="col">Hiệu số</th>
-                                    <th scope="col">Điểm</th>
+                                    <th scope="col">Số bàn thắng</th>
                                 </tr>
                             </thead>
                             <tbody class="table-group-divider">
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td class="club">
-                                        <img
-                                            src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png">
-                                        <span class="fs-7">Manchester City</span>
+                                    <td scope="row">1</td>
+                                    <td class="player">
+                                        <img src="https://www.mancity.com/meta/media/e2lawnab/erling-haaland.png">
+                                        <span class="fs-7">Erling Haaland</span>
                                     </td>
-                                    <td>38</td>
-                                    <td>30</td>
-                                    <td>5</td>
-                                    <td>3</td>
-                                    <td>104</td>
-                                    <td>28</td>
-                                    <td>86</td>
-                                    <td>105</td>
+                                    <td>Manchester City</td>
+                                    <td>36</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td class="club">
-                                        <img
-                                            src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png">
-                                        <span class="fs-7">Manchester City</span>
+                                    <td scope="row">1</td>
+                                    <td class="player">
+                                        <img src="https://www.mancity.com/meta/media/e2lawnab/erling-haaland.png">
+                                        <span class="fs-7">Erling Haaland</span>
                                     </td>
-                                    <td>38</td>
-                                    <td>30</td>
-                                    <td>5</td>
-                                    <td>3</td>
-                                    <td>104</td>
-                                    <td>28</td>
-                                    <td>86</td>
-                                    <td>105</td>
+                                    <td>Manchester City</td>
+                                    <td>36</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td class="club">
-                                        <img
-                                            src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png">
-                                        <span class="fs-7">Manchester City</span>
+                                    <td scope="row">1</td>
+                                    <td class="player">
+                                        <img src="https://www.mancity.com/meta/media/e2lawnab/erling-haaland.png">
+                                        <span class="fs-7">Erling Haaland</span>
                                     </td>
-                                    <td>38</td>
-                                    <td>30</td>
-                                    <td>5</td>
-                                    <td>3</td>
-                                    <td>104</td>
-                                    <td>28</td>
-                                    <td>86</td>
-                                    <td>105</td>
+                                    <td>Manchester City</td>
+                                    <td>36</td>
                                 </tr>
                             </tbody>
                         </table>
