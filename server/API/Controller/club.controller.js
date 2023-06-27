@@ -8,14 +8,22 @@ class ClubController {
 
     async createClub(req, res) {
         const club = req.body;
-        console.log(req.body);
-        console.log(req.file);
 
         club.seasons = [];
         club.seasons.push({
             seasonId: req.body.seasonId,
             coachName: req.body.coachName
         })
+
+        const season = await seasonModel.findOne({_id: req.body.seasonId});
+        console.log(season);
+        // if (season.clubs){
+        //     season.clubs = [];
+        // }
+        if (season.clubs.length === season.rule.totalClubs) {
+            res.status(400).send({message: "Max number of club"});
+            return;
+        }
         if (req.file) {
             club.image = `Images/club/${req.file.filename}`;
         }
@@ -23,6 +31,9 @@ class ClubController {
 
         try {
             await document.save();
+            console.log(document._id);
+            season.clubs.push(document._id);
+            season.save();
         } catch (error) {
             fs.unlink(path.join(__dirname, "Public", `Images/club/${req.file.filename}`), (err) => {
                 if (err) {
@@ -45,9 +56,15 @@ class ClubController {
 
         const club = await clubModel.findById(clubId);
         const player = await playerModel.findById(playerId);
+        const season = await seasonModel.findById(seasonId);
 
         for (let index = 0; index < club.seasons.length; index++) {
             if (club.seasons[index].seasonId.equals(seasonId)) {
+                if(club.seasons[index].players.length === season.rule.maxClubPlayer) {
+                    res.status(400).send({message: "Max club players"});
+                    return;
+                }
+
                 for (const p of club.seasons[index].players) {
                     if (playerNumber === Number(p.shirt_number)) {
                         res.status(400).send({ message: "Player number already exists" });
@@ -182,11 +199,12 @@ class ClubController {
         const seasonId = req.body.seasonId;
         console.log(clubId);
         const club = await clubModel.findById(clubId);
-        console.log(club);
+        const season = await seasonModel.findById(seasonId);
 
         var size = club.seasons.length;
         for (let index = 0; index < club.seasons.length; index++) {
             if (club.seasons[index].seasonId.equals(seasonId)) {
+                season.clubs.pull(clubId);
                 size -= 1;
                 if (size === 0) {
                     fs.unlink(path.join("Public", club.image), (err) => {
@@ -197,14 +215,17 @@ class ClubController {
                     });
 
                     const rs = await clubModel.findByIdAndDelete(clubId);
+                    season.save();
                     res.status(201).send({ message: "Deleted Club in complete Successfully" });
                     return;
                 } else {
                     club.seasons.pull({ seasonId: club.seasons[index].seasonId });
+                    season.save();
                     club.save();
+                    res.status(201).send({ message: "Deleted Club in season Successfully" });
+                    return;
                 }
-                res.status(201).send({ message: "Deleted Club in season Successfully" });
-                return;
+                
             }
         }
 
@@ -244,6 +265,7 @@ class ClubController {
     //     res.status(201).send({message: "Deleted Club Successfully"});
     // }
 
+    //chua xoa duoc 2 player
     async deletePlayerFromClub(req, res) {
         const { _id, season } = req.body;
         const club = await clubModel.findById(_id);
@@ -253,9 +275,13 @@ class ClubController {
                     const Id = season.playersId[i];
                     club.seasons[index].players.pull({ playerId: Id })
                 }
+
             }
 
         }
+        club.save();
+        await clubModel.updateOne( { _id: _id, 'seasons.seasonId': season.seasonId }, // Match the document and the array element
+        { $set: { 'seasons.$.coachName': season.coachName } });
         res.status(201).send({ message: "Deleted Player from Club Successfully" });
         return;
 
