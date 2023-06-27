@@ -47,7 +47,8 @@ class PlayerController {
         let players = [];
         try {
             if (seasonId) {
-                players = await playerModel.find(filter).elemMatch("seasons", { seasonId: req.query.seasonId }).select('_id name dob image nationality position');
+                players = await playerModel.find(filter).elemMatch("seasons", { seasonId: req.query.seasonId })
+                    .select('_id name dob image nationality position');
                 
             } else {
                 players = await playerModel.find(filter).select('_id name dob image nationality position');
@@ -59,17 +60,41 @@ class PlayerController {
     }
 
     async create(req, res) {
-        let { clubId, seasonId, ...player } = req.body;
-
-        console.log(player);
+        let { clubId, seasonId, shirtNumber, ...player } = req.body;
 
         const image = req.file.filename;
         player.image = image ? `/Images/player/${image}`: "";
         
         try {
             const doc = new playerModel(player);
-            doc.seasons.push({seasonId: seasonId, clubId: clubId});
-            await doc.save();
+            doc.seasons.push({seasonId: seasonId, clubId: clubId, shirtNumber: shirtNumber});
+            doc.save();
+
+            
+
+            // To do
+            // Add this player to club
+
+
+
+
+            // await doc.save(function(err, player) {
+            //     console.log(player);
+            // });
+
+            // const club = clubModel.findOne({_id: clubId});
+
+            // await doc.save().then(savedDoc => {
+            //     club.seasons.forEach(season => {
+            //         if (season.seasonId == seasonId) {
+            //             season.players.push()
+            //         }
+            //     })
+            // });
+
+
+            
+            
         } catch (error) {
             if (image) {
                 fs.unlink(`Public${player.image}`, (err) => { });
@@ -110,6 +135,10 @@ class PlayerController {
         if (player.image !== "") {
             fs.unlink(`Public${player.image}`, (err) => {});
         }
+
+        // To do
+        // Delete from the club
+
         
         await playerModel.deleteOne({ _id: playerId });
         res.status(200).send({ message: "Deleted successfully" });
