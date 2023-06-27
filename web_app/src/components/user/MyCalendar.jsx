@@ -314,6 +314,8 @@ function ContentPreview() {
 
 function AddMatch() {
   const [round, setRound] = useState("1");
+  const [totalRound, setTotalRound] = useState(1);
+
   const id = localStorage.getItem("seasonIDSelected");
   const [listRound, setListRound] = useState(null);
   const formatDate = (dateString) => {
@@ -323,9 +325,7 @@ function AddMatch() {
     const formattedDateTime = moment(dateTimeString).format("HH:mm");
     return formattedDateTime;
   };
-  const formatDate1 = (dateString) => {
-    return moment(dateString).format("HH-MM-YYYY");
-  };
+
 
   const handleRoundChange = (event) => {
     const newRound = event.target.value;
@@ -343,11 +343,16 @@ function AddMatch() {
         }
       })
       .then((response) => {
-        setListRound(response.data.data);
+        setListRound(response.data.data.matches);
+        setTotalRound(response.data.data.numberOfRound);
         console.log(response.data.data);
       })
       .catch((err) => { });
   }, []);
+
+  const roundOptions = Array.from({ length: totalRound }, (_, index) => index + 1);
+
+
   return (
     <div className="contentUser">
       <Content />
@@ -359,9 +364,9 @@ function AddMatch() {
               <div className="round-select input-group" style={{ width: 180 }}>
                 <label className="input-group-text" htmlFor="inputGroupSelect01">Vòng đấu</label>
                 <select className="form-select" id="inputGroupSelect01" value={round} onChange={handleRoundChange}>
-                  <option defaultValue="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
+                  {roundOptions.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
                 </select>
               </div>
             </div>
