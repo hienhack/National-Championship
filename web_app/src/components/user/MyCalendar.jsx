@@ -325,13 +325,15 @@ const submitUpdateMatch = async () => {
   let minute = $("#minuteUpdate").val();
   let date = $("#dateUpdate").val();
   let idSeason = localStorage.getItem("seasonIDSelected");
-
+  let idMatch = localStorage.getItem("matchUpdateSelected");
+  console.log(idMatch);
   const requestData = {
     round: round,
     datetime: combineDateTime(date, hour, minute),
     club1Id: club1,
     club2Id: club2,
-    seasonId: idSeason
+    seasonId: idSeason,
+    _id: idMatch
   };
 
   await fetch("http://127.0.0.1:5000/api/match/update", {
@@ -377,10 +379,11 @@ function AllCalendar() {
   const id = localStorage.getItem("seasonIDSelected");
   const [listRound, setListRound] = useState(null);
   const formatDate = (dateString) => {
-    return moment(dateString).format("DD-MM-YYYY");
+    return moment.utc(dateString).format("DD-MM-YYYY");
   };
+
   const tachNgayGio = (dateTimeString) => {
-    const formattedDateTime = moment(dateTimeString).format("HH:mm");
+    const formattedDateTime = moment.utc(dateTimeString).format("HH:mm");
     return formattedDateTime;
   };
 
@@ -725,7 +728,6 @@ function AddMatch() {
   const [api, contextHolder] = notification.useNotification();
 
   const [listTeam, setListTeam] = useState([]);
-  const id1 = localStorage.getItem("seasonIDSelected");
   useEffect(() => {
 
 
@@ -762,10 +764,11 @@ function AddMatch() {
   const id = localStorage.getItem("seasonIDSelected");
   const [listRound, setListRound] = useState(null);
   const formatDate = (dateString) => {
-    return moment(dateString).format("DD-MM-YYYY");
+    return moment.utc(dateString).format("DD-MM-YYYY");
   };
+
   const tachNgayGio = (dateTimeString) => {
-    const formattedDateTime = moment(dateTimeString).format("HH:mm");
+    const formattedDateTime = moment.utc(dateTimeString).format("HH:mm");
     return formattedDateTime;
   };
 
@@ -774,6 +777,25 @@ function AddMatch() {
     const newRound = event.target.value;
     setRound(newRound);
   };
+  // useEffect(() => {
+  //   axios
+  //     .get(API, {
+  //       headers: {
+  //         "content-type": "application/json",
+  //         accept: "application/json",
+  //       },
+  //       params: {
+  //         seasonId: id
+  //       }
+  //     })
+  //     .then((response) => {
+  //       setListRound(response.data.data.matches);
+  //       setTotalRound(response.data.data.numberOfRound);
+  //       console.log(response.data.data);
+  //     })
+  //     .catch((err) => { });
+  // }, []);
+
   useEffect(() => {
     axios
       .get(API, {
@@ -796,19 +818,43 @@ function AddMatch() {
   const roundOptions = Array.from({ length: totalRound }, (_, index) => index + 1);
 
   const extractDate = (datetime) => {
-    const datePart = datetime.split("T")[0];
+    const datePart = datetime?.split("T")[0];
     return datePart;
   };
 
   const extractHour = (datetime) => {
-    const timePart = datetime.split("T")[1];
-    const hour = timePart.split(":")[0];
+    const timePart = datetime?.split("T")[1];
+    const hour = timePart?.split(":")[0];
     return hour;
   };
+  const [match, setMatch] = useState(null);
+  const [matchID, setMatchID] = useState(null);
 
+  const setMatchUpdateSelected = (matchId) => {
+    localStorage.setItem("matchUpdateSelected", matchId);
+    setMatchID(matchId);
+  };
+  useEffect(() => {
+    if (matchID !== null) {
+      axios
+        .get(`${API}/${matchID}`, {
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response.data.data);
+          setMatch(response.data.data)
+        })
+        .catch((err) => {
+          // Xử lý lỗi khi gọi API
+        });
+    }
+  }, [matchID]);
   const extractMinute = (datetime) => {
-    const timePart = datetime.split("T")[1];
-    const minute = timePart.split(":")[1];
+    const timePart = datetime?.split("T")[1];
+    const minute = timePart?.split(":")[1];
     return minute;
   };
   return (
@@ -861,7 +907,10 @@ function AddMatch() {
                           <div className="fs-8">{tachNgayGio(i.datetime)}</div>
                         </div>
                         <div className="update-match p-3 bg-success">
-                          <button className="text-light" data-bs-toggle="modal" data-bs-target="#update-match-modal"><EditNoteIcon></EditNoteIcon></button>
+                          <button className="text-light" data-bs-toggle="modal" data-bs-target="#update-match-modal" onClick={() => {
+                            setMatchUpdateSelected(i._id);
+
+                          }}><EditNoteIcon ></EditNoteIcon></button>
                         </div>
                         <div className="modal fade" id="update-match-modal" tabIndex="-1" aria-hidden="true">
                           <div className="modal-dialog">
@@ -878,7 +927,7 @@ function AddMatch() {
                                     <div>
                                       <label className="fs-8 mb-1">Vòng</label>
                                       <div className="input-group">
-                                        <input type="number" className="form-control" defaultValue={i.round} id="roundUpdate"
+                                        <input type="number" className="form-control" defaultValue={match?.round} id="roundUpdate"
                                         />
                                       </div>
                                     </div>
@@ -886,7 +935,7 @@ function AddMatch() {
                                       <label className="fs-8 mb-1">Đội bóng 1</label>
                                       <select className="form-select" aria-label="Default select example" id="club1Update">
 
-                                        <option defaultValue={i.club1?._id}>{i.club1?.name}</option>
+                                        <option defaultValue={i.club1?._id}>{match?.club1?.name}</option>
                                         {listTeam.map((i, index) => (
 
                                           <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
@@ -896,7 +945,7 @@ function AddMatch() {
                                     <div>
                                       <label className="fs-8 mb-1">Đội bóng 2</label>
                                       <select className="form-select" aria-label="Default select example" id="club2Update">
-                                        <option defaultValue={i.club2?._id}>{i.club2?.name}</option>
+                                        <option defaultValue={i.club2?._id}>{match?.club2?.name}</option>
                                         {listTeam.map((i, index) => (
 
                                           <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
@@ -908,19 +957,19 @@ function AddMatch() {
                                       <div>
                                         <label className="fs-8 mb-1">Giờ</label>
                                         <div className="input-group">
-                                          <input type="number" className="form-control" defaultValue={extractHour(i.datetime)} id="hourUpdate" />
+                                          <input type="number" className="form-control" defaultValue={extractHour(match?.datetime)} id="hourUpdate" />
                                         </div>
                                       </div>
                                       <div>
                                         <label className="fs-8 mb-1">Phút</label>
                                         <div className="input-group">
-                                          <input type="number" className="form-control" defaultValue={extractMinute(i.datetime)} id="minuteUpdate" />
+                                          <input type="number" className="form-control" defaultValue={extractMinute(match?.datetime)} id="minuteUpdate" />
                                         </div>
                                       </div>
                                       <div>
                                         <label className="fs-8 mb-1">Ngày</label>
                                         <div className="input-group">
-                                          <input type="date" className="form-control" defaultValue={extractDate(i.datetime)} id="dateUpdate" />
+                                          <input type="date" className="form-control" defaultValue={extractDate(match?.datetime)} id="dateUpdate" />
                                         </div>
                                       </div>
                                     </div>
@@ -938,6 +987,7 @@ function AddMatch() {
                                   data-bs-dismiss="modal">Hủy</button>
                                 {contextHolder}
                                 <button type="button" className="btn btn-primary" onClick={() => {
+
                                   let round = $("#roundUpdate").val();
                                   let club1 = $("#club1Update").val();
                                   let club2 = $("#club2Update").val();
@@ -1002,7 +1052,10 @@ function AddMatch() {
                           <div className="fs-8">{tachNgayGio(i.datetime)}</div>
                         </div>
                         <div className="update-match p-3 bg-success">
-                          <button className="text-light" data-bs-toggle="modal" data-bs-target="#update-match-modal"><EditNoteIcon></EditNoteIcon></button>
+                          <button className="text-light" data-bs-toggle="modal" data-bs-target="#update-match-modal" onClick={() => {
+                            setMatchUpdateSelected(i._id);
+                            console.log(i._id);
+                          }}><EditNoteIcon></EditNoteIcon></button>
                         </div>
                         <div className="modal fade" id="update-match-modal" tabIndex="-1" aria-hidden="true">
                           <div className="modal-dialog">
@@ -1019,7 +1072,7 @@ function AddMatch() {
                                     <div>
                                       <label className="fs-8 mb-1">Vòng</label>
                                       <div className="input-group">
-                                        <input type="number" className="form-control" defaultValue={i.round} id="roundUpdate"
+                                        <input type="number" className="form-control" defaultValue={match?.round} id="roundUpdate"
                                         />
                                       </div>
                                     </div>
@@ -1027,7 +1080,7 @@ function AddMatch() {
                                       <label className="fs-8 mb-1">Đội bóng 1</label>
                                       <select className="form-select" aria-label="Default select example" id="club1Update">
 
-                                        <option defaultValue={i.club1?._id}>{i.club1?.name}</option>
+                                        <option defaultValue={i.club1?._id}>{match?.club1?.name}</option>
                                         {listTeam.map((i, index) => (
 
                                           <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
@@ -1037,7 +1090,7 @@ function AddMatch() {
                                     <div>
                                       <label className="fs-8 mb-1">Đội bóng 2</label>
                                       <select className="form-select" aria-label="Default select example" id="club2Update">
-                                        <option defaultValue={i.club2?._id}>{i.club2?.name}</option>
+                                        <option defaultValue={i.club2?._id}>{match?.club2?.name}</option>
                                         {listTeam.map((i, index) => (
 
                                           <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
@@ -1049,19 +1102,19 @@ function AddMatch() {
                                       <div>
                                         <label className="fs-8 mb-1">Giờ</label>
                                         <div className="input-group">
-                                          <input type="number" className="form-control" defaultValue={extractHour(i.datetime)} id="hourUpdate" />
+                                          <input type="number" className="form-control" defaultValue={extractHour(match?.datetime)} id="hourUpdate" />
                                         </div>
                                       </div>
                                       <div>
                                         <label className="fs-8 mb-1">Phút</label>
                                         <div className="input-group">
-                                          <input type="number" className="form-control" defaultValue={extractMinute(i.datetime)} id="minuteUpdate" />
+                                          <input type="number" className="form-control" defaultValue={extractMinute(match?.datetime)} id="minuteUpdate" />
                                         </div>
                                       </div>
                                       <div>
                                         <label className="fs-8 mb-1">Ngày</label>
                                         <div className="input-group">
-                                          <input type="date" className="form-control" defaultValue={extractDate(i.datetime)} id="dateUpdate" />
+                                          <input type="date" className="form-control" defaultValue={extractDate(match?.datetime)} id="dateUpdate" />
                                         </div>
                                       </div>
                                     </div>
