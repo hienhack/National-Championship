@@ -804,7 +804,8 @@ function AddMatch() {
           accept: "application/json",
         },
         params: {
-          seasonId: id
+          seasonId: id,
+          result: true
         }
       })
       .then((response) => {
@@ -935,7 +936,7 @@ function AddMatch() {
                                       <label className="fs-8 mb-1">Đội bóng 1</label>
                                       <select className="form-select" aria-label="Default select example" id="club1Update">
 
-                                        <option defaultValue={i.club1?._id}>{match?.club1?.name}</option>
+                                        <option value={match?.club1?._id}>{match?.club1?.name}</option>
                                         {listTeam.map((i, index) => (
 
                                           <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
@@ -945,7 +946,7 @@ function AddMatch() {
                                     <div>
                                       <label className="fs-8 mb-1">Đội bóng 2</label>
                                       <select className="form-select" aria-label="Default select example" id="club2Update">
-                                        <option defaultValue={i.club2?._id}>{match?.club2?.name}</option>
+                                        <option value={match?.club2?._id}>{match?.club2?.name}</option>
                                         {listTeam.map((i, index) => (
 
                                           <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
@@ -1080,7 +1081,7 @@ function AddMatch() {
                                       <label className="fs-8 mb-1">Đội bóng 1</label>
                                       <select className="form-select" aria-label="Default select example" id="club1Update">
 
-                                        <option defaultValue={i.club1?._id}>{match?.club1?.name}</option>
+                                        <option value={match?.club1?._id}>{match?.club1?.name}</option>
                                         {listTeam.map((i, index) => (
 
                                           <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
@@ -1090,7 +1091,7 @@ function AddMatch() {
                                     <div>
                                       <label className="fs-8 mb-1">Đội bóng 2</label>
                                       <select className="form-select" aria-label="Default select example" id="club2Update">
-                                        <option defaultValue={i.club2?._id}>{match?.club2?.name}</option>
+                                        <option value={match?.club2?._id}>{match?.club2?.name}</option>
                                         {listTeam.map((i, index) => (
 
                                           <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
