@@ -107,6 +107,7 @@ class MatchController {
     async getAll(req, res) {
         const { round, seasonId, result } = req.query;
 
+        console.log(result);
         // Tìm tất cả các trận đấu có round và seasonId hoặc clubId
         // Vì là query nên có thể có field = null
         var queries = {};
@@ -123,11 +124,10 @@ class MatchController {
         // if (clubId) {
         //     queries.$or = [{ "club1Id": clubId }, { "club2Id": clubId }];
         // }
-        console.log(queries);
         if ( result ) {
-            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round").lean();
-        }else {
             var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round result").lean();
+        }else {
+            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round").lean();
         }
         
         for ( const match of matches ) {
@@ -144,7 +144,7 @@ class MatchController {
                 logo: club2.image
             };
         }
-        console.log(matches);
+
         const season = await seasonModel.findOne({_id: seasonId});
         const numberOfClub = season.clubs.length;
         const numberOfRound = numberOfClub * 2 - 2 ;
@@ -154,6 +154,7 @@ class MatchController {
     }
 
     async create(req, res) {
+        console.log(req);
         const match = req.body;
         match.isPlayed = false;
         match.goals = [];
@@ -173,10 +174,16 @@ class MatchController {
     }
 
     async update(req, res) {
+     
         const { _id, ...updated } = req.body;
-
+        updated.round = Number(updated.round);
+        updated.datetime = new Date(updated.datetime);
+        console.log(updated);
         try {
-            await matchModel.findByIdAndUpdate(_id, updated);
+            const b = await matchModel.findById(_id);
+            console.log(b);
+            const a = await matchModel.findByIdAndUpdate(_id, updated);
+            console.log(a);
             res.status(200).send({ message: "Updated successfully" });
             return;
         } catch (error) {
@@ -211,7 +218,7 @@ class MatchController {
             const goalDoc = new goalModel(goal);
             goalDoc.save();
 
-            console.log(goalDoc);
+  
 
             if (goalDoc.clubId.equals(match.club1Id)) {
                 match.result.club1++;
@@ -234,6 +241,23 @@ class MatchController {
         }
     }
 
+    async deleteGoal(req,res){
+        const goalId = req.body.goalId;
+        const matchId = req.body.matchId;
+
+        const match = await matchModel.findById(matchId);
+        try {
+            match.goals.pull(goalId);
+            match.save();
+            await goalModel.findByIdAndDelete(goalId);
+            res.status(200).send({message: 'Deleted goal successfully!'});
+            return;
+        } catch (error) {
+            res.status(400).send({message: "Deleted goal failed"});
+            return;
+        }
+    }
+
     async addCard(req, res) {
         const { matchId, card } = req.body;
 
@@ -250,6 +274,22 @@ class MatchController {
             return;
         } catch (error) {
             res.status(400).send({ message: "Unable to add goal" });
+            return;
+        }
+    }
+
+    async deleteCard(req,res){
+        const cardId = req.body.cardId;
+        const matchId = req.body.matchId;
+
+        const match = await matchModel.findById(matchId);
+        try {
+            match.cards.pull({_id: cardId});
+            match.save();
+            res.status(200).send({message: 'Deleted card successfully!'});
+            return;
+        } catch (error) {
+            res.status(400).send({message: "Deleted card failed"});
             return;
         }
     }
