@@ -909,11 +909,11 @@ function AddMatch() {
                         </div>
                         <div className="update-match p-3 bg-success">
                           <button className="text-light" data-bs-toggle="modal" data-bs-target="#update-match-modal" onClick={() => {
-                            setMatchUpdateSelected(i._id);
+                            // setMatchUpdateSelected(i._id);
 
                           }}><EditNoteIcon ></EditNoteIcon></button>
                         </div>
-                        <div className="modal fade" id="update-match-modal" tabIndex="-1" aria-hidden="true">
+                        {/* <div className="modal fade" id="update-match-modal" tabIndex="-1" aria-hidden="true">
                           <div className="modal-dialog">
                             <div className="modal-content">
                               <div className="modal-header px-4">
@@ -980,10 +980,10 @@ function AddMatch() {
                                         <input type="text" className="form-control" id="stadiumMatchUpdate" />
                                       </div>
                                     </div> */}
-                                  </div>
-                                </form>
-                              </div>
-                              <div className="modal-footer py-2 px-4">
+                        {/* </div> */}
+                        {/* </form> */}
+                        {/* </div> */}
+                        {/* <div className="modal-footer py-2 px-4">
                                 <button type="button" className="btn btn-light"
                                   data-bs-dismiss="modal">Hủy</button>
                                 {contextHolder}
@@ -1015,10 +1015,10 @@ function AddMatch() {
                                     submitUpdateMatch();
                                   }
                                 }}>Sửa</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                              </div> */}
+                        {/* </div> */}
+                        {/* </div> */}
+                        {/* </div> */}
                       </div>
                     </div>
 
@@ -1054,11 +1054,11 @@ function AddMatch() {
                         </div>
                         <div className="update-match p-3 bg-success">
                           <button className="text-light" data-bs-toggle="modal" data-bs-target="#update-match-modal" onClick={() => {
-                            setMatchUpdateSelected(i._id);
-                            console.log(i._id);
+                            // setMatchUpdateSelected(i._id);
+                            // console.log(i._id);
                           }}><EditNoteIcon></EditNoteIcon></button>
                         </div>
-                        <div className="modal fade" id="update-match-modal" tabIndex="-1" aria-hidden="true">
+                        {/* <div className="modal fade" id="update-match-modal" tabIndex="-1" aria-hidden="true">
                           <div className="modal-dialog">
                             <div className="modal-content">
                               <div className="modal-header px-4">
@@ -1125,7 +1125,7 @@ function AddMatch() {
                                         <input type="text" className="form-control" id="stadiumMatchUpdate" />
                                       </div>
                                     </div> */}
-                                  </div>
+                        {/* </div>
                                 </form>
                               </div>
                               <div className="modal-footer py-2 px-4">
@@ -1161,8 +1161,8 @@ function AddMatch() {
                                 }}>Sửa</button>
                               </div>
                             </div>
-                          </div>
-                        </div>
+                          </div> */}
+                        {/* </div> */}
                       </div>
                     </div>
 
