@@ -317,6 +317,36 @@ const submitAddMatch = async () => {
   // window.location.reload(false);
 };
 
+const submitUpdateMatch = async () => {
+  let round = $("#roundUpdate").val();
+  let club1 = $("#club1Update").val();
+  let club2 = $("#club2Update").val();
+  let hour = $("#hourUpdate").val();
+  let minute = $("#minuteUpdate").val();
+  let date = $("#dateUpdate").val();
+  let idSeason = localStorage.getItem("seasonIDSelected");
+
+  const requestData = {
+    round: round,
+    datetime: combineDateTime(date, hour, minute),
+    club1Id: club1,
+    club2Id: club2,
+    seasonId: idSeason
+  };
+
+  await fetch("http://127.0.0.1:5000/api/match/update", {
+    method: "POST",
+    body: JSON.stringify(requestData),
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+  // window.location.reload(false);
+};
+
 const deleteMatch = async () => {
   // const id = localStorage.getItem("clubDeleteSelected");
   const id = localStorage.getItem("matchDeleteSelected");
@@ -465,7 +495,7 @@ function AllCalendar() {
                               </select>
                             </div>
                             <div>
-                              <label className="fs-8 mb-1">Đội bóng 1</label>
+                              <label className="fs-8 mb-1">Đội bóng 2</label>
                               <select className="form-select" aria-label="Default select example" id="club2Add">
                                 <option defaultValue="">Chọn đội bóng</option>
                                 {listTeam.map((i, index) => (
@@ -649,7 +679,43 @@ function ContentPreview() {
 function AddMatch() {
   const [round, setRound] = useState("1");
   const [totalRound, setTotalRound] = useState(1);
+  const [api, contextHolder] = notification.useNotification();
 
+  const [listTeam, setListTeam] = useState([]);
+  const id1 = localStorage.getItem("seasonIDSelected");
+  useEffect(() => {
+
+
+    axios.get(API1, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      },
+      params: {
+        seasonId: id
+      }
+
+    }).
+      then(response => {
+        setListTeam(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
+
+  const openNotificationWithIcon1 = (type) => {
+    api[type]({
+      message: type === "success" ? "Thêm thành công" : "Vui lòng điền đủ thông tin",
+    });
+  };
+  const openNotificationWithIcon2 = (type) => {
+    api[type]({
+      message: "Xóa thành công",
+    });
+  };
   const id = localStorage.getItem("seasonIDSelected");
   const [listRound, setListRound] = useState(null);
   const formatDate = (dateString) => {
@@ -686,7 +752,22 @@ function AddMatch() {
 
   const roundOptions = Array.from({ length: totalRound }, (_, index) => index + 1);
 
+  const extractDate = (datetime) => {
+    const datePart = datetime.split("T")[0];
+    return datePart;
+  };
 
+  const extractHour = (datetime) => {
+    const timePart = datetime.split("T")[1];
+    const hour = timePart.split(":")[0];
+    return hour;
+  };
+
+  const extractMinute = (datetime) => {
+    const timePart = datetime.split("T")[1];
+    const minute = timePart.split(":")[1];
+    return minute;
+  };
   return (
     <div className="contentUser">
       <Content />
@@ -735,7 +816,112 @@ function AddMatch() {
                           <div className="fs-8">{tachNgayGio(i.datetime)}</div>
                         </div>
                         <div className="update-match p-3 bg-success">
-                          <button className="text-light"><EditNoteIcon></EditNoteIcon></button>
+                          <button className="text-light" data-bs-toggle="modal" data-bs-target="#update-match-modal"><EditNoteIcon></EditNoteIcon></button>
+                        </div>
+                        <div className="modal fade" id="update-match-modal" tabIndex="-1" aria-hidden="true">
+                          <div className="modal-dialog">
+                            <div className="modal-content">
+                              <div className="modal-header px-4">
+                                <h1 className="modal-title fs-6" id="exampleModalLabel">Biểu mẫu sửa trận đấu
+                                </h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div className="modal-body px-4">
+                                <form>
+                                  <div className="d-flex flex-column gap-3">
+                                    <div>
+                                      <label className="fs-8 mb-1">Vòng</label>
+                                      <div className="input-group">
+                                        <input type="number" className="form-control" defaultValue={i.round} id="roundUpdate"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <label className="fs-8 mb-1">Đội bóng 1</label>
+                                      <select className="form-select" aria-label="Default select example" id="club1Update">
+
+                                        <option defaultValue={i.club1?._id}>{i.club1?.name}</option>
+                                        {listTeam.map((i, index) => (
+
+                                          <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <label className="fs-8 mb-1">Đội bóng 2</label>
+                                      <select className="form-select" aria-label="Default select example" id="club2Update">
+                                        <option defaultValue={i.club2?._id}>{i.club2?.name}</option>
+                                        {listTeam.map((i, index) => (
+
+                                          <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
+                                        ))}
+                                      </select>
+                                    </div>
+
+                                    <div className="d-flex gap-3">
+                                      <div>
+                                        <label className="fs-8 mb-1">Giờ</label>
+                                        <div className="input-group">
+                                          <input type="number" className="form-control" defaultValue={extractHour(i.datetime)} id="hourUpdate" />
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <label className="fs-8 mb-1">Phút</label>
+                                        <div className="input-group">
+                                          <input type="number" className="form-control" defaultValue={extractMinute(i.datetime)} id="minuteUpdate" />
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <label className="fs-8 mb-1">Ngày</label>
+                                        <div className="input-group">
+                                          <input type="date" className="form-control" defaultValue={extractDate(i.datetime)} id="dateUpdate" />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {/* <div>
+                                      <label className="fs-8 mb-1">Sân đấu</label>
+                                      <div className="input-group">
+                                        <input type="text" className="form-control" id="stadiumMatchUpdate" />
+                                      </div>
+                                    </div> */}
+                                  </div>
+                                </form>
+                              </div>
+                              <div className="modal-footer py-2 px-4">
+                                <button type="button" className="btn btn-light"
+                                  data-bs-dismiss="modal">Hủy</button>
+                                {contextHolder}
+                                <button type="button" className="btn btn-primary" onClick={() => {
+                                  let round = $("#roundUpdate").val();
+                                  let club1 = $("#club1Update").val();
+                                  let club2 = $("#club2Update").val();
+                                  let hour = $("#hourUpdate").val();
+                                  let minute = $("#minuteUpdate").val();
+                                  let date = $("#dateUpdate").val();
+                                  // let stadium = $("#stadiumMatchUpdate").val();
+
+
+                                  if (
+                                    round === "" ||
+                                    club1 === "" ||
+                                    club2 === "" ||
+                                    hour === "" ||
+                                    minute === "" ||
+                                    date === ""
+
+                                  ) {
+                                    openNotificationWithIcon1("error");
+
+                                    return;
+                                  } else {
+                                    openNotificationWithIcon1("success");
+                                    submitUpdateMatch();
+                                  }
+                                }}>Sửa</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
