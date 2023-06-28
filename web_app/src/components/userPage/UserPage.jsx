@@ -106,8 +106,8 @@ function UserPage() {
                   <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
                 </div>
                 <ul className="collapse" id="report-menu">
-                  <li className="menu-item"><a href="#">Bảng xếp hạng</a></li>
-                  <li className="menu-item"><a href="#">Danh sách ghi bàn</a></li>
+                  <li className={`menu-item ${activeMenuItem === 'report/rank' ? 'active' : ''}`} onClick={() => handleMenuClick('report/rank')}><Link to="/report/rank">Bảng xếp hạng</Link></li>
+                  <li className={`menu-item ${activeMenuItem === 'report/goal' ? 'active' : ''}`} onClick={() => handleMenuClick('report/goal')}><Link to="/report/goal">Danh sách ghi bàn</Link></li>
                 </ul>
               </div>
             </div>

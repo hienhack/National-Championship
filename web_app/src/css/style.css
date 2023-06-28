@@ -245,3 +245,33 @@ button:hover {
 .club-win * {
 	font-weight: bolder;
 }
+.standings .club {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.club img {
+	max-height: 30px;
+	max-width: 30px;
+	object-fit: cover;
+}
+
+.standings td {
+	vertical-align: middle;
+}
+.scored-players .player {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.player img {
+	max-height: 30px;
+	max-width: 30px;
+	object-fit: cover;
+}
+
+.scored-players td {
+	vertical-align: middle;
+}
