@@ -17,7 +17,6 @@ const matchSchema = mongoose.Schema({
     goals: [Schema.Types.ObjectId],
     cards: [{
         club: Number, // Nếu thẻ của clb 1 thì là số 1, 2 thì là số 2
-        _id: false,
         playerId: Schema.Types.ObjectId,
         time: Number
     }]
