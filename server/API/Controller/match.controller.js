@@ -66,38 +66,46 @@ class MatchController {
         // match.goals = [ 
         //      {club: 1, time: 30, type: "p", scoredPlayer: "adfads", assistedPlayer: "adfads" }
         // ]
-        match.goals = await Promise.all(match.goals.map(async id => {
-            const goal = await goalModel.findById(id);
-            var rs = new Object();
-            rs._id = goal._id;
-            rs.time = goal.time;
-            rs.type = goal.type;
-            const clubGoal = await clubModel.findById(goal.clubId);
-            const scoredPlayer = await playerModel.findById(goal.scoredPlayerId);
-            const assistedPlayer = await playerModel.findById(goal.assistedPlayerId);
-
-            if (clubGoal._id.equals(club1._id)) {
-                rs.club = 1;
-            } else if (clubGoal._id.equals(club2._id)) {
-                rs.club = 2;
-            }
-            rs.scoredPlayer = scoredPlayer.name;
-            if (assistedPlayer) {
-                rs.assistedPlayer = assistedPlayer.name;
-            }
-
-            return rs;
-        }));
-        match.cards = await Promise.all(match.cards.map(async card => {
-            const player = await playerModel.findById(card.playerId);
-            console.log(player);
-            var rs = {};
-            rs.club = card.club;
-            rs.playerId = card.playerId;
-            rs.time = card.time;
-            rs.playerName = player.name;
-            return rs;
-        }))
+        if (match.goals != undefined){
+            match.goals = await Promise.all(match.goals.map(async id => {
+                const goal = await goalModel.findById(id);
+                var rs = new Object();
+                rs._id = goal._id;
+                rs.time = goal.time;
+                rs.type = goal.type;
+                const clubGoal = await clubModel.findById(goal.clubId);
+                const scoredPlayer = await playerModel.findById(goal.scoredPlayerId);
+                const assistedPlayer = await playerModel.findById(goal.assistedPlayerId);
+    
+                if (clubGoal._id.equals(club1._id)) {
+                    rs.club = 1;
+                } else if (clubGoal._id.equals(club2._id)) {
+                    rs.club = 2;
+                }
+                rs.scoredPlayer = scoredPlayer.name;
+                if (assistedPlayer) {
+                    rs.assistedPlayer = assistedPlayer.name;
+                }
+    
+                return rs;
+            }));
+        }else{
+            match.goals = [];
+        }
+        if (match.cards != undefined) {
+            match.cards = await Promise.all(match.cards.map(async card => {
+                const player = await playerModel.findById(card.playerId);
+                console.log(player);
+                var rs = {};
+                rs.club = card.club;
+                rs.playerId = card.playerId;
+                rs.time = card.time;
+                rs.playerName = player.name;
+                return rs;
+            }));
+        }else {
+            match.cards = [];
+        }
         delete match.club1Id;
         delete match.club2Id;
         // delete match.club1.appearances;
