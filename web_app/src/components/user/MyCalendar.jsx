@@ -6,10 +6,11 @@ import "../../css/style.css";
 import moment from "moment";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { notification } from "antd";
-
+import ArrowCircleLeftSharpIcon from '@mui/icons-material/ArrowCircleLeftSharp';
+import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import "../../style/myteam.css";
 import BuildIcon from "@mui/icons-material/Build";
-
+import SellIcon from '@mui/icons-material/Sell';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 const API = "http://127.0.0.1:5000/api/match";
@@ -22,7 +23,7 @@ function MyCalendar() {
 
       <Route path="all" element={<AddMatch />} />
       <Route path="add" element={<AllCalendar />} />
-      <Route path="edit" element={<EditMatch />} />
+      <Route path="info" element={<EditMatch />} />
     </Routes>
   );
 }
@@ -828,36 +829,22 @@ function AddMatch() {
     const hour = timePart?.split(":")[0];
     return hour;
   };
-  const [match, setMatch] = useState(null);
-  const [matchID, setMatchID] = useState(null);
 
-  const setMatchUpdateSelected = (matchId) => {
-    localStorage.setItem("matchUpdateSelected", matchId);
-    setMatchID(matchId);
-  };
-  useEffect(() => {
-    if (matchID !== null) {
-      axios
-        .get(`${API}/${matchID}`, {
-          headers: {
-            "content-type": "application/json",
-            accept: "application/json",
-          },
-        })
-        .then((response) => {
-          console.log(response.data.data);
-          setMatch(response.data.data)
-        })
-        .catch((err) => {
-          // Xử lý lỗi khi gọi API
-        });
-    }
-  }, [matchID]);
   const extractMinute = (datetime) => {
     const timePart = datetime?.split("T")[1];
     const minute = timePart?.split(":")[1];
     return minute;
   };
+
+  const navigate = useNavigate();
+  const handleOnClick = useCallback(
+    () => navigate("../edit", { replace: true }),
+    [navigate]
+  );
+  const handleOnClick1 = useCallback(
+    () => navigate("../info", { replace: true }),
+    [navigate]
+  );
   return (
     <div className="contentUser">
       <Content />
@@ -908,8 +895,11 @@ function AddMatch() {
                           <div className="fs-8">{tachNgayGio(i.datetime)}</div>
                         </div>
                         <div className="update-match p-3 bg-success">
-                          <button className="text-light" data-bs-toggle="modal" data-bs-target="#update-match-modal" onClick={() => {
+                          <button className="text-light" onClick={() => {
                             // setMatchUpdateSelected(i._id);
+                            localStorage.setItem("matchSelected", i._id);
+
+                            handleOnClick1();
 
                           }}><EditNoteIcon ></EditNoteIcon></button>
                         </div>
@@ -1053,9 +1043,13 @@ function AddMatch() {
                           <div className="fs-8">{tachNgayGio(i.datetime)}</div>
                         </div>
                         <div className="update-match p-3 bg-success">
-                          <button className="text-light" data-bs-toggle="modal" data-bs-target="#update-match-modal" onClick={() => {
+                          <button className="text-light" onClick={() => {
                             // setMatchUpdateSelected(i._id);
                             // console.log(i._id);
+                            localStorage.setItem("matchSelected", i._id);
+
+                            handleOnClick1();
+
                           }}><EditNoteIcon></EditNoteIcon></button>
                         </div>
                         {/* <div className="modal fade" id="update-match-modal" tabIndex="-1" aria-hidden="true">
@@ -1184,150 +1178,232 @@ function AddMatch() {
 }
 
 function EditMatch() {
+  const navigate = useNavigate();
+  const handleOnClick = useCallback(
+    () => navigate("../all", { replace: true }),
+    [navigate]
+  );
+  const handleOnClick1 = useCallback(
+    () => navigate("../info", { replace: true }),
+    [navigate]
+  );
+  const [match, setMatch] = useState(null);
+  const [matchID, setMatchID] = useState(null);
+
+  const matchid = localStorage.getItem("matchSelected");
+
+  useEffect(() => {
+    if (matchid !== null) {
+      axios
+        .get(`${API}/${matchid}`, {
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response.data.data);
+          setMatch(response.data.data)
+        })
+        .catch((err) => {
+          // Xử lý lỗi khi gọi API
+        });
+    }
+  }, []);
   return (
     <div className="contentUser">
       <Content />
-      <div className="allTeamTitle">
-        <div style={{ fontWeight: "bold" }}>Cập nhật trận đấu</div>
-        <div>
-          {/* <button type="button" className="btn btn-danger" style={{ width: 80 }}>
-            Sửa
-          </button> */}
-        </div>
-      </div>
-      <div className="animated fadeIn">
-        <div className="row">
-          <div className="col-lg-2"></div>
-          <div className="col-lg-8">
-            <div className="card">
-              <div className="card-header">
-                <strong>Thông tin trận đấu</strong>
+      <div class="main-wrapper">
+
+
+        <div class="d-flex flex-column gap-4 p-4">
+          <h5 class="m-0">Chi tiết trận đấu</h5>
+          <div class="m-auto bg-white shadow-sm rounded-2" style={{ width: 800 }}>
+            <div class="p-4">
+              <h6 class="text-secondary fs-7">
+                <button className="back-btn fw-semibold  fs-8" onClick={() => {
+                  handleOnClick();
+                }}><ArrowCircleLeftSharpIcon></ArrowCircleLeftSharpIcon></button>
+                <br />
+                <br />
+                Vòng: 1
+              </h6>
+              <div class="d-flex justify-content-around">
+                <div class="match-detail-club order-1">
+                  <img alt=""
+                    src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                  <div class="fs-7">Manchester City</div>
+                </div>
+                <div class="match-detail-club order-5">
+                  <img alt=""
+                    src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
+                  <div class="fs-7">Manchester United</div>
+                </div>
+                <div class="club-goal order-2 fs-1">2</div>
+                <div class="club-goal order-4 fs-1">0</div>
+                <div class="order-3 fs-1">-</div>
               </div>
-              <div className="card-body card-block">
-                <form
-                  id="register"
-                  action="/club/add/<%=idSeason%>"
-                  method="post"
-                  className="form-horizontal"
-                >
-                  <div className="row form-group" style={{ marginBottom: 15 }}>
-                    <div className="col col-md-3 ">
-                      <label htmlFor="tendoibong" className=" form-control-label ">
-                        Vòng
-                      </label>
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <select
-                        id="loaiCauThu"
-                        name="loaiCauThu"
-                        className="form-control"
-                        required="required"
-                      >
-                        <option defaultValue="1">
-                          1
-                        </option>
-                        <option value="2" >
-                          2
-                        </option>
-                        <option value="3" >
-                          3
-                        </option>
-                      </select>
-                    </div>
+              <hr />
+              <div class="d-flex flex-column gap-2">
+                <div class="goal border" aria-label="club1">
+                  <div class="d-flex gap-2 align-items-center p-2">
+                    <i class="fa-regular fa-futbol"><SportsSoccerIcon></SportsSoccerIcon></i>
+                    <span class="fs-7">Erring Haaland (P) "10</span>
                   </div>
-                  <div className="row form-group" style={{ marginBottom: 15 }}>
-                    <div className="col col-md-3 ">
-                      <label htmlFor="svd" className=" form-control-label ">
-                        Đội nhà
-                      </label>
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <select
-                        id="loaiCauThu"
-                        name="loaiCauThu"
-                        className="form-control"
-                        required="required"
-                      >
-                        <option defaultValue="1" >
-                          MU
-                        </option>
-                        <option value="0">MCI</option>
-                      </select>
-                    </div>
+                  <button class="remove-btn bg-danger px-2"><i
+                    class="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
+                </div>
+                <div class="goal border" aria-label="club2">
+                  <div class="d-flex gap-2 align-items-center p-2 flex-row-reverse">
+                    <i class="fa-regular fa-futbol"><SportsSoccerIcon></SportsSoccerIcon></i>
+                    <span class="fs-7">Erring Haaland (P) A. Kevin De Bruyne "19</span>
                   </div>
-                  <div className="row form-group" style={{ marginBottom: 15 }}>
-                    <div className="col col-md-3 ">
-                      <label htmlFor="svd" className=" form-control-label ">
-                        Đội khách
-                      </label>
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <select
-                        id="loaiCauThu"
-                        name="loaiCauThu"
-                        className="form-control"
-                        required="required"
-                      >
-                        <option value="1" >
-                          MU
-                        </option>
-                        <option value="0">MCI</option>
-                      </select>
-                    </div>
+                  <button class="remove-btn bg-danger px-2"><i
+                    class="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
+                </div>
+                <div class="goal border" aria-label="club1">
+                  <div class="d-flex gap-2 align-items-center p-2">
+                    <i class="text-danger fa-solid fa-mobile text-red"><SellIcon></SellIcon></i>
+                    <span class="fs-7">Erring Haaland "65</span>
                   </div>
-                  <div className="row form-group" style={{ marginBottom: 15 }}>
-                    <div className="col col-md-3 ">
-                      <label htmlFor="hlv" className=" form-control-label ">
-                        Địa điểm{" "}
-                      </label>
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <input
-                        type="text"
-                        id="viTriThiDau"
-                        name="viTriThiDau"
-                        className="form-control"
-                        required="required"
-                      ></input>
-                    </div>
+                  <button class="remove-btn bg-danger px-2"><i
+                    class="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
+                </div>
+                <div class="goal border" aria-label="club2">
+                  <div class="d-flex gap-2 align-items-center p-2">
+                    <i class="text-danger fa-solid fa-mobile text-red"><SellIcon></SellIcon></i>
+                    <span class="fs-7">Erring Haaland "65</span>
                   </div>
-                  <div className="row form-group" style={{ marginBottom: 15 }}>
-                    <div className="col col-md-3 ">
-                      <label htmlFor="tendoibong" className=" form-control-label ">
-                        Thời gian
-                      </label>
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <input
-                        type="date"
-                        id="tendoibong"
-                        name="tendoibong"
-                        className="form-control"
-                        required
-                      />
-                    </div>
-                  </div>
-                </form>
+                  <button class="remove-btn bg-danger px-2"><i
+                    class="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
+                </div>
               </div>
-              <div
-                className="card-footer"
-                style={{ display: "flex", justifyContent: "center" }}
-              >
-                <button
-                  form="register"
-                  type="submit"
-                  className="btn btn-primary btn-sm"
-                  style={{ marginRight: 20 }}
-                >
-                  <i className="fa fa-check"></i> Thay đổi
-                </button>
-                <button
-                  form="register"
-                  type="reset"
-                  className="btn btn-danger btn-sm"
-                >
-                  <i className="fa fa-ban"> </i> Hủy thay đổi
-                </button>
+              <hr />
+              <div class="d-flex flex-row-reverse gap-2">
+                <button class="btn btn-primary" data-bs-toggle="modal"
+                  data-bs-target="#add-goal-modal">Thêm bàn thắng</button>
+                <button class="btn btn-primary" data-bs-toggle="modal"
+                  data-bs-target="#add-card-modal">Thêm thẻ đỏ</button>
+              </div>
+              <div class="modal fade" id="add-goal-modal" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-6">Thêm bàn thắng</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="d-flex flex-column px-2 gap-3">
+                        <div class="d-flex justify-content-between py-4">
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="clubId"
+                              checked />
+                            <label class="form-check-label">
+                              Đội bóng 1
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="clubId" />
+                            <label class="form-check-label">
+                              Đội bóng 2
+                            </label>
+                          </div>
+                        </div>
+                        <div>
+                          <label class="fs-8 mb-1">Cầu thủ ghi bàn</label>
+                          <select class="form-select" aria-label="Default select example">
+                            <option selected>Chọn cầu thủ</option>
+                            <option value="ádfds">advcxca adfds</option>
+                            <option value="adsf"> ádf ád f</option>
+                          </select>
+                        </div>
+                        <div class="d-flex gap-3">
+                          <div>
+                            <label class="fs-8 mb-1">Loại bàn thắng</label>
+                            <select class="form-select" aria-label="Default select example">
+                              <option selected>Chọn cầu thủ</option>
+                              <option value="N">Thông thường</option>
+                              <option value="P">Penalty</option>
+                              <option value="O">Phản lưới</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label class="fs-8 mb-1">Phút</label>
+                            <div class="input-group">
+                              <input type="number" class="form-control" value="0" />
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <label class="fs-8 mb-1">Cầu thủ kiến tạo</label>
+                          <select class="form-select" aria-label="Default select example">
+                            <option selected>Chọn cầu thủ</option>
+                            <option value="dfds">advcxca adfds</option>
+                            <option value="adsf"> ádf ád f</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn light fs-7"
+                        data-bs-dismiss="modal">Hủy</button>
+                      <button type="button" class="btn btn-primary fs-7">Lưu</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal fade" id="add-card-modal" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-6">Thêm thẻ đỏ</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="d-flex flex-column px-2 gap-3">
+                        <div class="d-flex justify-content-between py-4">
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="clubId"
+                              checked value="clubid1" />
+                            <label class="form-check-label">
+                              Đội bóng 1
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="clubId"
+                              value="clubid2" />
+                            <label class="form-check-label">
+                              Đội bóng 2
+                            </label>
+                          </div>
+                        </div>
+                        <div>
+                          <label class="fs-8 mb-1">Cầu thủ nhận thẻ</label>
+                          <select class="form-select" aria-label="Default select example">
+                            <option selected>Chọn cầu thủ</option>
+                            <option value="dfds">advcxca adfds</option>
+                            <option value="adsf"> ádf ád f</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label class="fs-8 mb-1">phút</label>
+                          <div class="input-group">
+                            <input type="number" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-light fs-7"
+                        data-bs-dismiss="modal">Hủy</button>
+                      <button type="button" class="btn btn-primary fs-7">Thêm</button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

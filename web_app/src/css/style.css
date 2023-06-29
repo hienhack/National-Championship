@@ -275,3 +275,42 @@ button:hover {
 .scored-players td {
 	vertical-align: middle;
 }
+.match-detail-club {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: center;
+}
+
+.match-detail-club img {
+	height: 80px;
+	width: 80px;
+	object-fit: cover;
+	display: block;
+}
+
+.goal {
+	display: flex;
+	gap: 10px;
+}
+
+.goal .remove-btn {
+	height: auto;
+	display: none;
+}
+
+.goal:hover .remove-btn {
+	display: block;
+}
+
+.goal[aria-label="club1"] {
+	justify-content: space-between;
+}
+
+.goal[aria-label="club2"] {
+	justify-content: end;
+}
+
+.goal[aria-label="club2"]>div {
+	flex-direction: row-reverse;
+}
