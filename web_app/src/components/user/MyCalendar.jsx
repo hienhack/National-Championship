@@ -1209,7 +1209,84 @@ const submitAddGoal = async () => {
   })
     .then((result) => { })
     .catch((error) => { });
-  // window.location.reload(false);
+  window.location.reload(false);
+};
+
+const submitDeleteGoal = async () => {
+  let matchid = localStorage.getItem("matchSelected");
+  let goal = localStorage.getItem("IDGoalDelete");
+
+
+  const requestData = {
+    matchId: matchid,
+
+    goalId: goal
+  };
+
+  await fetch("http://127.0.0.1:5000/api/match/delete-goal", {
+    method: "POST",
+    body: JSON.stringify(requestData),
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+  window.location.reload(false);
+};
+
+const submitDeleteCard = async () => {
+  let matchid = localStorage.getItem("matchSelected");
+  let card = localStorage.getItem("IDCardDelete");
+
+
+  const requestData = {
+    matchId: matchid,
+
+    cardId: card
+  };
+
+  await fetch("http://127.0.0.1:5000/api/match/delete-redcard", {
+    method: "POST",
+    body: JSON.stringify(requestData),
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+  window.location.reload(false);
+};
+
+const submitAddCard = async () => {
+  let matchid = localStorage.getItem("matchSelected");
+  let club = localStorage.getItem("clubGetCard");
+
+  let playerGoal = $("#playerCard").val();
+  let minute = $("#minuteCard").val();
+  const requestData = {
+    matchId: matchid,
+
+    card: {
+      club: parseInt(club),
+      playerId: playerGoal,
+      time: parseInt(minute),
+    }
+  };
+
+  await fetch("http://127.0.0.1:5000/api/match/add-redcard", {
+    method: "POST",
+    body: JSON.stringify(requestData),
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+  window.location.reload(false);
 };
 
 function EditMatch() {
@@ -1311,7 +1388,11 @@ function EditMatch() {
                         "{i.time}
                       </span>
                     </div>
-                    <button className="remove-btn bg-danger px-2">
+                    <button className="remove-btn bg-danger px-2" onClick={() => {
+                      localStorage.setItem("IDGoalDelete", i?._id)
+                      openNotificationWithIcon2("success");
+                      submitDeleteGoal();
+                    }}>
                       <i className="fa-solid fa-trash-can"><DeleteIcon /></i>
                     </button>
                   </div>
@@ -1324,7 +1405,11 @@ function EditMatch() {
                       <i className="text-danger fa-solid fa-mobile text-red"><SellIcon></SellIcon></i>
                       <span className="fs-7"> {i.playerName} "{i.time}</span>
                     </div>
-                    <button className="remove-btn bg-danger px-2"><i
+                    <button className="remove-btn bg-danger px-2" onClick={() => {
+                      localStorage.setItem("IDCardDelete", i?._id)
+                      openNotificationWithIcon2("success");
+                      submitDeleteCard();
+                    }}><i
                       className="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
                   </div>
 
@@ -1434,7 +1519,7 @@ function EditMatch() {
                         let type = $("#typeGoal").val();
                         let minute = $("#minuteGoal").val();
                         let assistGoal = $("#assistGoal").val();
-                        if (selectedClub === "1") {
+                        if (selectedClub === 1) {
                           localStorage.setItem("clubIDGoal", match?.club1?._id);
                         }
                         else {
@@ -1522,7 +1607,33 @@ function EditMatch() {
                     <div className="modal-footer">
                       <button type="button" className="btn btn-light fs-7"
                         data-bs-dismiss="modal">Hủy</button>
-                      <button type="button" className="btn btn-primary fs-7">Thêm</button>
+                      <button type="button" className="btn btn-primary fs-7" onClick={() => {
+                        localStorage.setItem("clubGetCard", selectedClub);
+                        let playerGoal = $("#playerCard").val();
+                        let minute = $("#minuteGoal").val();
+                        if (selectedClub === 1) {
+                          localStorage.setItem("clubIDCard", match?.club1?._id);
+                        }
+                        else {
+                          localStorage.setItem("clubIDCard", match?.club2?._id);
+
+                        }
+
+                        if (
+
+                          playerGoal === "" ||
+                          minute === ""
+
+
+                        ) {
+                          openNotificationWithIcon1("error");
+
+                          return;
+                        } else {
+                          openNotificationWithIcon1("success");
+                          submitAddCard();
+                        }
+                      }}>Thêm</button>
                     </div>
                   </div>
                 </div>
