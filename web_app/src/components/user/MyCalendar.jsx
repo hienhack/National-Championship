@@ -1188,12 +1188,33 @@ function EditMatch() {
     [navigate]
   );
   const [match, setMatch] = useState(null);
-  const [matchID, setMatchID] = useState(null);
 
   const matchid = localStorage.getItem("matchSelected");
 
   useEffect(() => {
     if (matchid !== null) {
+      axios
+        .get(`${API}/${matchid}`, {
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response.data.data);
+          setMatch(response.data.data)
+        })
+        .catch((err) => {
+          // Xử lý lỗi khi gọi API
+        });
+    }
+  }, []);
+
+  const [club1, setClub1] = useState(null);
+
+
+  useEffect(() => {
+    if (match.club1._id !== null) {
       axios
         .get(`${API}/${matchid}`, {
           headers: {
@@ -1250,7 +1271,7 @@ function EditMatch() {
                     <div className={`d-flex gap-2 align-items-center p-2 ${i?.club === 1 ? '' : 'flex-row-reverse'}`}>
                       <i className="fa-regular fa-futbol"><SportsSoccerIcon /></i>
                       <span className="fs-7">
-                        {i.scoredPlayer}
+                        {i.scoredPlayer}({i.type})
                         "{i.time}
                       </span>
                     </div>
@@ -1265,7 +1286,7 @@ function EditMatch() {
                   <div className={`goal border ${i?.club === 1 ? 'club1' : 'club2'}`} aria-label={`club${i?.club}`}>
                     <div className={`d-flex gap-2 align-items-center p-2 ${i?.club === 1 ? '' : 'flex-row-reverse'}`}>
                       <i className="text-danger fa-solid fa-mobile text-red"><SellIcon></SellIcon></i>
-                      <span className="fs-7"> {i.scoredPlayer} "65</span>
+                      <span className="fs-7"> {i.playerName} "{i.time}</span>
                     </div>
                     <button className="remove-btn bg-danger px-2"><i
                       className="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
@@ -1294,14 +1315,14 @@ function EditMatch() {
                       <div className="d-flex flex-column px-2 gap-3">
                         <div className="d-flex justify-content-between py-4">
                           <div className="form-check">
-                            <input className="form-check-input" type="radio" name="clubId"
+                            <input className="form-check-input" type="radio" name="clubId" id="club1Goal"
                               checked />
                             <label className="form-check-label">
                               Đội bóng 1
                             </label>
                           </div>
                           <div className="form-check">
-                            <input className="form-check-input" type="radio" name="clubId" />
+                            <input className="form-check-input" type="radio" name="clubId" id="club2Goal" />
                             <label className="form-check-label">
                               Đội bóng 2
                             </label>
@@ -1309,7 +1330,7 @@ function EditMatch() {
                         </div>
                         <div>
                           <label className="fs-8 mb-1">Cầu thủ ghi bàn</label>
-                          <select className="form-select" aria-label="Default select example">
+                          <select className="form-select" aria-label="Default select example" id="playerGoal">
                             <option selected>Chọn cầu thủ</option>
                             <option value="ádfds">advcxca adfds</option>
                             <option value="adsf"> ádf ád f</option>
@@ -1318,8 +1339,8 @@ function EditMatch() {
                         <div className="d-flex gap-3">
                           <div>
                             <label className="fs-8 mb-1">Loại bàn thắng</label>
-                            <select className="form-select" aria-label="Default select example">
-                              <option selected>Chọn cầu thủ</option>
+                            <select className="form-select" aria-label="Default select example" id="typeGoal">
+                              <option selected>Chọn bàn thắng</option>
                               <option value="N">Thông thường</option>
                               <option value="P">Penalty</option>
                               <option value="O">Phản lưới</option>
@@ -1328,13 +1349,13 @@ function EditMatch() {
                           <div>
                             <label className="fs-8 mb-1">Phút</label>
                             <div className="input-group">
-                              <input type="number" className="form-control" value="0" />
+                              <input type="number" className="form-control" value="0" id="minuteGoal" />
                             </div>
                           </div>
                         </div>
                         <div>
                           <label className="fs-8 mb-1">Cầu thủ kiến tạo</label>
-                          <select className="form-select" aria-label="Default select example">
+                          <select className="form-select" aria-label="Default select example" id="assistGoal">
                             <option selected>Chọn cầu thủ</option>
                             <option value="dfds">advcxca adfds</option>
                             <option value="adsf"> ádf ád f</option>
@@ -1363,14 +1384,14 @@ function EditMatch() {
                       <div className="d-flex flex-column px-2 gap-3">
                         <div className="d-flex justify-content-between py-4">
                           <div className="form-check">
-                            <input className="form-check-input" type="radio" name="clubId"
+                            <input className="form-check-input" type="radio" name="clubId" id="club1Card"
                               checked value="clubid1" />
                             <label className="form-check-label">
                               Đội bóng 1
                             </label>
                           </div>
                           <div className="form-check">
-                            <input className="form-check-input" type="radio" name="clubId"
+                            <input className="form-check-input" type="radio" name="clubId" id="club2Card"
                               value="clubid2" />
                             <label className="form-check-label">
                               Đội bóng 2
@@ -1379,7 +1400,7 @@ function EditMatch() {
                         </div>
                         <div>
                           <label className="fs-8 mb-1">Cầu thủ nhận thẻ</label>
-                          <select className="form-select" aria-label="Default select example">
+                          <select className="form-select" aria-label="Default select example" id="playerCard">
                             <option selected>Chọn cầu thủ</option>
                             <option value="dfds">advcxca adfds</option>
                             <option value="adsf"> ádf ád f</option>
@@ -1388,7 +1409,7 @@ function EditMatch() {
                         <div>
                           <label className="fs-8 mb-1">phút</label>
                           <div className="input-group">
-                            <input type="number" className="form-control" />
+                            <input type="number" className="form-control" id="minuteCard" />
                           </div>
                         </div>
                       </div>
