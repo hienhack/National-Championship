@@ -1192,7 +1192,7 @@ const submitAddGoal = async () => {
     goal: {
       assistedPlayerId: assistGoal,
       clubId: clubID,
-      scorePlayerId: playerGoal,
+      scoredPlayerId: playerGoal,
       seasonId: idSeason,
       time: parseInt(minute),
       type: type
