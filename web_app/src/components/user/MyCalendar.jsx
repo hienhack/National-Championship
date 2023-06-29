@@ -1177,6 +1177,41 @@ function AddMatch() {
   );
 }
 
+const submitAddGoal = async () => {
+  let clubID = localStorage.getItem("clubIDGoal");
+  let matchid = localStorage.getItem("matchSelected");
+  let idSeason = localStorage.getItem("seasonIDSelected");
+
+  let playerGoal = $("#playerGoal").val();
+  let type = $("#typeGoal").val();
+  let minute = $("#minuteGoal").val();
+  let assistGoal = $("#assistGoal").val();
+  const requestData = {
+    matchId: matchid,
+
+    goal: {
+      assistedPlayerId: assistGoal,
+      clubId: clubID,
+      scorePlayerId: playerGoal,
+      seasonId: idSeason,
+      time: parseInt(minute),
+      type: type
+    }
+  };
+
+  await fetch("http://127.0.0.1:5000/api/match/add-goal", {
+    method: "POST",
+    body: JSON.stringify(requestData),
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+  })
+    .then((result) => { })
+    .catch((error) => { });
+  // window.location.reload(false);
+};
+
 function EditMatch() {
   const navigate = useNavigate();
   const handleOnClick = useCallback(
@@ -1188,9 +1223,25 @@ function EditMatch() {
     [navigate]
   );
   const [match, setMatch] = useState(null);
+  const [matchID, setMatchID] = useState(null);
 
   const matchid = localStorage.getItem("matchSelected");
-
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type) => {
+    api[type]({
+      message: "Chọn mùa giải thành công",
+    });
+  };
+  const openNotificationWithIcon1 = (type) => {
+    api[type]({
+      message: type === "success" ? "Thêm thành công" : "Vui lòng điền đủ thông tin",
+    });
+  };
+  const openNotificationWithIcon2 = (type) => {
+    api[type]({
+      message: "Xóa thành công",
+    });
+  };
   useEffect(() => {
     if (matchid !== null) {
       axios
@@ -1209,28 +1260,13 @@ function EditMatch() {
         });
     }
   }, []);
+  const [selectedClub, setSelectedClub] = useState(1); // Giá trị ban đầu của selectedClub
 
-  const [club1, setClub1] = useState(null);
+  // Hàm xử lý khi radio box thay đổi
+  const handleClubChange = (event) => {
+    setSelectedClub(Number(event.target.value)); // Chuyển đổi giá trị sang kiểu số
+  };
 
-
-  useEffect(() => {
-    if (match.club1._id !== null) {
-      axios
-        .get(`${API}/${matchid}`, {
-          headers: {
-            "content-type": "application/json",
-            accept: "application/json",
-          },
-        })
-        .then((response) => {
-          console.log(response.data.data);
-          setMatch(response.data.data)
-        })
-        .catch((err) => {
-          // Xử lý lỗi khi gọi API
-        });
-    }
-  }, []);
   return (
     <div className="contentUser">
       <Content />
@@ -1316,13 +1352,17 @@ function EditMatch() {
                         <div className="d-flex justify-content-between py-4">
                           <div className="form-check">
                             <input className="form-check-input" type="radio" name="clubId" id="club1Goal"
-                              checked />
+                              value={1}
+                              checked={selectedClub === 1}
+                              onChange={handleClubChange} />
                             <label className="form-check-label">
                               Đội bóng 1
                             </label>
                           </div>
                           <div className="form-check">
-                            <input className="form-check-input" type="radio" name="clubId" id="club2Goal" />
+                            <input className="form-check-input" type="radio" name="clubId" id="club2Goal" value={2}
+                              checked={selectedClub === 2}
+                              onChange={handleClubChange} />
                             <label className="form-check-label">
                               Đội bóng 2
                             </label>
@@ -1331,16 +1371,26 @@ function EditMatch() {
                         <div>
                           <label className="fs-8 mb-1">Cầu thủ ghi bàn</label>
                           <select className="form-select" aria-label="Default select example" id="playerGoal">
-                            <option selected>Chọn cầu thủ</option>
-                            <option value="ádfds">advcxca adfds</option>
-                            <option value="adsf"> ádf ád f</option>
+                            <option selected value="">Chọn cầu thủ</option>
+                            {selectedClub === 1 &&
+                              match?.club1?.players.map((player) => (
+                                <option value={player.playerId} key={player.playerId}>
+                                  {player.name}
+                                </option>
+                              ))}
+                            {selectedClub === 2 &&
+                              match?.club2?.players.map((player) => (
+                                <option value={player.playerId} key={player.playerId}>
+                                  {player.name}
+                                </option>
+                              ))}
                           </select>
                         </div>
                         <div className="d-flex gap-3">
                           <div>
                             <label className="fs-8 mb-1">Loại bàn thắng</label>
                             <select className="form-select" aria-label="Default select example" id="typeGoal">
-                              <option selected>Chọn bàn thắng</option>
+                              <option selected value="">Chọn bàn thắng</option>
                               <option value="N">Thông thường</option>
                               <option value="P">Penalty</option>
                               <option value="O">Phản lưới</option>
@@ -1349,16 +1399,26 @@ function EditMatch() {
                           <div>
                             <label className="fs-8 mb-1">Phút</label>
                             <div className="input-group">
-                              <input type="number" className="form-control" value="0" id="minuteGoal" />
+                              <input type="number" className="form-control" defaultValue="0" id="minuteGoal" />
                             </div>
                           </div>
                         </div>
                         <div>
                           <label className="fs-8 mb-1">Cầu thủ kiến tạo</label>
                           <select className="form-select" aria-label="Default select example" id="assistGoal">
-                            <option selected>Chọn cầu thủ</option>
-                            <option value="dfds">advcxca adfds</option>
-                            <option value="adsf"> ádf ád f</option>
+                            <option selected value="">Chọn cầu thủ</option>
+                            {selectedClub === 1 &&
+                              match?.club1?.players.map((player) => (
+                                <option value={player.playerId} key={player.playerId}>
+                                  {player.name}
+                                </option>
+                              ))}
+                            {selectedClub === 2 &&
+                              match?.club2?.players.map((player) => (
+                                <option value={player.playerId} key={player.playerId}>
+                                  {player.name}
+                                </option>
+                              ))}
                           </select>
                         </div>
                       </div>
@@ -1366,7 +1426,38 @@ function EditMatch() {
                     <div className="modal-footer">
                       <button type="button" className="btn light fs-7"
                         data-bs-dismiss="modal">Hủy</button>
-                      <button type="button" className="btn btn-primary fs-7">Lưu</button>
+                      {contextHolder}
+
+                      <button type="button" className="btn btn-primary fs-7" onClick={() => {
+
+                        let playerGoal = $("#playerGoal").val();
+                        let type = $("#typeGoal").val();
+                        let minute = $("#minuteGoal").val();
+                        let assistGoal = $("#assistGoal").val();
+                        if (selectedClub === "1") {
+                          localStorage.setItem("clubIDGoal", match?.club1?._id);
+                        }
+                        else {
+                          localStorage.setItem("clubIDGoal", match?.club2?._id);
+
+                        }
+
+                        if (
+
+                          playerGoal === "" ||
+                          minute === "" ||
+                          type === "" ||
+                          assistGoal === ""
+
+                        ) {
+                          openNotificationWithIcon1("error");
+
+                          return;
+                        } else {
+                          openNotificationWithIcon1("success");
+                          submitAddGoal();
+                        }
+                      }}>Lưu</button>
                     </div>
                   </div>
                 </div>
@@ -1385,14 +1476,18 @@ function EditMatch() {
                         <div className="d-flex justify-content-between py-4">
                           <div className="form-check">
                             <input className="form-check-input" type="radio" name="clubId" id="club1Card"
-                              checked value="clubid1" />
+                              value={1}
+                              checked={selectedClub === 1}
+                              onChange={handleClubChange} />
                             <label className="form-check-label">
                               Đội bóng 1
                             </label>
                           </div>
                           <div className="form-check">
                             <input className="form-check-input" type="radio" name="clubId" id="club2Card"
-                              value="clubid2" />
+                              value={2}
+                              checked={selectedClub === 2}
+                              onChange={handleClubChange} />
                             <label className="form-check-label">
                               Đội bóng 2
                             </label>
@@ -1402,8 +1497,18 @@ function EditMatch() {
                           <label className="fs-8 mb-1">Cầu thủ nhận thẻ</label>
                           <select className="form-select" aria-label="Default select example" id="playerCard">
                             <option selected>Chọn cầu thủ</option>
-                            <option value="dfds">advcxca adfds</option>
-                            <option value="adsf"> ádf ád f</option>
+                            {selectedClub === 1 &&
+                              match?.club1?.players.map((player) => (
+                                <option value={player.playerId} key={player.playerId}>
+                                  {player.name}
+                                </option>
+                              ))}
+                            {selectedClub === 2 &&
+                              match?.club2?.players.map((player) => (
+                                <option value={player.playerId} key={player.playerId}>
+                                  {player.name}
+                                </option>
+                              ))}
                           </select>
                         </div>
                         <div>
