@@ -125,9 +125,9 @@ class MatchController {
         //     queries.$or = [{ "club1Id": clubId }, { "club2Id": clubId }];
         // }
         if ( result ) {
-            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round result").lean();
+            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round stadium result").lean();
         }else {
-            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round").lean();
+            var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round stadium").lean();
         }
         
         for ( const match of matches ) {
@@ -174,16 +174,13 @@ class MatchController {
     }
 
     async update(req, res) {
-     
         const { _id, ...updated } = req.body;
+
         updated.round = Number(updated.round);
         updated.datetime = new Date(updated.datetime);
-        console.log(updated);
+
         try {
-            const b = await matchModel.findById(_id);
-            console.log(b);
-            const a = await matchModel.findByIdAndUpdate(_id, updated);
-            console.log(a);
+            await matchModel.findByIdAndUpdate(_id, updated);
             res.status(200).send({ message: "Updated successfully" });
             return;
         } catch (error) {
