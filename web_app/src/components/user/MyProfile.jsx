@@ -433,7 +433,7 @@ const submitUpdateSeason = async () => {
   })
     .then((result) => { })
     .catch((error) => { });
-  // window.location.reload(false);
+  window.location.reload(false);
 }
 function EditLeague() {
   const [season, setSeason] = useState(null);

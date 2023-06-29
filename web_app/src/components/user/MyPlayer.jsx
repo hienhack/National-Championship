@@ -312,7 +312,7 @@ const submitAddPlayer = async () => {
   })
     .then((result) => { })
     .catch((error) => { });
-  // window.location.reload(false);
+  window.location.reload(false);
 };
 
 function AddPlayer() {
@@ -585,7 +585,7 @@ const submitUpdatePlayer = async () => {
   })
     .then((result) => { })
     .catch((error) => { });
-  // window.location.reload(false);
+  window.location.reload(false);
 }
 
 function InfoPlayer() {

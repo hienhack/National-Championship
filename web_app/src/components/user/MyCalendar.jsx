@@ -315,7 +315,7 @@ const submitAddMatch = async () => {
   })
     .then((result) => { })
     .catch((error) => { });
-  // window.location.reload(false);
+  window.location.reload(false);
 };
 
 const submitUpdateMatch = async () => {
@@ -347,7 +347,7 @@ const submitUpdateMatch = async () => {
   })
     .then((result) => { })
     .catch((error) => { });
-  // window.location.reload(false);
+  window.location.reload(false);
 };
 
 const deleteMatch = async () => {
