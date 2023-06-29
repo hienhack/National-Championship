@@ -96,6 +96,7 @@ class MatchController {
             match.cards = await Promise.all(match.cards.map(async card => {
                 const player = await playerModel.findById(card.playerId);
                 var rs = {};
+                rs._id = card._id;
                 rs.club = card.club;
                 rs.playerId = card.playerId;
                 rs.time = card.time;
@@ -248,18 +249,18 @@ class MatchController {
     async deleteGoal(req, res) {
         const goalId = req.body.goalId;
         const matchId = req.body.matchId;
+
         const goal = await goalModel.findById(goalId);
         const match = await matchModel.findById(matchId);
+
         try {
             match.goals.pull(goalId);
             match.save();
 
             if (goal.clubId.equals(match.club1Id)) {
-                console.log("club1");
                 await matchModel.findByIdAndUpdate(matchId, { $inc: { "result.club1": -1 } });
             }
             if (goal.clubId.equals(match.club2Id)) {
-                console.log("club2");
                 await matchModel.findByIdAndUpdate(matchId, { $inc: { "result.club2": -1 } });
             }
 
