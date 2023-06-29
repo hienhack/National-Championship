@@ -34,36 +34,32 @@ class MatchController {
         //    {playerId: "a43454545", name: "asdf adf a", shirtNumber: 10, type: sub}
         // ]
 
-        // async function listPlayers(listId, listPlayer){
-        //     var list = [];
-        //     for (let i = 0; i < listId.length; i++) {
-        //         const id = listId[i];
-        //         const player = await playerModel.findById(id);
-        //         const {name, ...data} = player;
+        async function listPlayers(listPlayers){
+            var list = [];
+            for (let i = 0; i < listPlayers.length; i++) {
+                const p = listPlayers[i];
+                const player = await playerModel.findById(p.playerId);
+                const {name, ...data} = player;
 
-        //         var rs = new Object();
-        //         for (let index = 0; index < listPlayer.length; index++) {
-        //             const p = listPlayer[index];
+                var rs = new Object();
+                rs.playerId = p.playerId;
+                rs.shirtNumber = p.shirt_number;
+                rs.name = name;
 
-        //             if (player._id.equals(p.playerId)) {
-        //                 rs.playerId = p.playerId;
-        //                 rs.shirt_number = p.shirt_number;
-        //                 break;
-        //             }
-        //         }
-        //         if(rs) {
-        //             rs.name = name;
-        //         }
-
-        //         list.push(rs);
-        //     }
-        //     return list;
-        // }
-
-        // match.club1.players = await listPlayers(match.club1.appearances,club1.seasons[0].players);
-
-        // match.club2.players = await listPlayers(match.club2.appearances,club2.seasons[0].players);
-
+                list.push(rs);
+            }
+            return list;
+        }
+        for (let index = 0; index < club1.seasons.length; index++) {
+            if (club1.seasons[index].seasonId.equals(match.seasonId)){
+                match.club1.players = await listPlayers(club1.seasons[index].players);
+            }
+        }
+        for (let index = 0; index < club2.seasons.length; index++) {
+            if (club2.seasons[index].seasonId.equals(match.seasonId)){
+                match.club2.players = await listPlayers(club2.seasons[index].players);
+            }
+        }
 
         // Lấy thông tin các bàn thắng. Sử dụng goalModel, id các bàn thắng, type, time của bàn thắng giữ nguyên
         // example:
@@ -92,6 +88,16 @@ class MatchController {
 
             return rs;
         }));
+        match.cards = await Promise.all(match.cards.map(async card => {
+            const player = await playerModel.findById(card.playerId);
+            console.log(player);
+            var rs = {};
+            rs.club = card.club;
+            rs.playerId = card.playerId;
+            rs.time = card.time;
+            rs.playerName = player.name;
+            return rs;
+        }))
         delete match.club1Id;
         delete match.club2Id;
         // delete match.club1.appearances;
@@ -101,8 +107,6 @@ class MatchController {
 
         res.status(200).send({ message: "success", data: match });
     }
-
-
 
     async getAll(req, res) {
         const { round, seasonId, result } = req.query;
