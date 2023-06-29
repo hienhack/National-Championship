@@ -1213,116 +1213,112 @@ function EditMatch() {
   return (
     <div className="contentUser">
       <Content />
-      <div class="main-wrapper">
+      <div className="main-wrapper">
 
 
-        <div class="d-flex flex-column gap-4 p-4">
-          <h5 class="m-0">Chi tiết trận đấu</h5>
-          <div class="m-auto bg-white shadow-sm rounded-2" style={{ width: 800 }}>
-            <div class="p-4">
-              <h6 class="text-secondary fs-7">
+        <div className="d-flex flex-column gap-4 p-4">
+          <h5 className="m-0">Chi tiết trận đấu</h5>
+          <div className="m-auto bg-white shadow-sm rounded-2" style={{ width: 800 }}>
+            <div className="p-4">
+              <h6 className="text-secondary fs-7">
                 <button className="back-btn fw-semibold  fs-8" onClick={() => {
                   handleOnClick();
                 }}><ArrowCircleLeftSharpIcon></ArrowCircleLeftSharpIcon></button>
                 <br />
                 <br />
-                Vòng: 1
+                Vòng: {match?.round}
               </h6>
-              <div class="d-flex justify-content-around">
-                <div class="match-detail-club order-1">
-                  <img alt=""
-                    src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                  <div class="fs-7">Manchester City</div>
+              <div className="d-flex justify-content-around">
+                <div className="match-detail-club order-1">
+                  <img alt="" style={{ width: 80, height: 80 }}
+                    src={`http://localhost:5000/${match?.club1?.image}`} />
+                  <div className="fs-7">{match?.club1?.name}</div>
                 </div>
-                <div class="match-detail-club order-5">
-                  <img alt=""
-                    src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg" />
-                  <div class="fs-7">Manchester United</div>
+                <div className="match-detail-club order-5">
+                  <img alt="" style={{ width: 80, height: 80 }}
+                    src={`http://localhost:5000/${match?.club2?.image}`} />
+                  <div className="fs-7">{match?.club2?.name}</div>
                 </div>
-                <div class="club-goal order-2 fs-1">2</div>
-                <div class="club-goal order-4 fs-1">0</div>
-                <div class="order-3 fs-1">-</div>
+                <div className="club-goal order-2 fs-1">{match?.result?.club1}</div>
+                <div className="club-goal order-4 fs-1">{match?.result?.club2}</div>
+                <div className="order-3 fs-1">-</div>
               </div>
               <hr />
-              <div class="d-flex flex-column gap-2">
-                <div class="goal border" aria-label="club1">
-                  <div class="d-flex gap-2 align-items-center p-2">
-                    <i class="fa-regular fa-futbol"><SportsSoccerIcon></SportsSoccerIcon></i>
-                    <span class="fs-7">Erring Haaland (P) "10</span>
+              <div className="d-flex flex-column gap-2">
+                {match?.goals?.map((i, index) => (
+                  <div className={`goal border ${i?.club === 1 ? 'club1' : 'club2'}`} aria-label={`club${i?.club}`}>
+                    <div className={`d-flex gap-2 align-items-center p-2 ${i?.club === 1 ? '' : 'flex-row-reverse'}`}>
+                      <i className="fa-regular fa-futbol"><SportsSoccerIcon /></i>
+                      <span className="fs-7">
+                        {i.scoredPlayer}
+                        "{i.time}
+                      </span>
+                    </div>
+                    <button className="remove-btn bg-danger px-2">
+                      <i className="fa-solid fa-trash-can"><DeleteIcon /></i>
+                    </button>
                   </div>
-                  <button class="remove-btn bg-danger px-2"><i
-                    class="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
-                </div>
-                <div class="goal border" aria-label="club2">
-                  <div class="d-flex gap-2 align-items-center p-2 flex-row-reverse">
-                    <i class="fa-regular fa-futbol"><SportsSoccerIcon></SportsSoccerIcon></i>
-                    <span class="fs-7">Erring Haaland (P) A. Kevin De Bruyne "19</span>
+                ))}
+
+                {match?.cards?.map((i, index) => (
+
+                  <div className={`goal border ${i?.club === 1 ? 'club1' : 'club2'}`} aria-label={`club${i?.club}`}>
+                    <div className={`d-flex gap-2 align-items-center p-2 ${i?.club === 1 ? '' : 'flex-row-reverse'}`}>
+                      <i className="text-danger fa-solid fa-mobile text-red"><SellIcon></SellIcon></i>
+                      <span className="fs-7"> {i.scoredPlayer} "65</span>
+                    </div>
+                    <button className="remove-btn bg-danger px-2"><i
+                      className="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
                   </div>
-                  <button class="remove-btn bg-danger px-2"><i
-                    class="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
-                </div>
-                <div class="goal border" aria-label="club1">
-                  <div class="d-flex gap-2 align-items-center p-2">
-                    <i class="text-danger fa-solid fa-mobile text-red"><SellIcon></SellIcon></i>
-                    <span class="fs-7">Erring Haaland "65</span>
-                  </div>
-                  <button class="remove-btn bg-danger px-2"><i
-                    class="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
-                </div>
-                <div class="goal border" aria-label="club2">
-                  <div class="d-flex gap-2 align-items-center p-2">
-                    <i class="text-danger fa-solid fa-mobile text-red"><SellIcon></SellIcon></i>
-                    <span class="fs-7">Erring Haaland "65</span>
-                  </div>
-                  <button class="remove-btn bg-danger px-2"><i
-                    class="fa-solid fa-trash-can"><DeleteIcon></DeleteIcon></i></button>
-                </div>
+
+                ))}
+
               </div>
               <hr />
-              <div class="d-flex flex-row-reverse gap-2">
-                <button class="btn btn-primary" data-bs-toggle="modal"
+              <div className="d-flex flex-row-reverse gap-2">
+                <button className="btn btn-primary" data-bs-toggle="modal"
                   data-bs-target="#add-goal-modal">Thêm bàn thắng</button>
-                <button class="btn btn-primary" data-bs-toggle="modal"
+                <button className="btn btn-primary" data-bs-toggle="modal"
                   data-bs-target="#add-card-modal">Thêm thẻ đỏ</button>
               </div>
-              <div class="modal fade" id="add-goal-modal" tabindex="-1"
+              <div className="modal fade" id="add-goal-modal" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-6">Thêm bàn thắng</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h1 className="modal-title fs-6">Thêm bàn thắng</h1>
+                      <button type="button" className="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                      <div class="d-flex flex-column px-2 gap-3">
-                        <div class="d-flex justify-content-between py-4">
-                          <div class="form-check">
-                            <input class="form-check-input" type="radio" name="clubId"
+                    <div className="modal-body">
+                      <div className="d-flex flex-column px-2 gap-3">
+                        <div className="d-flex justify-content-between py-4">
+                          <div className="form-check">
+                            <input className="form-check-input" type="radio" name="clubId"
                               checked />
-                            <label class="form-check-label">
+                            <label className="form-check-label">
                               Đội bóng 1
                             </label>
                           </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="radio" name="clubId" />
-                            <label class="form-check-label">
+                          <div className="form-check">
+                            <input className="form-check-input" type="radio" name="clubId" />
+                            <label className="form-check-label">
                               Đội bóng 2
                             </label>
                           </div>
                         </div>
                         <div>
-                          <label class="fs-8 mb-1">Cầu thủ ghi bàn</label>
-                          <select class="form-select" aria-label="Default select example">
+                          <label className="fs-8 mb-1">Cầu thủ ghi bàn</label>
+                          <select className="form-select" aria-label="Default select example">
                             <option selected>Chọn cầu thủ</option>
                             <option value="ádfds">advcxca adfds</option>
                             <option value="adsf"> ádf ád f</option>
                           </select>
                         </div>
-                        <div class="d-flex gap-3">
+                        <div className="d-flex gap-3">
                           <div>
-                            <label class="fs-8 mb-1">Loại bàn thắng</label>
-                            <select class="form-select" aria-label="Default select example">
+                            <label className="fs-8 mb-1">Loại bàn thắng</label>
+                            <select className="form-select" aria-label="Default select example">
                               <option selected>Chọn cầu thủ</option>
                               <option value="N">Thông thường</option>
                               <option value="P">Penalty</option>
@@ -1330,15 +1326,15 @@ function EditMatch() {
                             </select>
                           </div>
                           <div>
-                            <label class="fs-8 mb-1">Phút</label>
-                            <div class="input-group">
-                              <input type="number" class="form-control" value="0" />
+                            <label className="fs-8 mb-1">Phút</label>
+                            <div className="input-group">
+                              <input type="number" className="form-control" value="0" />
                             </div>
                           </div>
                         </div>
                         <div>
-                          <label class="fs-8 mb-1">Cầu thủ kiến tạo</label>
-                          <select class="form-select" aria-label="Default select example">
+                          <label className="fs-8 mb-1">Cầu thủ kiến tạo</label>
+                          <select className="form-select" aria-label="Default select example">
                             <option selected>Chọn cầu thủ</option>
                             <option value="dfds">advcxca adfds</option>
                             <option value="adsf"> ádf ád f</option>
@@ -1346,61 +1342,61 @@ function EditMatch() {
                         </div>
                       </div>
                     </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn light fs-7"
+                    <div className="modal-footer">
+                      <button type="button" className="btn light fs-7"
                         data-bs-dismiss="modal">Hủy</button>
-                      <button type="button" class="btn btn-primary fs-7">Lưu</button>
+                      <button type="button" className="btn btn-primary fs-7">Lưu</button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="modal fade" id="add-card-modal" tabindex="-1"
+              <div className="modal fade" id="add-card-modal" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-6">Thêm thẻ đỏ</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h1 className="modal-title fs-6">Thêm thẻ đỏ</h1>
+                      <button type="button" className="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                      <div class="d-flex flex-column px-2 gap-3">
-                        <div class="d-flex justify-content-between py-4">
-                          <div class="form-check">
-                            <input class="form-check-input" type="radio" name="clubId"
+                    <div className="modal-body">
+                      <div className="d-flex flex-column px-2 gap-3">
+                        <div className="d-flex justify-content-between py-4">
+                          <div className="form-check">
+                            <input className="form-check-input" type="radio" name="clubId"
                               checked value="clubid1" />
-                            <label class="form-check-label">
+                            <label className="form-check-label">
                               Đội bóng 1
                             </label>
                           </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="radio" name="clubId"
+                          <div className="form-check">
+                            <input className="form-check-input" type="radio" name="clubId"
                               value="clubid2" />
-                            <label class="form-check-label">
+                            <label className="form-check-label">
                               Đội bóng 2
                             </label>
                           </div>
                         </div>
                         <div>
-                          <label class="fs-8 mb-1">Cầu thủ nhận thẻ</label>
-                          <select class="form-select" aria-label="Default select example">
+                          <label className="fs-8 mb-1">Cầu thủ nhận thẻ</label>
+                          <select className="form-select" aria-label="Default select example">
                             <option selected>Chọn cầu thủ</option>
                             <option value="dfds">advcxca adfds</option>
                             <option value="adsf"> ádf ád f</option>
                           </select>
                         </div>
                         <div>
-                          <label class="fs-8 mb-1">phút</label>
-                          <div class="input-group">
-                            <input type="number" class="form-control" />
+                          <label className="fs-8 mb-1">phút</label>
+                          <div className="input-group">
+                            <input type="number" className="form-control" />
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-light fs-7"
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-light fs-7"
                         data-bs-dismiss="modal">Hủy</button>
-                      <button type="button" class="btn btn-primary fs-7">Thêm</button>
+                      <button type="button" className="btn btn-primary fs-7">Thêm</button>
                     </div>
                   </div>
                 </div>
