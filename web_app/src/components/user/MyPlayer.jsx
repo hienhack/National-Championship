@@ -75,6 +75,10 @@ function AllPlayer() {
       message: "Xóa thành công",
     });
   };
+
+  const [nameSearch, setNameSearch] = useState("");
+
+
   useEffect(() => {
 
 
@@ -84,7 +88,8 @@ function AllPlayer() {
         'accept': 'application/json',
       },
       params: {
-        seasonId: id
+        seasonId: id,
+        key: nameSearch
       }
 
     }).
@@ -96,7 +101,9 @@ function AllPlayer() {
       })
 
 
-  }, [])
+  }, [nameSearch])
+
+
 
   const navigate = useNavigate();
   const handleOnClick = useCallback(
@@ -118,14 +125,16 @@ function AllPlayer() {
           <div className="bg-white rounded-2">
             <div className="d-flex flex-column gap-4 p-4">
               <div className="d-flex justify-content-between">
-                <form role="search">
+                <div >
                   <div className="d-flex gap-2" style={{ width: "400px" }}>
                     <div className="input-group">
-                      <input type="text" className="form-control" />
+                      <input type="text" className="form-control" id="searchName" />
                     </div>
-                    <button className="text-white p-2 rounded-2 bg-primary">search</button>
+                    <button className="text-white p-2 rounded-2 bg-primary" onClick={() => {
+                      setNameSearch($("#searchName").val());
+                    }}>Search</button>
                   </div>
-                </form>
+                </div>
                 <div className="d-flex gap-3 align-items-center">
                   <h6 className="text-secondary m-0">Số dòng</h6>
                   <select className="form-select" style={{ width: "100px" }}>
