@@ -169,7 +169,7 @@ class MatchController {
         match.isPlayed = false;
         match.goals = [];
         match.cards = [];
-        match.result = { 'club1': -1, 'club2': -1 };
+        match.result = { 'club1': 0, 'club2': 0 };
 
         try {
             const doc = new matchModel(match);
@@ -225,11 +225,11 @@ class MatchController {
 
             if (goalDoc.clubId.equals(match.club1Id)) {
                 console.log("club1");
-                await matchModel.findByIdAndUpdate(matchId, { $inc: { "result.club1": 1 } });
+                await matchModel.findByIdAndUpdate(matchId, { $inc: { "result.club1": 1 } , isPlayed: true});
             }
             if (goalDoc.clubId.equals(match.club2Id)) {
                 console.log("club2");
-                await matchModel.findByIdAndUpdate(matchId, { $inc: { "result.club2": 1 } });
+                await matchModel.findByIdAndUpdate(matchId, { $inc: { "result.club2": 1 }, isPlayed: true });
             }
 
             console.log(1);
@@ -285,6 +285,7 @@ class MatchController {
         try {
             match.cards.push(card);
             match.save();
+            await matchModel.findByIdAndUpdate(matchId, {isPlayed: true});
             res.status(200).send({ message: "Added Card Successfully" });
             return;
         } catch (error) {
