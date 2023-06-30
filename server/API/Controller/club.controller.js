@@ -190,7 +190,7 @@ class ClubController {
             }
         }
 
-        const rs = await clubModel.findByIdAndUpdate(_id, update, { new: true });
+        const rs = await clubModel.findByIdAndUpdate(_id, update);
         res.status(200).send({ message: "Updated Club Successfully" });
     }
 

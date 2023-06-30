@@ -22,9 +22,9 @@ class ReportController {
                 const queries = {};
                 queries.seasonId= seasonId;
                 queries.isPlayed = true;
-                queries.$or = [{"club1.clubId":  rs.clubId},{"club2.clubId":  rs.clubId}];
+                queries.$or = [{"club1Id":  rs.clubId},{"club2Id":  rs.clubId}];
                 const matches = await matchModel.find(queries);
-
+                console.log(matches);
                 rs.Played = matches.length;
 
                 var won,lost,drawn,scored,conceded,points;
@@ -46,7 +46,7 @@ class ReportController {
                             conceded+=1;
                         }
                     }
-                    if(matches[index].club1.clubId.equals(rs.clubId)){
+                    if(matches[index].club1Id.equals(rs.clubId)){
                         if(match.result.club1 > match.result.club2) won++;
                         else if(match.result.club1 < match.result.club2) lost++;
                         else drawn++;
@@ -66,6 +66,7 @@ class ReportController {
                 rs.goalDifference = scored - conceded;
 
                 list.push(rs);
+                console.log(rs);
                 }
             list.sort((a, b) =>b.points-a.points);
             return list;
