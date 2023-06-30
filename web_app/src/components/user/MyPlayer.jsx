@@ -777,17 +777,20 @@ function InfoPlayer() {
                   </tr>
                 </thead>
                 <tbody className="table-group-divider">
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>2023</td>
-                    <td className="player-club" style={{ display: "flex" }}>
+                  {player?.seasons?.map((i, index) => (
 
-                      <h6 className="m-0">Manchester City</h6>
-                    </td>
-                    <td>2</td>
-                    <td>
-                      0</td>
-                  </tr>
+                    <tr>
+                      <th scope="row">{index + 1}</th>
+                      <td>{i.year}</td>
+                      <td >
+
+                        {i.club?.name}
+                      </td>
+                      <td>{i.goal}</td>
+                      <td>
+                        {i.assist}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

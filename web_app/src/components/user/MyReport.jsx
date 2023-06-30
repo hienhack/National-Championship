@@ -211,9 +211,9 @@ function AllGoal() {
 
                   <tr>
                     <td scope="row">{index}</td>
-                    <td></td>
-                    <td>Manchester City</td>
-                    <td>36</td>
+                    <td>{i.player}</td>
+                    <td>{i.club}</td>
+                    <td>{i.goals}</td>
                   </tr>
                 ))}
 
