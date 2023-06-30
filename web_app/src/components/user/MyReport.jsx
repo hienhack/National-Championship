@@ -166,7 +166,9 @@ function AllGoal() {
         'content-type': 'application/json',
         'accept': 'application/json',
       },
-
+      params: {
+        seasonId: id
+      }
 
     }).
       then(response => {
