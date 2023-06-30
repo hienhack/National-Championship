@@ -592,13 +592,13 @@ function AllCalendar() {
                           className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
                           <div className={i.result?.club1 > i.result?.club2 ? "club-win" : "club-lose"}>
                             <img className="club-logo" alt=""
-                              src={`http://localhost:5000${i.club1?.logo}`} />
+                              src={`http://localhost:5000/${i.club1?.logo}`} />
                             <span>{i.club1.name}</span>
                             {/* <span className="goal float-end">{i.result?.club1}</span> */}
                           </div>
                           <div className={i.result?.club1 < i.result?.club2 ? "club-win" : "club-lose"}>
                             <img className="club-logo" alt=""
-                              src={`http://localhost:5000${i.club2?.logo}`} />
+                              src={`http://localhost:5000/${i.club2?.logo}`} />
                             <span>{i.club2.name}</span>
                             {/* <span className="goal float-end">{i.result?.club2}</span> */}
                           </div>
@@ -633,13 +633,13 @@ function AllCalendar() {
                           className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
                           <div className={i.result?.club1 > i.result?.club2 ? "club-win" : "club-lose"}>
                             <img className="club-logo" alt=""
-                              src={`http://localhost:5000${i.club1?.logo}`} />
+                              src={`http://localhost:5000/${i.club1?.logo}`} />
                             <span>{i.club1.name}</span>
                             {/* <span className="goal float-end">{i.result?.club1}</span> */}
                           </div>
                           <div className={i.result?.club1 < i.result?.club2 ? "club-win" : "club-lose"}>
                             <img className="club-logo" alt=""
-                              src={`http://localhost:5000${i.club2?.logo}`} />
+                              src={`http://localhost:5000$/{i.club2?.logo}`} />
                             <span>{i.club2.name}</span>
                             {/* <span className="goal float-end">{i.result?.club2}</span> */}
                           </div>
@@ -878,13 +878,13 @@ function AddMatch() {
                           className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
                           <div className={i.result?.club1 > i.result?.club2 ? "club-win" : "club-lose"}>
                             <img className="club-logo" alt=""
-                              src={`http://localhost:5000${i.club1?.logo}`} />
+                              src={`http://localhost:5000/${i.club1?.logo}`} />
                             <span>{i.club1.name}</span>
                             <span className="goal float-end">{i.result?.club1}</span>
                           </div>
                           <div className={i.result?.club1 < i.result?.club2 ? "club-win" : "club-lose"}>
                             <img className="club-logo" alt=""
-                              src={`http://localhost:5000${i.club2?.logo}`} />
+                              src={`http://localhost:5000/${i.club2?.logo}`} />
                             <span>{i.club2.name}</span>
                             <span className="goal float-end">{i.result?.club2}</span>
                           </div>
@@ -1026,13 +1026,13 @@ function AddMatch() {
                           className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
                           <div className={i.result?.club1 > i.result?.club2 ? "club-win" : "club-lose"}>
                             <img className="club-logo" alt=""
-                              src={`http://localhost:5000${i.club1?.logo}`} />
+                              src={`http://localhost:5000/${i.club1?.logo}`} />
                             <span>{i.club1.name}</span>
                             <span className="goal float-end">{i.result?.club1}</span>
                           </div>
                           <div className={i.result?.club1 < i.result?.club2 ? "club-win" : "club-lose"}>
                             <img className="club-logo" alt=""
-                              src={`http://localhost:5000${i.club2?.logo}`} />
+                              src={`http://localhost:5000/${i.club2?.logo}`} />
                             <span>{i.club2.name}</span>
                             <span className="goal float-end">{i.result?.club2}</span>
                           </div>
