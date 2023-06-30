@@ -639,7 +639,7 @@ function AllCalendar() {
                           </div>
                           <div className={i.result?.club1 < i.result?.club2 ? "club-win" : "club-lose"}>
                             <img className="club-logo" alt=""
-                              src={`http://localhost:5000$/{i.club2?.logo}`} />
+                              src={`http://localhost:5000/${i.club2?.logo}`} />
                             <span>{i.club2.name}</span>
                             {/* <span className="goal float-end">{i.result?.club2}</span> */}
                           </div>
