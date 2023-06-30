@@ -485,7 +485,7 @@ function AllCalendar() {
                             <div>
                               <label className="fs-8 mb-1">Vòng</label>
                               <div className="input-group">
-                                <input type="number" className="form-control" value="1" id="roundAdd"
+                                <input type="number" className="form-control" defaultValue="1" id="roundAdd"
                                 />
                               </div>
                             </div>
