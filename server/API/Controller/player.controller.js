@@ -103,42 +103,10 @@ class PlayerController {
                     club.save();
                     res.status(201).send({ message: "Add Player Successfully" });
                     return;
-                    // try {
-                    //     player.seasons.push({
-                    //         seasonId: seasonId,
-                    //         clubId: clubId
-                    //     })
-                    //     player.save();
-                    //     club.save();
-                    //     res.status(201).send({ message: "Add Player Successfully" });
-                    //     return;
-
-                    // } catch (error) {
-                    //     res.status(400).send({ message: "Add Player Failed" });
-                    //     return;
-                    // }
                 }
             }
             res.status(400).send({ message: "Season Not Found" });
             return;
-
-
-            // await doc.save(function(err, player) {
-            //     console.log(player);
-            // });
-
-            // const club = clubModel.findOne({_id: clubId});
-
-            // await doc.save().then(savedDoc => {
-            //     club.seasons.forEach(season => {
-            //         if (season.seasonId == seasonId) {
-            //             season.players.push()
-            //         }
-            //     })
-            // });
-
-
-
 
         } catch (error) {
             if (image) {
@@ -168,7 +136,7 @@ class PlayerController {
     async delete(req, res) {
         const playerId = req.body.playerId;
         const seasonId = req.body.seasonId;
-        console.log(req.body);
+
         const player = await playerModel.findById(playerId);
         if (player == null) {
             res.status(400).send({ message: "Player not found" });
@@ -191,7 +159,7 @@ class PlayerController {
         // To do
         // Delete from the club
         const club = await clubModel.findOne({ _id: clubId });
-        console.log(club);
+
         for (let index = 0; index < club.seasons.length; index++) {
             if (club.seasons[index].seasonId.equals(seasonId)) {
                 club.seasons[index].players.pull({ playerId: playerId });
@@ -199,49 +167,10 @@ class PlayerController {
                 await playerModel.deleteOne({ _id: playerId });
                 res.status(200).send({ message: "Deleted successfully" });
                 return;
-                // for (const p of club.seasons[index].players) {
-                //     if (playerNumber === Number(p.shirt_number)) {
-                //         res.status(400).send({ message: "Player number already exists" });
-                //         return;
-                //     }
-                //     if (doc._id.equals(p.playerId)) {
-                //         res.status(400).send({ message: "Player already exists" });
-                //         return;
-                //     }
-                // }
-
-                // club.seasons[index].players.push({
-                //     playerId: doc._id,
-                //     shirt_number: playerNumber
-                // });
-
-                // club.save();
-                // res.status(201).send({ message: "Add Player Successfully" });
-                // return;
-                // try {
-                //     player.seasons.push({
-                //         seasonId: seasonId,
-                //         clubId: clubId
-                //     })
-                //     player.save();
-                //     club.save();
-                //     res.status(201).send({ message: "Add Player Successfully" });
-                //     return;
-
-                // } catch (error) {
-                //     res.status(400).send({ message: "Add Player Failed" });
-                //     return;
-                // }
             }
         }
         res.status(400).send({ message: "Season Not Found" });
         return;
-
-
-
-
-        // await playerModel.deleteOne({ _id: playerId });
-        // res.status(200).send({ message: "Deleted successfully" });
     }
 }
 
