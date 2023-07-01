@@ -2,12 +2,11 @@ import React from 'react'
 
 import { BrowserRouter, Navigate, Route, Routes, useRoutes } from 'react-router-dom'
 import HomeUser from '../components/sidebar/HomeUser'
-import MyProfile from '../components/user/MyProfile'
-import MyTeam from '../components/user/MyTeam'
-import MyPlayer from '../components/user/MyPlayer'
-import MyRule from '../components/user/MyRule'
-import MyReport from '../components/user/MyReport'
-import MyCalendar from '../components/user/MyCalendar'
+import MyProfile from '../components/user/Season'
+import MyTeam from '../components/user/Club'
+import MyPlayer from '../components/user/Player'
+import MyReport from '../components/user/Report'
+import MyCalendar from '../components/user/Match'
 
 
 function User() {
@@ -21,7 +20,6 @@ function User() {
         <Route path="season/*" element={<MyProfile />} />
         <Route path="club/*" element={<MyTeam />} />
         <Route path="player/*" element={<MyPlayer />} />
-        <Route path="rule/*" element={<MyRule />} />
         <Route path="report/*" element={<MyReport />} />
         <Route path="schedule/*" element={<MyCalendar />} />
 

@@ -3,9 +3,9 @@ const { Schema } = mongoose;
 
 const goalSchema = new Schema({
     seasonId: Schema.Types.ObjectId,
-    time: Number, 
-    type: String, 
-    clubId: Schema.Types.ObjectId, 
+    time: Number,
+    type: String,
+    clubId: Schema.Types.ObjectId,
     scoredPlayerId: Schema.Types.ObjectId,
     assistedPlayerId: Schema.Types.ObjectId
 });
