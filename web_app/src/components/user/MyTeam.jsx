@@ -49,7 +49,6 @@ function AllTeam() {
     }).
       then(response => {
         setListTeam(response.data.data);
-        console.log(response.data.data)
 
       }).catch(err => {
       })
@@ -174,7 +173,6 @@ function ContentPreview() {
     }).
       then(response => {
         setClub(response.data.data);
-        console.log(response.data.data)
 
       }).catch(err => {
       })
@@ -292,7 +290,6 @@ const submitAddClub = async () => {
   let content = $("#contentPDFAdd").prop("files")[0];
   let idSeason = localStorage.getItem("seasonIDSelected");
 
-  console.log(content);
   const formData = new FormData();
   formData.append("name", name);
   formData.append("stadium", stadium);
@@ -481,7 +478,6 @@ function InfoTeam() {
     }).
       then(response => {
         setClub(response.data.data);
-        console.log(response.data.data)
 
       }).catch(err => {
       })

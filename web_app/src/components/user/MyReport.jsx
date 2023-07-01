@@ -39,7 +39,6 @@ function AllRank() {
     }).
       then(response => {
         setListTeam(response.data.data);
-        console.log(response.data.data)
 
       }).catch(err => {
       })
@@ -172,7 +171,6 @@ function AllGoal() {
     }).
       then(response => {
         setListTeam(response.data.data);
-        console.log(response.data.data)
 
       }).catch(err => {
       })

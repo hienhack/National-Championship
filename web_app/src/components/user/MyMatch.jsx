@@ -68,37 +68,7 @@ const submitAddMatch = async () => {
   window.location.reload(false);
 };
 
-const submitUpdateMatch = async () => {
-  let round = $("#roundUpdate").val();
-  let club1 = $("#club1Update").val();
-  let club2 = $("#club2Update").val();
-  let hour = $("#hourUpdate").val();
-  let minute = $("#minuteUpdate").val();
-  let date = $("#dateUpdate").val();
-  let idSeason = localStorage.getItem("seasonIDSelected");
-  let idMatch = localStorage.getItem("matchUpdateSelected");
-  console.log(idMatch);
-  const requestData = {
-    round: round,
-    datetime: combineDateTime(date, hour, minute),
-    club1Id: club1,
-    club2Id: club2,
-    seasonId: idSeason,
-    _id: idMatch
-  };
 
-  await fetch("http://127.0.0.1:5000/api/match/update", {
-    method: "POST",
-    body: JSON.stringify(requestData),
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    },
-  })
-    .then((result) => { })
-    .catch((error) => { });
-  window.location.reload(false);
-};
 
 const deleteMatch = async () => {
   const id = localStorage.getItem("matchDeleteSelected");
@@ -137,7 +107,6 @@ function AllCalendar() {
   };
 
   const [listTeam, setListTeam] = useState([]);
-  const id1 = localStorage.getItem("seasonIDSelected");
   useEffect(() => {
 
 
@@ -153,7 +122,6 @@ function AllCalendar() {
     }).
       then(response => {
         setListTeam(response.data.data);
-        console.log(response.data.data)
 
       }).catch(err => {
       })
@@ -179,7 +147,6 @@ function AllCalendar() {
       .then((response) => {
         setListRound(response.data.data.matches);
         setTotalRound(response.data.data.numberOfRound);
-        console.log(response.data.data);
       })
       .catch((err) => { });
   }, []);
@@ -206,7 +173,7 @@ function AllCalendar() {
           <div className="m-auto bg-white shadow-sm rounded-2" style={{ width: 800 }}>
             <div className="p-4">
 
-              <div className="round-select input-group" style={{ width: 180, }} >
+              <div className="round-select input-group" style={{ width: 200, }} >
                 <label className="input-group-text" htmlFor="inputGroupSelect01">Vòng đấu</label>
                 <select className="form-select" id="inputGroupSelect01" value={round} onChange={handleRoundChange}>
                   <option value="Tất cả">Tất cả</option>
@@ -480,7 +447,6 @@ function AddMatch() {
     }).
       then(response => {
         setListTeam(response.data.data);
-        console.log(response.data.data)
 
       }).catch(err => {
       })
@@ -531,7 +497,6 @@ function AddMatch() {
       .then((response) => {
         setListRound(response.data.data.matches);
         setTotalRound(response.data.data.numberOfRound);
-        console.log(response.data.data);
       })
       .catch((err) => { });
   }, []);
@@ -837,7 +802,6 @@ function EditMatch() {
           },
         })
         .then((response) => {
-          console.log(response.data.data);
           setMatch(response.data.data)
         })
         .catch((err) => {

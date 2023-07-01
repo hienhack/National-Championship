@@ -97,7 +97,6 @@ function AllLeague() {
       })
       .then((response) => {
         setList(response.data.data);
-        console.log(response.data.data);
       })
       .catch((err) => { });
   }, []);
@@ -457,7 +456,6 @@ function EditLeague() {
       })
       .then((response) => {
         setSeason(response.data.data);
-        console.log(response.data.data);
       })
       .catch((err) => { });
   }, []);
@@ -671,7 +669,6 @@ function InfoLeague() {
       })
       .then((response) => {
         setSeason(response.data.data);
-        console.log(response.data.data);
       })
       .catch((err) => { });
   }, []);
