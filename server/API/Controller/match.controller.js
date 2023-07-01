@@ -108,10 +108,6 @@ class MatchController {
         }
         delete match.club1Id;
         delete match.club2Id;
-        // delete match.club1.appearances;
-        // delete match.club1.substitutes;
-        // delete match.club2.appearances;
-        // delete match.club2.substitutes;
 
         res.status(200).send({ message: "success", data: match });
     }
@@ -132,9 +128,7 @@ class MatchController {
             res.status(400).send({ message: "Request invalid" });
             return;
         }
-        // if (clubId) {
-        //     queries.$or = [{ "club1Id": clubId }, { "club2Id": clubId }];
-        // }
+
         if (result) {
             var matches = await matchModel.find(queries).select("_id club1Id club2Id datetime isPlayed round stadium result").lean();
         } else {
@@ -224,19 +218,15 @@ class MatchController {
             const goalDoc = new goalModel(goal);
 
             if (goalDoc.clubId.equals(match.club1Id)) {
-                console.log("club1");
-                await matchModel.findByIdAndUpdate(matchId, { $inc: { "result.club1": 1 } , isPlayed: true});
+                await matchModel.findByIdAndUpdate(matchId, { $inc: { "result.club1": 1 }, isPlayed: true });
             }
             if (goalDoc.clubId.equals(match.club2Id)) {
-                console.log("club2");
                 await matchModel.findByIdAndUpdate(matchId, { $inc: { "result.club2": 1 }, isPlayed: true });
             }
 
-            console.log(1);
             match.goals.push(goalDoc._id);
             goalDoc.save();
             match.save();
-            console.log(match);
             res.status(200).send({ message: "Added Goal successfully" });
             return;
 
@@ -285,7 +275,7 @@ class MatchController {
         try {
             match.cards.push(card);
             match.save();
-            await matchModel.findByIdAndUpdate(matchId, {isPlayed: true});
+            await matchModel.findByIdAndUpdate(matchId, { isPlayed: true });
             res.status(200).send({ message: "Added Card Successfully" });
             return;
         } catch (error) {

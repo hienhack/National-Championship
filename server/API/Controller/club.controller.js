@@ -15,13 +15,10 @@ class ClubController {
             coachName: req.body.coachName
         })
 
-        const season = await seasonModel.findOne({_id: req.body.seasonId});
-        console.log(season);
-        // if (season.clubs){
-        //     season.clubs = [];
-        // }
+        const season = await seasonModel.findOne({ _id: req.body.seasonId });
+
         if (season.clubs.length === season.rule.totalClubs) {
-            res.status(400).send({message: "Max number of club"});
+            res.status(400).send({ message: "Max number of club" });
             return;
         }
         if (req.file) {
@@ -31,7 +28,7 @@ class ClubController {
 
         try {
             await document.save();
-            console.log(document._id);
+
             season.clubs.push(document._id);
             season.save();
         } catch (error) {
@@ -46,133 +43,6 @@ class ClubController {
         }
         res.status(201).send({ message: "Created Club Successfully" });
     }
-
-    // add Player exists 
-    // async addPlayer(req, res) {
-    //     const seasonId = req.body.seasonId;
-    //     const clubId = req.body.clubId;
-    //     const playerId = req.body.playerId;
-    //     const playerNumber = Number(req.body.playerNumber);
-
-    //     const club = await clubModel.findById(clubId);
-    //     const player = await playerModel.findById(playerId);
-    //     const season = await seasonModel.findById(seasonId);
-
-    //     for (let index = 0; index < club.seasons.length; index++) {
-    //         if (club.seasons[index].seasonId.equals(seasonId)) {
-    //             if(club.seasons[index].players.length === season.rule.maxClubPlayer) {
-    //                 res.status(400).send({message: "Max club players"});
-    //                 return;
-    //             }
-
-    //             for (const p of club.seasons[index].players) {
-    //                 if (playerNumber === Number(p.shirt_number)) {
-    //                     res.status(400).send({ message: "Player number already exists" });
-    //                     return;
-    //                 }
-    //                 if (player._id.equals(p.playerId)) {
-    //                     res.status(400).send({ message: "Player already exists" });
-    //                     return;
-    //                 }
-    //             }
-
-    //             club.seasons[index].players.push({
-    //                 playerId: player._id,
-    //                 shirt_number: playerNumber
-    //             });
-
-    //             try {
-    //                 player.seasons.push({
-    //                     seasonId: seasonId,
-    //                     clubId: clubId
-    //                 })
-    //                 player.save();
-    //                 club.save();
-    //                 res.status(201).send({ message: "Add Player Successfully" });
-    //                 return;
-
-    //             } catch (error) {
-    //                 res.status(400).send({ message: "Add Player Failed" });
-    //                 return;
-    //             }
-    //         }
-    //     }
-    //     res.status(400).send({ message: "Season Not Found" });
-    //     return;
-
-
-    // }
-    // async addPlayer(req, res) {
-    //     const seasonId = req.body.seasonId;
-    //     const clubId = req.body.clubId;
-    //     const playerId = req.body.playerId;
-    //     const playerNumber = Number(req.body.playerNumber);
-
-    //     const club = await clubModel.findOne({_id: clubId, "seasons.seasonId": seasonId});
-    //     const player = await playerModel.findById(playerId);
-
-    //     if(club === null){
-    //         res.status(400).send({message: "Season Not Found"});
-    //         return;
-    //     }
-
-    //     for (const p of club.seasons[0].players) {
-    //         if (playerNumber === Number(p.shirt_number)) {
-    //             res.status(400).send({ message: "Player number already exists" });
-    //             return;
-    //         }
-    //         if(player._id.equals(p.playerId)) {
-    //             res.status(400).send({ message: "Player already exists" });
-    //             return;
-    //         }
-    //     }
-
-    //     club.seasons[0].players.push({
-    //         playerId: player._id,
-    //         shirt_number: playerNumber
-    //     });
-    //     try {
-    //         player.seasons.push({
-    //             seasonId: seasonId,
-    //             clubId: clubId
-    //         })
-    //         player.save();
-    //         club.save();
-    //         res.status(201).send({message:"Add Player Successfully"});
-    //         return;
-
-    //     } catch (error) {
-    //         res.status(400).send({message:"Add Player Failed"});
-    //         return;
-    //     }
-
-    // }
-
-    // async updateClub1(req, res) {
-    //     console.log(1);
-    //     const { _id, ...update} = req.body;
-    //     update['seasons.coachName'] = update.season.coachName;
-    //     console.log(update);
-    //     //const oldClub = await clubModel.findOne({_id: _id, "seasons.seasonId": update.season.seasonId});
-    //     // if(req.file){
-    //     //     update.image = `Images/club/${req.file.filename}`;
-
-    //     //     if(oldClub != null){
-    //     //         fs.unlink(path.join("Public",oldClub.image), (err) => {
-    //     //             if (err) {
-    //     //                 throw err;
-    //     //             }
-    //     //             console.log("Delete Old Club's Image successfully.");
-    //     //         });
-    //     //     }  
-    //     // }
-    //     await clubModel.findOneAndUpdate({_id: _id, "seasons.seasonId": update.season.seasonId},update, {new: true}); 
-    //     // console.log(update);
-    //     // console.log(oldClub);
-    //     // const rs = await clubModel.findByIdAndUpdate(_id, update, {new : true});
-
-    //     res.status(200).send({message:"Updated Club Successfully"});
-    // }
 
     async updateClub(req, res) {
         const { _id, ...update } = req.body;
@@ -197,7 +67,7 @@ class ClubController {
     async deleteClub(req, res) {
         const clubId = req.body.clubId;
         const seasonId = req.body.seasonId;
-        console.log(clubId);
+
         const club = await clubModel.findById(clubId);
         const season = await seasonModel.findById(seasonId);
 
@@ -225,45 +95,13 @@ class ClubController {
                     res.status(201).send({ message: "Deleted Club in season Successfully" });
                     return;
                 }
-                
+
             }
         }
 
         res.status(400).send({ message: "Season Not Found" });
         return;
-        // if(club === null){
-        //     res.status(400).send({message: "Season Not Found"});
-        //     return;
-        // }
-        // delete club.seasons[0];
-        // const afterClub = await clubModel.findById(clubId);
-        // if ( afterClub.seasons === null ){
-        //     fs.unlink(path.join("Public",club.image), (err) => {
-        //         if (err) {
-        //             throw err;
-        //         }
-        //         console.log("Delete Club's Image successfully.");
-        //     });
-
-        //     const rs = await clubModel.findByIdAndDelete(clubId);
-        //     res.status(201).send({message: "Deleted Club Successfully"});
-        // }
     }
-
-    // async deleteClub(req,res) {
-    //     const clubId = req.body.clubId;
-
-    //     const club = await clubModel.findById(clubId);
-    //     fs.unlink(path.join("Public",club.image), (err) => {
-    //         if (err) {
-    //             throw err;
-    //         }
-    //         console.log("Delete Club's Image successfully.");
-    //     });
-
-    //     const rs = await clubModel.findByIdAndDelete(clubId);
-    //     res.status(201).send({message: "Deleted Club Successfully"});
-    // }
 
     //chua xoa duoc 2 player
     async deletePlayerFromClub(req, res) {
@@ -275,73 +113,17 @@ class ClubController {
                     const Id = season.playersId[i];
                     club.seasons[index].players.pull({ playerId: Id })
                 }
-
             }
-
         }
         club.save();
-        await clubModel.updateOne( { _id: _id, 'seasons.seasonId': season.seasonId }, // Match the document and the array element
-        { $set: { 'seasons.$.coachName': season.coachName } });
         res.status(201).send({ message: "Deleted Player from Club Successfully" });
         return;
-
-
-
-        // const clubId = req.body.clubId;
-        // const playerId = req.body.playerId;
-        // const player = await playerModel.findById(playerId);
-
-        // const club = await clubModel.findByIdAndUpdate(
-        //     clubId,
-        //     { $pull: { 'seasons.0.players': { playerId: player._id } } },
-        //     { new: true }
-        // );
-
-
-        // if (club) {
-        // res.status(201).send({ message: "Deleted Player from Club Successfully" });
-        // return;
-        // } else {
-        //     res.status(400).send({ message: "Deleted Player from Club Failed" });
-        //     return;
-        // }
     }
-
-    // async getClub(req, res) {
-
-    //     const seasonId = req.params.seasonId;
-    //     const clubId = req.params.clubId;
-    //     const season = await seasonModel.findById(seasonId);
-
-    //     var result = await clubModel.findOne({ _id: clubId, 'seasons.seasonId': season._id }, { _id: 1, name: 1, stadium: 1, image: 1, 'seasons.$': 1 }).lean();
-    //     if (result === null) {
-    //         res.status(400).send({ message: "Club not found" });
-    //         return;
-    //     }
-
-    //     result.seasons[0].playerList = [];
-
-    //     for (let index = 0; index < result.seasons[0].players.length; index++) {
-    //         const p = result.seasons[0].players[index];
-
-    //         const player = await playerModel.findOne({ _id: p.playerId }).lean();
-
-    //         if (player) {
-    //             delete player.seasons;
-    //             player.shirt_number = p.shirt_number;
-    //         }
-    //         result.seasons[0].playerList.push(player);
-    //     }
-    //     delete result.seasons[0].players;
-    //     res.status(200).send({ message: "Showed club's infomation successfully", data: result });
-
-    // }
 
     async getClub(req, res) {
 
         const seasonId = req.params.seasonId;
         const clubId = req.params.clubId;
-        // const season = await seasonModel.findById(seasonId);
 
         const club = await clubModel.findById(clubId);
         var data = new Object();
@@ -375,22 +157,6 @@ class ClubController {
         res.status(400).send({ message: "Club not found" });
         return;
 
-        // result.seasons[0].playerList = [];
-
-        // for (let index = 0; index < result.seasons[0].players.length; index++) {
-        //     const p = result.seasons[0].players[index];
-
-        //     const player = await playerModel.findOne({ _id: p.playerId }).lean();
-
-        //     if (player) {
-        //         delete player.seasons;
-        //         player.shirt_number = p.shirt_number;
-        //     }
-        //     result.seasons[0].playerList.push(player);
-        // }
-        // delete result.seasons[0].players;
-        // res.status(200).send({ message: "Showed club's infomation successfully", data: result });
-
     }
 
     async findClub(req, res) {
@@ -403,7 +169,6 @@ class ClubController {
         if (seasonId) {
             queries['seasons.seasonId'] = seasonId;
         }
-        console.log(queries);
 
         const clubs = await clubModel.find(queries).select('_id name image');
 
