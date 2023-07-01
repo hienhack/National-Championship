@@ -602,7 +602,6 @@ function InfoTeam() {
                     <th scope="col">Ảnh</th>
                     <th scope="col">Họ tên</th>
                     <th scope="col">Vị trí</th>
-                    <th scope="col">Hoạt động</th>
                   </tr>
                 </thead>
                 <tbody className="table-group-divider">
