@@ -6,7 +6,9 @@ import TourIcon from '@mui/icons-material/Tour';
 import style1 from "./style1.module.css";
 import "./style1.module.css";
 import "../../css/style.css"
-
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import logo from "../../assets/imgs/logo.png";
 import PersonIcon from '@mui/icons-material/Person';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -16,9 +18,14 @@ import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 function UserPage() {
   // const [listAccount, setList] = useState([]);
   const [activeMenuItem, setActiveMenuItem] = useState('season');
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const handleMenuClick = (menuItem) => {
     setActiveMenuItem(menuItem);
+  };
+
+  const handleCollapseToggle = () => {
+    setIsCollapsed(!isCollapsed);
   };
   return (
     <>
@@ -54,11 +61,10 @@ function UserPage() {
           <div className="menu flex-fill px-4">
             <div className="submenu">
               <div className="submenu-btn active" data-bs-toggle="collapse" data-bs-target="#home-menu"
-                aria-expanded="true">
+                aria-expanded="false">
                 <i className="fa-solid fa-flag"><TourIcon></TourIcon></i>&emsp;Mùa giải
-                <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
-              </div>
-              <ul className="collapse show" id="home-menu">
+                {isCollapsed ? <ArrowForwardIcon className="float-end menu-arrow" style={{ width: 20, height: 20 }} /> : <ArrowDownwardIcon className="float-end menu-arrow" style={{ width: 20, height: 20 }} />}              </div>
+              <ul className={`collapse ${isCollapsed ? 'hide' : 'show'}`} id="home-menu">
                 <li className={`menu-item ${activeMenuItem === 'season' ? 'active' : ''}`} onClick={() => handleMenuClick('season')}><Link to="/season">Danh sách mùa giải</Link></li>
               </ul>
             </div>
@@ -69,9 +75,8 @@ function UserPage() {
                 <div className="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#club-menu"
                   aria-expanded="false">
                   <i className="fa-solid fa-users"><GroupsIcon></GroupsIcon></i>&emsp;Đội bóng
-                  <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
-                </div>
-                <ul className="collapse" id="club-menu">
+                  {isCollapsed ? <ArrowForwardIcon className="float-end menu-arrow" style={{ width: 20, height: 20 }} /> : <ArrowDownwardIcon className="float-end menu-arrow" style={{ width: 20, height: 20 }} />}              </div>
+                <ul className={`collapse ${isCollapsed ? 'hide' : 'show'}`} id="club-menu">
                   <li className={`menu-item ${activeMenuItem === 'club' ? 'active' : ''}`} onClick={() => handleMenuClick('club')}><Link to="/club">Danh sách đội bóng</Link></li>
                   <li className={`menu-item ${activeMenuItem === 'club/add' ? 'active' : ''}`} onClick={() => handleMenuClick('club/add')}><Link to="/club/add">Đăng ký đội bóng</Link></li>
                 </ul>
@@ -80,9 +85,8 @@ function UserPage() {
                 <div className="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#player-menu"
                   aria-expanded="false">
                   <i className="fa-solid fa-user"><PersonIcon></PersonIcon></i>&emsp;Cầu thủ
-                  <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
-                </div>
-                <ul className="collapse" id="player-menu">
+                  {isCollapsed ? <ArrowForwardIcon className="float-end menu-arrow" style={{ width: 20, height: 20 }} /> : <ArrowDownwardIcon className="float-end menu-arrow" style={{ width: 20, height: 20 }} />}              </div>
+                <ul className={`collapse ${isCollapsed ? 'hide' : 'show'}`} id="player-menu">
                   <li className={`menu-item ${activeMenuItem === 'player' ? 'active' : ''}`} onClick={() => handleMenuClick('player')}><Link to="/player">Danh sách cầu thủ</Link></li>
                   <li className={`menu-item ${activeMenuItem === 'player/add' ? 'active' : ''}`} onClick={() => handleMenuClick('player/add')}><Link to="/player/add">Đăng ký cầu thủ</Link></li>
                 </ul>
@@ -91,9 +95,8 @@ function UserPage() {
                 <div className="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#schedule-menu"
                   aria-expanded="false">
                   <i className="fa-solid fa-calendar"><CalendarMonthIcon></CalendarMonthIcon></i>&emsp;Lịch thi đấu
-                  <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
-                </div>
-                <ul className="collapse" id="schedule-menu">
+                  {isCollapsed ? <ArrowForwardIcon className="float-end menu-arrow" style={{ width: 20, height: 20 }} /> : <ArrowDownwardIcon className="float-end menu-arrow" style={{ width: 20, height: 20 }} />}              </div>
+                <ul className={`collapse ${isCollapsed ? 'hide' : 'show'}`} id="schedule-menu">
                   <li className={`menu-item ${activeMenuItem === 'schedule/add' ? 'active' : ''}`} onClick={() => handleMenuClick('schedule/add')}><Link to="/schedule/add">Tạo lịch thi đấu</Link></li>
                   <li className={`menu-item ${activeMenuItem === 'schedule/all' ? 'active' : ''}`} onClick={() => handleMenuClick('schedule/all')}><Link to="/schedule/all">Trận đấu</Link></li>
 
@@ -103,9 +106,8 @@ function UserPage() {
                 <div className="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#report-menu"
                   aria-expanded="false">
                   <i className="fa-solid fa-paste"><ContentPasteSearchIcon></ContentPasteSearchIcon></i>&emsp;Báo cáo
-                  <i className="fa-solid fa-angle-right float-end menu-arrow"></i>
-                </div>
-                <ul className="collapse" id="report-menu">
+                  {isCollapsed ? <ArrowForwardIcon className="float-end menu-arrow" style={{ width: 20, height: 20 }} /> : <ArrowDownwardIcon className="float-end menu-arrow" style={{ width: 20, height: 20 }} />}              </div>
+                <ul className={`collapse ${isCollapsed ? 'hide' : 'show'}`} id="report-menu">
                   <li className={`menu-item ${activeMenuItem === 'report/rank' ? 'active' : ''}`} onClick={() => handleMenuClick('report/rank')}><Link to="/report/rank">Bảng xếp hạng</Link></li>
                   <li className={`menu-item ${activeMenuItem === 'report/goal' ? 'active' : ''}`} onClick={() => handleMenuClick('report/goal')}><Link to="/report/goal">Danh sách ghi bàn</Link></li>
                 </ul>

@@ -58,6 +58,10 @@ const deletePlayer = async () => {
 
 function AllPlayer() {
   const [listPlayer, setListPlayer] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Số dòng hiển thị trên mỗi trang
+
   const id = localStorage.getItem("seasonIDSelected");
   const [api, contextHolder] = notification.useNotification();
   const openNotificationWithIcon = (type) => {
@@ -94,16 +98,39 @@ function AllPlayer() {
 
     }).
       then(response => {
-        setListPlayer(response.data.data)
-        console.log(response.data.data)
+        const totalPlayers = response.data.data.length;
+        const totalPages = Math.ceil(totalPlayers / rowsPerPage);
+        setTotalPages(totalPages);
 
+        // Cắt `response.data.data` thành các trang nhỏ hơn
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const playerData = response.data.data.slice(start, end);
+
+        setListPlayer(playerData);
       }).catch(err => {
       })
 
 
-  }, [nameSearch])
+  }, [nameSearch, rowsPerPage, currentPage])
 
+  const goToPage = (page) => {
+    setCurrentPage(page);
+    // Gọi API để lấy danh sách cầu thủ trên trang mới
+    // Sử dụng tham số `page` để xác định vị trí bắt đầu và kết thúc trong danh sách dữ liệu
+  };
 
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
+    }
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1);
+    }
+  };
 
   const navigate = useNavigate();
   const handleOnClick = useCallback(
@@ -137,10 +164,15 @@ function AllPlayer() {
                 </div>
                 <div className="d-flex gap-3 align-items-center">
                   <h6 className="text-secondary m-0">Số dòng</h6>
-                  <select className="form-select" style={{ width: "100px" }}>
+                  <select
+                    className="form-select"
+                    style={{ width: "100px" }}
+                    value={rowsPerPage}
+                    onChange={(e) => setRowsPerPage(Number(e.target.value))}
+                  >
+                    <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
-                    <option value="20">20</option>
                   </select>
                 </div>
               </div>
@@ -192,16 +224,20 @@ function AllPlayer() {
               </table>
               <nav>
                 <ul className="pagination float-end">
-                  <li className="page-item">
-                    <a className="page-link" href="#" aria-label="Previous">
+                  <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                    <a className="page-link" href="#" aria-label="Previous" onClick={goToPreviousPage}>
                       <span aria-hidden="true">&laquo;</span>
                     </a>
                   </li>
-                  <li className="page-item"><span className="page-link">1</span></li>
-                  <li className="page-item"><span className="page-link">2</span></li>
-                  <li className="page-item"><span className="page-link">3</span></li>
-                  <li className="page-item">
-                    <a className="page-link" href="#" aria-label="Next">
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <li className={`page-item ${currentPage === index + 1 ? 'active' : ''}`} key={index}>
+                      <a className="page-link" href="#" onClick={() => goToPage(index + 1)}>
+                        {index + 1}
+                      </a>
+                    </li>
+                  ))}
+                  <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                    <a className="page-link" href="#" aria-label="Next" onClick={goToNextPage}>
                       <span aria-hidden="true">&raquo;</span>
                     </a>
                   </li>
