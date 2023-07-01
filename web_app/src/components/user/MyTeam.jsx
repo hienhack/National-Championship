@@ -3,8 +3,7 @@ import { Navigate, Routes, Route, useNavigate, Link } from "react-router-dom";
 import $ from "jquery";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowCircleLeftSharpIcon from '@mui/icons-material/ArrowCircleLeftSharp';
-import BuildIcon from '@mui/icons-material/Build';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { notification } from "antd";
@@ -12,12 +11,8 @@ import { notification } from "antd";
 import "../../style/myteam.css";
 import "../../css/content.css";
 import "../../css/style.css"
-import SearchIcon from '@mui/icons-material/Search';
-import { Col, Row, Select } from "antd";
 import axios from "axios"
-import AddIcon from '@mui/icons-material/Add';
 
-import muImage from "../../assets/imgs/mu.png";
 const API = 'http://127.0.0.1:5000/api/club';
 
 function MyTeam() {
@@ -627,12 +622,7 @@ function InfoTeam() {
                       </td>
                       <td>{i.name}</td>
                       <td>{i.position}</td>
-                      {/* <td>
-                        <div className="actions">
-                          <button title="Xem thông tin"><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
-                          <button title="Xóa cầu thủ"><DeleteIcon></DeleteIcon></button>
-                        </div>
-                      </td> */}
+
                     </tr>
                   ))}
 
@@ -647,150 +637,6 @@ function InfoTeam() {
   );
 }
 
-
-
-function EditPlayer() {
-  const options = [{
-    value: "MU",
-    label: "MU",
-  },
-  {
-    value: "MCI",
-    label: "MCI"
-  }];
-  return (
-    <div className="contentUser">
-      <Content />
-      <div className="allTeamTitle">
-        <div style={{ fontWeight: "bold" }}>Đội bóng</div>
-        <div>
-          {/* <button type="button" className="btn btn-danger" style={{ width: 80 }}>
-            Sửa
-          </button> */}
-        </div>
-      </div>
-      <div className="animated fadeIn">
-        <div className="row">
-          <div className="col-lg-2"></div>
-          <div className="col-lg-8">
-            <div className="card">
-              <div className="card-header">
-                <strong>Hồ sơ đội bóng</strong>
-              </div>
-              <div className="card-body card-block">
-                <form
-                  id="register"
-                  action="/club/add/<%=idSeason%>"
-                  method="post"
-                  className="form-horizontal"
-                >
-                  <div className="row form-group" style={{ marginBottom: 15 }}>
-                    <div className="col col-md-3 ">
-                      <label for="tendoibong" className=" form-control-label ">
-                        Tên đội bóng
-                      </label>
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <input
-                        type="text"
-                        id="tendoibong"
-                        name="tendoibong"
-                        placeholder="Tên đội bóng"
-                        className="form-control"
-                        defaultValue={"Manchester United"}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="row form-group" style={{ marginBottom: 15 }}>
-                    <div className="col col-md-3 ">
-                      <label for="svd" className=" form-control-label ">
-                        Sân vận động
-                      </label>
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <input
-                        type="text"
-                        id="svd"
-                        name="svd"
-                        placeholder="Sân vận động"
-                        className="form-control"
-                        defaultValue={"Anfield"}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="row form-group" style={{ marginBottom: 15 }}>
-                    <div className="col col-md-3 ">
-                      <label for="hlv" className=" form-control-label ">
-                        Huấn luyện viên{" "}
-                      </label>
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <input
-                        type="text"
-                        id="hlv"
-                        name="hlv"
-                        placeholder="Huấn luyện viên"
-                        defaultValue={"Park Hang Seo"}
-                        className="form-control"
-                        required
-                      />
-
-                    </div>
-                  </div>
-                  <div className="row form-group" style={{ marginBottom: 15 }}>
-                    <div className="col col-md-3 ">
-                      <label for="hlv" className=" form-control-label ">
-                        Cầu thủ tham gia{" "}
-                      </label>
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <Select
-
-                        mode="tags"
-                        size="large"
-                        placeholder="Please select"
-                        defaultValue={['Foden', 'Neymar']}
-                        style={{
-                          width: '100%',
-                        }}
-                        options={options}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="row form-group" style={{ marginBottom: 15 }}>
-                    <div className="col col-md-3">
-                      <label for="logo" className=" form-control-label">
-                        Logo
-                      </label>
-                    </div>
-                    <div className="col-12 col-md-9">
-                      <ContentPreview />
-                    </div>
-                    <input type="hidden" id="imgPath" name="imgPath" value="" />
-                  </div>
-
-                </form>
-
-              </div>
-              <div className="card-footer" style={{ display: "flex", justifyContent: "center" }}>
-                <button form="register" type="submit" className="btn btn-primary btn-sm" style={{ marginRight: 20 }}>
-                  <i className="fa fa-check"></i> Thay đổi
-                </button>
-                <button form="register" type="reset" className="btn btn-danger btn-sm">
-                  <i className="fa fa-ban"> </i> Hủy thay đổi
-                </button>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function Content(props) {
   const [league, setLeague] = useState('')

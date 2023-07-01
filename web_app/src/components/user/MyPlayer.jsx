@@ -3,7 +3,6 @@ import { Navigate, Routes, Route, useNavigate } from "react-router-dom";
 import $ from "jquery";
 import axios from "axios"
 import "../../style/myteam.css";
-import { Col, Row } from "antd";
 import moment from "moment";
 import { notification } from "antd";
 
@@ -11,9 +10,7 @@ import "../../css/style.css";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
-import muImage from "../../assets/imgs/mu.png";
-import AddIcon from '@mui/icons-material/Add';
-import SearchIcon from '@mui/icons-material/Search';
+
 
 const API = 'http://127.0.0.1:5000/api/player'
 const API1 = 'http://127.0.0.1:5000/api/club'
@@ -214,7 +211,6 @@ function AllPlayer() {
                           deletePlayer();
 
                         }}><DeleteIcon></DeleteIcon></button>
-                        {/* <button className="btn  btn-light" title="Sửa thông tin" ><BuildIcon></BuildIcon></button> */}
 
                       </td>
                     </tr>
@@ -255,28 +251,7 @@ function AllPlayer() {
 
 function ContentPreviewAdd() {
   const [avatar, setAvatar] = useState();
-  // const [club, setClub] = useState(null);
-  // const idClub = localStorage.getItem("clubSelected");
-  // const idSeason = localStorage.getItem("seasonIDSelected");
 
-  // useEffect(() => {
-
-
-  //   axios.get(`${API}/${idClub}/${idSeason}`, {
-  //     headers: {
-  //       'content-type': 'application/json',
-  //       'accept': 'application/json',
-  //     }
-  //   }).
-  //     then(response => {
-  //       setClub(response.data.data);
-  //       console.log(response.data.data)
-
-  //     }).catch(err => {
-  //     })
-
-
-  // }, [])
 
   useEffect(() => {
     return () => avatar && URL.revokeObjectURL(avatar.preview);
@@ -291,18 +266,7 @@ function ContentPreviewAdd() {
 
   return (
     <>
-      {/* {!avatar && (
-        <img
-          style={{
-            marginLeft: "70px",
-            height: "290px",
-            marginBottom: "10px",
-          }}
-          src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg"
-          alt=""
-          width="80%"
-        />
-      )} */}
+
 
       {avatar && (
         <img
@@ -408,15 +372,7 @@ function AddPlayer() {
           <h5 className="m-0">Đăng ký cầu thủ</h5>
 
           <div className="m-auto bg-white shadow rounded-2" style={{ width: 800 }}>
-            {/* <div className="d-flex justify-content-between p-4">
-              <div className="input-group w-50">
-                <i className="fa-solid fa-magnifying-glass input-group-text pt-2"><SearchIcon></SearchIcon> </i>
-                <input type="text" className="form-control" placeholder="Tìm cầu thủ các mùa trước..." />
-              </div>
-              {/* <button id="new-club-btn" className="fs-6 active" style={{ background: "#21e758", paddingRight: 5, borderRadius: 5, color: "white" }}><AddIcon></AddIcon> Đăng
-                ký mới</button> */}
-            {/* </div> */}
-            {/* <hr className="m-0" />  */}
+
             <form>
               <div className="row g-4 p-4">
                 <div className="col-6">
@@ -525,7 +481,6 @@ function ContentPreview() {
   const [avatar, setAvatar] = useState();
   const [player, setPLayer] = useState(null);
   const idPlayer = localStorage.getItem("playerSelected");
-  // const idSeason = localStorage.getItem("seasonIDSelected");
 
   useEffect(() => {
 
@@ -838,161 +793,7 @@ function InfoPlayer() {
   );
 }
 
-// function ContentPreview() {
-//   const [avatar, setAvatar] = useState();
 
-//   const handlePreviewAvatar = (e) => {
-//     const file = e.target.files[0];
-//     file.preview = URL.createObjectURL(file);
-
-//     setAvatar(file);
-//   };
-
-//   return (
-//     <>
-//       {/* {!avatar && (
-//         <img
-//           style={{
-//             marginTop: 8,
-//             marginLeft: "10px",
-//             height: "290px",
-//             marginBottom: "10px",
-//           }}
-//           src={listAccount.image}
-//           alt=""
-//           width="80%"
-//         />
-//       )} */}
-
-//       {avatar && (
-//         <img
-//           style={{
-//             marginTop: 8,
-
-//             height: "140px",
-//             marginBottom: "10px",
-//           }}
-//           src={avatar.preview}
-//           alt=""
-//           width="50%"
-//         />
-//       )}
-//       <div >
-//         <input type="file" onChange={handlePreviewAvatar} id="contentPDF" />
-//       </div>
-//     </>
-//   );
-// }
-
-// function AddTeam() {
-//   return (
-//     <div className="contentUser">
-//       <Content />
-//       <div className="allTeamTitle">
-//         <div style={{ fontWeight: "bold" }}>Đăng ký cầu thủ</div>
-//         <div>
-//           {/* <button type="button" className="btn btn-danger" style={{ width: 80 }}>
-//             Sửa
-//           </button> */}
-
-//         </div>
-//       </div>
-//       <div className="animated fadeIn">
-//         <div className="row">
-//           <div className="col-lg-2">
-//           </div>
-//           <div className="col-lg-8">
-//             <div className="card">
-//               <div className="card-header">
-//                 <strong>Form đăng ký</strong>
-//               </div>
-//               <div className="card-body card-block">
-//                 <form id="register" action="/club/add/<%=idSeason%>" method="post" className="form-horizontal">
-
-//                   <div className="row form-group" style={{ marginBottom: 15 }}>
-//                     <div className="col col-md-3 " ><label for="tendoibong" className=" form-control-label ">Tên cầu thủ</label>
-//                     </div>
-//                     <div className="col-12 col-md-9">
-//                       <input type="text" id="tendoibong" name="tendoibong" placeholder="Tên cầu thủ"
-//                         className="form-control" required />
-//                     </div>
-//                   </div>
-//                   <div className="row form-group" style={{ marginBottom: 15 }}>
-//                     <div className="col col-md-3 "><label for="svd" className=" form-control-label ">Loại cầu thủ</label>
-//                     </div>
-//                     <div className="col-12 col-md-9">
-//                       <select id="loaiCauThu" name="loaiCauThu" className="form-control" required="required">
-//                         <option value="1" selected>Cầu thủ nội</option>
-//                         <option value="0">Cầu thủ ngoại</option>
-//                       </select>
-//                     </div>
-//                   </div>
-//                   <div className="row form-group" style={{ marginBottom: 15 }}>
-
-//                     <div className="col col-md-3 "><label for="hlv" className=" form-control-label ">Vị trí thi đấu </label>
-//                     </div>
-//                     <div className="col-12 col-md-9">
-//                       <select id="viTriThiDau" name="viTriThiDau" className="form-control" required="required">
-//                         <option value="1" selected>Thủ môn</option>
-//                         <option value="2">Hậu vệ</option>
-//                         <option value="3">Tiền vệ</option>
-//                         <option value="4">Tiền đạo</option>
-//                       </select>
-//                     </div>
-//                   </div>
-//                   <div className="row form-group" style={{ marginBottom: 15 }}>
-//                     <div className="col col-md-3 " ><label for="tendoibong" className=" form-control-label ">Quốc tịch</label>
-//                     </div>
-//                     <div className="col-12 col-md-9">
-//                       <input type="text" id="tendoibong" name="tendoibong" placeholder="Quốc tịch"
-//                         className="form-control" required />
-//                     </div>
-//                   </div>
-//                   <div className="row form-group" style={{ marginBottom: 15 }}>
-//                     <div className="col col-md-3 "><label for="svd" className=" form-control-label ">Ngày sinh</label>
-//                     </div>
-//                     <div className="col-12 col-md-9">
-//                       <input type="date" id="svd" name="svd" className="form-control" required />
-//                     </div>
-//                   </div>
-//                   <div className="row form-group" style={{ marginBottom: 15 }}>
-
-//                     <div className="col col-md-3 "><label for="hlv" className=" form-control-label ">Đội tuyển </label>
-//                     </div>
-//                     <div className="col-12 col-md-9">
-//                       <select id="viTriThiDau" name="viTriThiDau" className="form-control" required="required">
-//                         <option value="1" selected>MU</option>
-//                         <option value="2">MCI</option>
-
-//                       </select>
-//                     </div>
-//                   </div>
-//                   <div className="row form-group" style={{ marginBottom: 15 }}>
-//                     <div className="col col-md-3"><label for="logo" className=" form-control-label">Ảnh đại diện</label></div>
-//                     <div className="col-12 col-md-9">
-//                       <ContentPreview />
-//                     </div>
-//                     <input type="hidden" id="imgPath" name="imgPath" value="" />
-//                   </div>
-//                 </form>
-//               </div>
-//               <div className="card-footer" style={{ display: "flex", justifyContent: "center" }}>
-//                 <button form="register" type="submit" className="btn btn-primary btn-sm" style={{ marginRight: 20 }}>
-//                   <i className="fa fa-check"></i> Đăng ký
-//                 </button>
-//                 <button form="register" type="reset" className="btn btn-danger btn-sm">
-//                   <i className="fa fa-ban"> </i> Hủy đăng ký
-//                 </button>
-
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//     </div>
-//   );
-// }
 
 function Content(props) {
   const [league, setLeague] = useState('')
