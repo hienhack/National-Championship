@@ -2,11 +2,11 @@ import React from 'react'
 
 import { BrowserRouter, Navigate, Route, Routes, useRoutes } from 'react-router-dom'
 import HomeUser from '../components/sidebar/HomeUser'
-import MyProfile from '../components/user/MySeason'
-import MyTeam from '../components/user/MyTeam'
-import MyPlayer from '../components/user/MyPlayer'
-import MyReport from '../components/user/MyReport'
-import MyCalendar from '../components/user/MyMatch'
+import MyProfile from '../components/user/Season'
+import MyTeam from '../components/user/Team'
+import MyPlayer from '../components/user/Player'
+import MyReport from '../components/user/Report'
+import MyCalendar from '../components/user/Match'
 
 
 function User() {
