@@ -107,27 +107,24 @@ function AllCalendar() {
   };
 
   const [listTeam, setListTeam] = useState([]);
+  const id1 = localStorage.getItem("seasonIDSelected");
   useEffect(() => {
-
-
-    axios.get(API1, {
-      headers: {
-        'content-type': 'application/json',
-        'accept': 'application/json',
-      },
-      params: {
-        seasonId: id
-      }
-
-    }).
-      then(response => {
-        setListTeam(response.data.data);
-
-      }).catch(err => {
+    axios
+      .get(API1, {
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+        },
+        params: {
+          seasonId: id,
+        },
       })
-
-
-  }, [])
+      .then((response) => {
+        setListTeam(response.data.data);
+        console.log(response.data.data);
+      })
+      .catch((err) => { });
+  }, []);
 
   const handleRoundChange = (event) => {
     const newRound = event.target.value;
@@ -141,21 +138,26 @@ function AllCalendar() {
           accept: "application/json",
         },
         params: {
-          seasonId: id
-        }
+          seasonId: id,
+        },
       })
       .then((response) => {
         setListRound(response.data.data.matches);
         setTotalRound(response.data.data.numberOfRound);
+        console.log(response.data.data);
       })
       .catch((err) => { });
   }, []);
   const [api, contextHolder] = notification.useNotification();
 
-  const roundOptions = Array.from({ length: totalRound }, (_, index) => index + 1);
+  const roundOptions = Array.from(
+    { length: totalRound },
+    (_, index) => index + 1
+  );
   const openNotificationWithIcon1 = (type) => {
     api[type]({
-      message: type === "success" ? "Thêm thành công" : "Vui lòng điền đủ thông tin",
+      message:
+        type === "success" ? "Thêm thành công" : "Vui lòng điền đủ thông tin",
     });
   };
   const openNotificationWithIcon2 = (type) => {
@@ -170,96 +172,171 @@ function AllCalendar() {
       <div className="main-wrapper">
         <div className="d-flex flex-column gap-4 p-4">
           <h5 className="m-0">Trận đấu</h5>
-          <div className="m-auto bg-white shadow-sm rounded-2" style={{ width: 800 }}>
-            <div className="p-4">
-
-              <div className="round-select input-group" style={{ width: 200, }} >
-                <label className="input-group-text" htmlFor="inputGroupSelect01">Vòng đấu</label>
-                <select className="form-select" id="inputGroupSelect01" value={round} onChange={handleRoundChange}>
+          <div
+            className="m-auto bg-white shadow-sm rounded-2"
+            style={{ width: 800 }}
+          >
+            <div className="p-4 d-flex justify-content-between align-items-center">
+              <div className="round-select input-group" style={{ width: 180 }}>
+                <label
+                  className="input-group-text"
+                  htmlFor="inputGroupSelect01"
+                >
+                  Vòng đấu
+                </label>
+                <select
+                  className="form-select"
+                  id="inputGroupSelect01"
+                  value={round}
+                  onChange={handleRoundChange}
+                >
                   <option value="Tất cả">Tất cả</option>
 
                   {roundOptions.map((option) => (
-                    <option key={option} value={option}>{option}</option>
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
                   ))}
                 </select>
-                <button className="btn btn-success " data-bs-toggle="modal" style={{ marginTop: "15px" }}
-                  data-bs-target="#add-match-modal"><AddIcon></AddIcon> Thêm trận
-                  đấu</button>
-                <div className="modal fade" id="add-match-modal" tabIndex="-1" aria-hidden="true">
-                  <div className="modal-dialog">
-                    <div className="modal-content">
-                      <div className="modal-header px-4">
-                        <h1 className="modal-title fs-6" id="exampleModalLabel">Biểu mẫu thêm trận đấu
-                        </h1>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal"
-                          aria-label="Close"></button>
-                      </div>
-                      <div className="modal-body px-4">
-                        <form>
-                          <div className="d-flex flex-column gap-3">
+              </div>
+              <button
+                className="btn btn-success "
+                data-bs-toggle="modal"
+                style={{ marginTop: "15px" }}
+                data-bs-target="#add-match-modal"
+              >
+                <AddIcon></AddIcon> Thêm trận đấu
+              </button>
+              <div
+                className="modal fade"
+                id="add-match-modal"
+                tabIndex="-1"
+                aria-hidden="true"
+              >
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header px-4">
+                      <h1 className="modal-title fs-6" id="exampleModalLabel">
+                        Biểu mẫu thêm trận đấu
+                      </h1>
+                      <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div className="modal-body px-4">
+                      <form>
+                        <div className="d-flex flex-column gap-3">
+                          <div>
+                            <label className="fs-8 mb-1">Vòng</label>
+                            <div className="input-group">
+                              <input
+                                type="number"
+                                className="form-control"
+                                defaultValue="1"
+                                id="roundAdd"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="fs-8 mb-1">Đội bóng 1</label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              id="club1Add"
+                            >
+                              <option defaultValue="">Chọn đội bóng</option>
+                              {listTeam.map((i, index) => (
+                                <option
+                                  value={i._id}
+                                  key={`match_club_${index}`}
+                                >
+                                  {i.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="fs-8 mb-1">Đội bóng 2</label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              id="club2Add"
+                            >
+                              <option defaultValue="">Chọn đội bóng</option>
+                              {listTeam.map((i, index) => (
+                                <option
+                                  value={i._id}
+                                  key={`match_club_${index}`}
+                                >
+                                  {i.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="d-flex gap-3">
                             <div>
-                              <label className="fs-8 mb-1">Vòng</label>
+                              <label className="fs-8 mb-1">Giờ</label>
                               <div className="input-group">
-                                <input type="number" className="form-control" defaultValue="1" id="roundAdd"
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="1"
+                                  id="hourAdd"
                                 />
                               </div>
                             </div>
                             <div>
-                              <label className="fs-8 mb-1">Đội bóng 1</label>
-                              <select className="form-select" aria-label="Default select example" id="club1Add">
-
-                                <option defaultValue="">Chọn đội bóng</option>
-                                {listTeam.map((i, index) => (
-
-                                  <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
-                                ))}
-                              </select>
-                            </div>
-                            <div>
-                              <label className="fs-8 mb-1">Đội bóng 2</label>
-                              <select className="form-select" aria-label="Default select example" id="club2Add">
-                                <option defaultValue="">Chọn đội bóng</option>
-                                {listTeam.map((i, index) => (
-
-                                  <option value={i._id} key={`match_club_${index}`}>{i.name}</option>
-                                ))}
-                              </select>
-                            </div>
-
-                            <div className="d-flex gap-3">
-                              <div>
-                                <label className="fs-8 mb-1">Giờ</label>
-                                <div className="input-group">
-                                  <input type="number" className="form-control" defaultValue="1" id="hourAdd" />
-                                </div>
-                              </div>
-                              <div>
-                                <label className="fs-8 mb-1">Phút</label>
-                                <div className="input-group">
-                                  <input type="number" className="form-control" defaultValue="1" id="minuteAdd" />
-                                </div>
-                              </div>
-                              <div>
-                                <label className="fs-8 mb-1">Ngày</label>
-                                <div className="input-group">
-                                  <input type="date" className="form-control" id="dateAdd" />
-                                </div>
-                              </div>
-                            </div>
-                            <div>
-                              <label className="fs-8 mb-1">Sân đấu</label>
+                              <label className="fs-8 mb-1">Phút</label>
                               <div className="input-group">
-                                <input type="text" className="form-control" id="stadiumMatchAdd" />
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  defaultValue="1"
+                                  id="minuteAdd"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="fs-8 mb-1">Ngày</label>
+                              <div className="input-group">
+                                <input
+                                  type="date"
+                                  className="form-control"
+                                  id="dateAdd"
+                                />
                               </div>
                             </div>
                           </div>
-                        </form>
-                      </div>
-                      <div className="modal-footer py-2 px-4">
-                        <button type="button" className="btn btn-light"
-                          data-bs-dismiss="modal">Hủy</button>
-                        {contextHolder}
-                        <button type="button" className="btn btn-primary" onClick={() => {
+                          <div>
+                            <label className="fs-8 mb-1">Sân đấu</label>
+                            <div className="input-group">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="stadiumMatchAdd"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div className="modal-footer py-2 px-4">
+                      <button
+                        type="button"
+                        className="btn btn-light"
+                        data-bs-dismiss="modal"
+                      >
+                        Hủy
+                      </button>
+                      {contextHolder}
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => {
                           let round = $("#roundAdd").val();
                           let club1 = $("#club1Add").val();
                           let club2 = $("#club2Add").val();
@@ -267,7 +344,6 @@ function AllCalendar() {
                           let minute = $("#minuteAdd").val();
                           let date = $("#dateAdd").val();
                           let stadium = $("#stadiumMatchAdd").val();
-
 
                           if (
                             round === "" ||
@@ -277,7 +353,6 @@ function AllCalendar() {
                             minute === "" ||
                             date === "" ||
                             stadium === ""
-
                           ) {
                             openNotificationWithIcon1("error");
 
@@ -286,8 +361,10 @@ function AllCalendar() {
                             openNotificationWithIcon1("success");
                             submitAddMatch();
                           }
-                        }}>Đăng ký</button>
-                      </div>
+                        }}
+                      >
+                        Đăng ký
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -295,95 +372,141 @@ function AllCalendar() {
             </div>
             <hr className="m-0" />
             <div className="d-flex flex-column py-4">
-
-
               {/* <h6 className="m-0 px-4 py-2 fs-8 text-secondary">Vòng: {i.round}</h6> */}
               <div className="row row-cols-2 g-0 px-4">
-                {listRound?.map((i, index) => (
-                  i.round.toString() === round && (<div className="round" key={`round_${index}`}>
-                    <div className="col">
-                      <div className="match d-flex border">
-                        <div
-                          className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                          <div className={i.result?.club1 > i.result?.club2 ? "club-win" : "club-lose"}>
-                            <img className="club-logo" alt=""
-                              src={`http://localhost:5000/${i.club1?.logo}`} />
-                            <span>{i.club1.name}</span>
-                            {/* <span className="goal float-end">{i.result?.club1}</span> */}
+                {listRound?.map(
+                  (i, index) =>
+                    i.round.toString() === round && (
+                      <div className="round" key={`round_${index}`}>
+                        <div className="col">
+                          <div className="match d-flex border">
+                            <div className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                              <div
+                                className={
+                                  i.result?.club1 > i.result?.club2
+                                    ? "club-win"
+                                    : "club-lose"
+                                }
+                              >
+                                <img
+                                  className="club-logo"
+                                  alt=""
+                                  src={`http://localhost:5000/${i.club1?.logo}`}
+                                />
+                                <span>{i.club1.name}</span>
+                                {/* <span className="goal float-end">{i.result?.club1}</span> */}
+                              </div>
+                              <div
+                                className={
+                                  i.result?.club1 < i.result?.club2
+                                    ? "club-win"
+                                    : "club-lose"
+                                }
+                              >
+                                <img
+                                  className="club-logo"
+                                  alt=""
+                                  src={`http://localhost:5000/${i.club2?.logo}`}
+                                />
+                                <span>{i.club2.name}</span>
+                                {/* <span className="goal float-end">{i.result?.club2}</span> */}
+                              </div>
+                            </div>
+                            <div className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                              <div className="fs-8">
+                                {formatDate(i.datetime)}
+                              </div>
+                              <div className="fs-8">
+                                {tachNgayGio(i.datetime)}
+                              </div>
+                            </div>
+                            <div className="remove-match p-3 bg-danger">
+                              <button
+                                className="text-muted"
+                                onClick={() => {
+                                  openNotificationWithIcon2("success");
+                                  localStorage.setItem(
+                                    "matchDeleteSelected",
+                                    i._id
+                                  );
+                                  deleteMatch();
+                                }}
+                              >
+                                <DeleteIcon></DeleteIcon>
+                              </button>
+                            </div>
                           </div>
-                          <div className={i.result?.club1 < i.result?.club2 ? "club-win" : "club-lose"}>
-                            <img className="club-logo" alt=""
-                              src={`http://localhost:5000/${i.club2?.logo}`} />
-                            <span>{i.club2.name}</span>
-                            {/* <span className="goal float-end">{i.result?.club2}</span> */}
-                          </div>
-                        </div>
-                        <div
-                          className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                          <div className="fs-8">{formatDate(i.datetime)}</div>
-                          <div className="fs-8">{tachNgayGio(i.datetime)}</div>
-                        </div>
-                        <div className="remove-match p-3 bg-danger">
-                          <button className="text-muted" onClick={() => {
-                            openNotificationWithIcon2("success");
-                            localStorage.setItem("matchDeleteSelected", i._id);
-                            deleteMatch();
-
-                          }}><DeleteIcon></DeleteIcon></button>
                         </div>
                       </div>
-                    </div>
-
-
-                  </div>
-                  )
-
-
-                ))}
-                {listRound?.map((i, index) => (
-                  round === "Tất cả" && (<div className="round" key={`round_${index}`}>
-                    <div className="col">
-                      <div className="match d-flex border">
-                        <div
-                          className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
-                          <div className={i.result?.club1 > i.result?.club2 ? "club-win" : "club-lose"}>
-                            <img className="club-logo" alt=""
-                              src={`http://localhost:5000/${i.club1?.logo}`} />
-                            <span>{i.club1.name}</span>
-                            {/* <span className="goal float-end">{i.result?.club1}</span> */}
+                    )
+                )}
+                {listRound?.map(
+                  (i, index) =>
+                    round === "Tất cả" && (
+                      <div className="round" key={`round_${index}`}>
+                        <div className="col">
+                          <div className="match d-flex border">
+                            <div className="d-flex flex-column justify-content-center gap-2 flex-grow-1 p-3">
+                              <div
+                                className={
+                                  i.result?.club1 > i.result?.club2
+                                    ? "club-win"
+                                    : "club-lose"
+                                }
+                              >
+                                <img
+                                  className="club-logo"
+                                  alt=""
+                                  src={`http://localhost:5000/${i.club1?.logo}`}
+                                />
+                                <span>{i.club1.name}</span>
+                                {/* <span className="goal float-end">{i.result?.club1}</span> */}
+                              </div>
+                              <div
+                                className={
+                                  i.result?.club1 < i.result?.club2
+                                    ? "club-win"
+                                    : "club-lose"
+                                }
+                              >
+                                <img
+                                  className="club-logo"
+                                  alt=""
+                                  src={`http://localhost:5000/${i.club2?.logo}`}
+                                />
+                                <span>{i.club2.name}</span>
+                                {/* <span className="goal float-end">{i.result?.club2}</span> */}
+                              </div>
+                            </div>
+                            <div className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
+                              <div className="fs-8">
+                                {formatDate(i.datetime)}
+                              </div>
+                              <div className="fs-8">
+                                {tachNgayGio(i.datetime)}
+                              </div>
+                            </div>
+                            <div className="remove-match p-3 bg-danger">
+                              <button
+                                className="text-muted"
+                                onClick={() => {
+                                  openNotificationWithIcon2("success");
+                                  localStorage.setItem(
+                                    "matchDeleteSelected",
+                                    i._id
+                                  );
+                                  deleteMatch();
+                                }}
+                              >
+                                <DeleteIcon></DeleteIcon>
+                              </button>
+                            </div>
                           </div>
-                          <div className={i.result?.club1 < i.result?.club2 ? "club-win" : "club-lose"}>
-                            <img className="club-logo" alt=""
-                              src={`http://localhost:5000/${i.club2?.logo}`} />
-                            <span>{i.club2.name}</span>
-                            {/* <span className="goal float-end">{i.result?.club2}</span> */}
-                          </div>
-                        </div>
-                        <div
-                          className="border-start p-3 d-flex flex-column justify-content-center align-items-center">
-                          <div className="fs-8">{formatDate(i.datetime)}</div>
-                          <div className="fs-8">{tachNgayGio(i.datetime)}</div>
-                        </div>
-                        <div className="remove-match p-3 bg-danger">
-                          <button className="text-muted" onClick={() => {
-                            openNotificationWithIcon2("success");
-                            localStorage.setItem("matchDeleteSelected", i._id);
-                            deleteMatch();
-
-                          }}><DeleteIcon></DeleteIcon></button>
                         </div>
                       </div>
-                    </div>
-
-
-                  </div>
-                  )
-
-
-                ))}
+                    )
+                )}
               </div>
-
-
             </div>
           </div>
         </div>
