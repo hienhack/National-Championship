@@ -627,12 +627,12 @@ function InfoTeam() {
                       </td>
                       <td>{i.name}</td>
                       <td>{i.position}</td>
-                      <td>
+                      {/* <td>
                         <div className="actions">
                           <button title="Xem thông tin"><RemoveRedEyeIcon></RemoveRedEyeIcon></button>
                           <button title="Xóa cầu thủ"><DeleteIcon></DeleteIcon></button>
                         </div>
-                      </td>
+                      </td> */}
                     </tr>
                   ))}
 

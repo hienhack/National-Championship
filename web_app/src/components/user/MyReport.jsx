@@ -83,7 +83,7 @@ function AllRank() {
                 {listTeam.map((i, index) => (
 
                   <tr style={{ textAlign: "center" }} key={`rank_${index}`}>
-                    <th scope="row">{index}</th>
+                    <th scope="row">{index + 1}</th>
 
                     {/* <img alt="" style={{ height: 30, width: 30, marginRight: 5 }}
                       src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png" /> */}
@@ -105,7 +105,7 @@ function AllRank() {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 
@@ -210,7 +210,7 @@ function AllGoal() {
                 {listTeam.map((i, index) => (
 
                   <tr>
-                    <td scope="row">{index}</td>
+                    <td scope="row">{index + 1}</td>
                     <td>{i.player}</td>
                     <td>{i.club}</td>
                     <td>{i.goals}</td>
