@@ -1,0 +1,78 @@
+.menu {
+    overflow-x: auto;
+}
+
+.sidebar-header {
+    height: 70px;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.app-logo {
+    width: 80%;
+    display: block;
+}
+
+.submenu-btn {
+    font-weight: 300;
+    font-size: 17px;
+    padding: 10px 0px 10px 0px;
+    border-radius: 5px;
+    color: rgb(69, 69, 69);
+}
+
+.submenu-btn:hover {
+    cursor: pointer;
+    color: #3D5EE1;
+    font-weight: 500;
+}
+
+.submenu.active>.submenu-btn {
+    color: #3D5EE1;
+    font-weight: 500;
+}
+
+.menu-arrow {
+    transition: transform .35s ease;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.submenu-btn[aria-expanded="true"]>.menu-arrow {
+    transform: rotate(90deg);
+}
+
+.submenu>ul {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu-item {
+    padding: 5px 0 5px 37px;
+    border-radius: 5px;
+}
+
+.menu-item:hover {
+    background-color: #3D5EE1;
+}
+
+.menu-item:hover>a {
+    color: white;
+}
+
+.menu-item>a {
+    text-decoration: none;
+    color: rgb(69, 69, 69);
+}
+
+.menu-item.active {
+    background-color: #3D5EE1;
+}
+
+.menu-item.active>a {
+    color: white;
+}

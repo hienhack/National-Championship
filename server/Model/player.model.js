@@ -8,8 +8,10 @@ const playerSchema = new Schema({
     nationality: String,
     position: String,
     seasons: [{
+        _id: false,
         seasonId: Schema.Types.ObjectId,
-        clubId: Schema.Types.ObjectId
+        clubId: Schema.Types.ObjectId,
+        shirtNumber: Number
     }]
 });
 

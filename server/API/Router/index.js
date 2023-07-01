@@ -6,10 +6,10 @@ const matchRouter = require('./match.router');
 const reportRouter = require('./report.router');
 
 module.exports = function(app) {
-    app.use('/season', seasonRouter);
-    app.use('/club', clubRouter);
-    app.use('/player', playerRouter);
-    app.use('/match', matchRouter);
-    app.use('/schedule', scheduleRouter);
-    app.use('/report', reportRouter);
+    app.use('/api/season', seasonRouter);
+    app.use('/api/club', clubRouter);
+    app.use('/api/player', playerRouter);
+    app.use('/api/match', matchRouter);
+    app.use('/api/schedule', scheduleRouter);
+    app.use('/api/report', reportRouter);
 }

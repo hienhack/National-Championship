@@ -1,0 +1,9 @@
+.set-season-btn:hover {
+  color: white;
+  background-color: rgb(9, 175, 9);
+}
+
+.set-season-btn.active {
+  color: white;
+  background-color: rgb(9, 175, 9);
+}

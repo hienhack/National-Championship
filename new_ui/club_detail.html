@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết clb</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js"
+        integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+    <link href="./css/style.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/8a19b96b6e.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <!-- Sidebar -->
+        <div class="sidebar d-flex flex-column">
+            <div class="sidebar-header ps-4">
+                <image src="./assets/logo.png" class="app-logo"></image>
+            </div>
+            <hr class="mt-0 mx-4 text-secondary" />
+            <div class="menu flex-fill px-4">
+                <div class="submenu">
+                    <div class="submenu-btn active" data-bs-toggle="collapse" data-bs-target="#home-menu"
+                        aria-expanded="true">
+                        <i class="fa-solid fa-flag"></i>&emsp;Mùa giải
+                        <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                    </div>
+                    <ul class="collapse show" id="home-menu">
+                        <li class="menu-item active"><a href="#">Danh sách mùa giải</a></li>
+                    </ul>
+                </div>
+                <h6 class="text-secondary mt-3">Hồ sơ mùa giải</h6>
+                <hr class="text-secondary" />
+                <div class="d-flex flex-column gap-2">
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#club-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-users"></i>&emsp;Đội bóng
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="club-menu">
+                            <li class="menu-item"><a href="#">Danh sách đội bóng</a></li>
+                            <li class="menu-item"><a href="#">Đăng ký đội bóng</a></li>
+                        </ul>
+                    </div>
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#player-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>&emsp;Cầu thủ
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="player-menu">
+                            <li class="menu-item"><a href="#">Danh sách cầu thủ</a></li>
+                            <li class="menu-item"><a href="#">Đăng ký cầu thủ</a></li>
+                        </ul>
+                    </div>
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#schedule-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-calendar"></i>&emsp;Lịch thi đấu
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="schedule-menu">
+                            <li class="menu-item"><a href="#">Xem lịch thi đấu</a></li>
+                            <li class="menu-item"><a href="#">Tạo lịch thi đấu</a></li>
+                        </ul>
+                    </div>
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#result-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-clipboard"></i>&emsp;Kết quả
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="result-menu">
+                            <li class="menu-item"><a href="#">ds</a></li>
+                            <li class="menu-item"><a href="#">dsf</a></li>
+                            <li class="menu-item"><a href="#">sdf</a></li>
+                        </ul>
+                    </div>
+                    <div class="submenu">
+                        <div class="submenu-btn collapsed" data-bs-toggle="collapse" data-bs-target="#report-menu"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-paste"></i></i>&emsp;Báo cáo
+                            <i class="fa-solid fa-angle-right float-end menu-arrow"></i>
+                        </div>
+                        <ul class="collapse" id="report-menu">
+                            <li class="menu-item"><a href="#">Bảng xếp hạng</a></li>
+                            <li class="menu-item"><a href="#">Danh sách ghi bàn</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-wrapper">
+            <!-- Header -->
+            <header class="header d-flex flex-column justify-content-center px-4">
+                <h5 class="m-0 fw-semibold">QUẢN LÝ GIẢI VÔ ĐỊCH QUỐC GIA</h5>
+                <h6 class="m-0">Vô địch quốc gia Night Wolf 2023</h6>
+            </header>
+
+            <style>
+                .club-cover-img {
+                    height: 200px;
+                    width: 100%;
+                    object-fit: cover;
+                }
+
+                .club-logo {
+                    height: 160px;
+                    width: 160px;
+                    object-fit: cover;
+                    border-radius: 50%;
+                    border: 5px solid white;
+                }
+
+
+                .club-player-table .avatar {
+                    height: 70px;
+                    width: 70px;
+                    object-fit: cover;
+                }
+
+                .club-player-table td {
+                    vertical-align: middle;
+                }
+
+                .club-player-table .actions {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .club-player-table .actions a,
+                .club-player-table .actions button {
+                    font-size: 20px;
+                    color: rgba(74, 72, 72, 0.747);
+                }
+
+                .club-player-table .actions a:hover {
+                    color: black;
+                }
+
+                .club-player-table .actions button:hover>i {
+                    color: red;
+                }
+
+                .club-player-table .actions button {
+                    width: fit-content;
+                    height: fit-content;
+                    border: none;
+                    background-color: transparent;
+                }
+            </style>
+
+            <!-- Main -->
+            <div class="main">
+                <div class="d-flex flex-column gap-4 p-4">
+                    <h5 class="m-0">Thông tin đội bóng</h5>
+                    <div class="bg-white rounded-1">
+                        <image class="club-cover-img rounded-top-1"
+                            src="https://media.istockphoto.com/id/472347896/photo/striped-soccer-field.jpg?s=612x612&w=0&k=20&c=wgeavCCOimF1b5mrv9QNQuuJqs1ERX67pDjPT3yv8j8=">
+                        </image>
+                        <div class="p-4 m" style="margin-top: -200px;">
+                            <button class="back-btn fw-semibold text-white fs-8"><i
+                                    class="fa-solid fa-arrow-left"></i>&emsp;Trở
+                                lại</button>
+                            <div class="d-flex align-items-end justify-content-between w-100" style="margin-top: 65px;">
+                                <div class="d-flex gap-4 align-items-end">
+                                    <div style="width: 50px;"></div>
+                                    <image class="club-logo"
+                                        src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+                                    </image>
+                                    <div>
+                                        <h2 class="text-light mb-4">Sông Lam Nghệ An</h2>
+                                        <h6>Sân nhà: Etihad</h6>
+                                        <h6>Huấn luyện viên: Pep Guardiola</h6>
+                                    </div>
+                                </div>
+                                <button class="btn btn-light" data-bs-toggle="modal"
+                                    data-bs-target="#edit-club-modal"><i
+                                        class="fa-solid fa-pen-to-square"></i>&emsp;Chỉnh
+                                    sửa</button>
+                                <div class="modal fade" id="edit-club-modal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5">Biểu mẫu thông tin đội bóng</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <form>
+                                                    <div class="d-flex flex-column gap-3">
+                                                        <div>
+                                                            <image class="d-block mb-3 m-auto"
+                                                                style="max-height: 250px; max-width: 250px; object-fit: cover;"
+                                                                src="https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg">
+
+                                                            </image>
+                                                            <div class="input-group">
+                                                                <input type="file" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label class="fs-8 mb-1">Tên câu lạc bộ</label>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label class="fs-8 mb-1">Sân nhà</label>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label class="fs-8 mb-1">Huấn luyện viên</label>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light"
+                                                    data-bs-dismiss="modal">Hủy</button>
+                                                <button type="button" class="btn btn-primary">Lưu</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5 class="mt-5 mb-3 text-muted">Danh sách cầu thủ</h5>
+                            <table class="table table-hover club-player-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Số áo</th>
+                                        <th scope="col">Ảnh</th>
+                                        <th scope="col">Họ tên</th>
+                                        <th scope="col">Vị trí</th>
+                                        <th scope="col">Hoạt động</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <tr>
+                                        <th style="vertical-align: middle;" scope="row">03</th>
+                                        <td>
+                                            <image class="avatar img-thumbnail"
+                                                src="https://www.mancity.com/meta/media/vw0b1q45/ruben-dias.png">
+                                            </image>
+                                        </td>
+                                        <td>Ruben Dias</td>
+                                        <td>Hậu vệ</td>
+                                        <td>
+                                            <div class="actions">
+                                                <a href="#"><i class="fa-solid fa-eye"></i></a>
+                                                <button><i class="fa-solid fa-trash-can"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(() => {
+                    // Sidebar
+                    $('.menu-item').on({
+                        click: function (event) {
+                            $('.menu-item').removeClass('active');
+                            $(this).addClass('active');
+                            $('.submenu').removeClass('active');
+                            $(this).parent().parent('.submenu').addClass('active');
+                        }
+                    })
+                })
+            </script>
+</body>
+
+</html>

@@ -3,8 +3,9 @@ const { Schema } = mongoose;
 
 const seasonSchema = new Schema({
     seasonName: String,
-    yearStart: Number,
-    yearEnd: Number,
+    year: Number,
+    start: Date,
+    end: Date,
     rule: {
         demotedPosition: Number,
         minAge: Number,

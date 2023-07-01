@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Navigate, Routes, Route, useNavigate } from "react-router-dom";
 import $ from "jquery";
+import axios from "axios"
 
 import "../../style/myteam.css";
 import { Col, Row } from "antd";
 import muImage from "../../assets/imgs/mu.png";
+const API = "http://127.0.0.1:5000/api/report";
+
 function MyTeam() {
   return (
     <Routes>
@@ -12,7 +15,7 @@ function MyTeam() {
 
       <Route path="rank" element={<AllRank />} />
       <Route path="goal" element={<AllGoal />} />
-      <Route path="assist" element={<AllAssist />} />
+      {/* <Route path="assist" element={<AllAssist />} /> */}
 
     </Routes>
   );
@@ -21,6 +24,29 @@ function MyTeam() {
 
 
 function AllRank() {
+  const [listTeam, setListTeam] = useState([]);
+  const id = localStorage.getItem("seasonIDSelected");
+  useEffect(() => {
+
+
+    axios.get(`${API}/${id}/standings`, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      },
+
+
+    }).
+      then(response => {
+        setListTeam(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
+
   const navigate = useNavigate();
   const handleOnClick = useCallback(
     () => navigate("../goal", { replace: true }),
@@ -33,73 +59,53 @@ function AllRank() {
   return (
     <div className="contentUser">
       <Content />
-      <div className="allTeamTitle">
-        <div style={{ fontWeight: "bold" }}>Báo cáo &gt; Bảng xếp hạng</div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <button type="button"
-            className="btn btn-danger"
-            style={{ marginLeft: "15px", width: 120 }}
-            onClick={() => {
-              handleOnClick();
-            }} >
-            Top ghi bàn
-          </button>
-          <button type="button"
-            className="btn btn-danger"
-            style={{ marginLeft: "15px", width: 120 }}
-            onClick={() => {
-              handleOnClick();
-            }} >
-            Top kiến tạo
-          </button>
-        </div>
-      </div>
-      <div className="animated fadeIn" style={{ margin: "0px 20px", marginTop: 20 }}>
-        <div className="row">
-          <div className="col-md-12">
-            <div className="card">
-              <div className="card-header">
-                <strong className="card-title">Bảng xếp hạng</strong>
-              </div>
-              <div className="card-body">
-                <table id="bootstrap-data-table-export" className="table table-striped table-bordered">
-                  <thead className="thead-dark">
-                    <tr>
-                      <th>TT</th>
-                      <th>CLB</th>
-                      <th>Số trận</th>
-                      <th>Thắng</th>
-                      <th>Hòa</th>
-                      <th>Thua</th>
-                      <th>Bàn thắng</th>
-                      <th>Bàn thua</th>
-                      <th>Hệ số</th>
-                      <th>Điểm</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+      <div className="main-wrapper">
+        <div className="d-flex flex-column gap-4 p-4">
+          <h5 className="m-0">Bảng xếp hạng</h5>
 
-                    <tr>
-                      <td>1</td>
-                      <td>MU</td>
-                      <td>3</td>
-                      <td>1</td>
-                      <td>1</td>
-                      <td>1</td>
-                      <td>7</td>
-                      <td>4</td>
-                      <td>2</td>
-                      <td>4</td>
-                    </tr>
+          <div className="bg-white rounded-2 p-4">
+            <table className="standings table table-hover club-player-table">
+              <thead>
+                <tr style={{ textAlign: "center" }}>
+                  <th scope="col">STT</th>
+                  <th scope="col">Đội bóng</th>
+                  <th scope="col">Đã đấu</th>
+                  <th scope="col">Thắng</th>
+                  <th scope="col">Thua</th>
+                  <th scope="col">Hòa</th>
+                  <th scope="col">Bàn thắng</th>
+                  <th scope="col">Bàn thua</th>
+                  <th scope="col">Hiệu số</th>
+                  <th scope="col">Điểm</th>
+                </tr>
+              </thead>
+              <tbody className="table-group-divider">
+                {listTeam.map((i, index) => (
 
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                  <tr style={{ textAlign: "center" }} key={`rank_${index}`}>
+                    <th scope="row">{index}</th>
+
+                    {/* <img alt="" style={{ height: 30, width: 30, marginRight: 5 }}
+                      src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Manchester_City_FC_logo.svg/1200px-Manchester_City_FC_logo.svg.png" /> */}
+                    <td>{i.name}</td>
+                    <td>{i.Played}</td>
+                    <td>{i.won}</td>
+                    <td>{i.lost}</td>
+                    <td>{i.drawn}</td>
+                    <td>{i.scored}</td>
+                    <td>{i.conceded}</td>
+                    <td>{i.goalDifference}</td>
+                    <td>{i.points}</td>
+                  </tr>
+                ))}
+
+
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
@@ -150,6 +156,30 @@ function ContentPreview() {
 }
 
 function AllGoal() {
+  const [listTeam, setListTeam] = useState([]);
+  const id = localStorage.getItem("seasonIDSelected");
+  useEffect(() => {
+
+
+    axios.get(`${API}/${id}/goals`, {
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+      },
+      params: {
+        seasonId: id
+      }
+
+    }).
+      then(response => {
+        setListTeam(response.data.data);
+        console.log(response.data.data)
+
+      }).catch(err => {
+      })
+
+
+  }, [])
   const navigate = useNavigate();
   const handleOnClick = useCallback(
     () => navigate("../rank", { replace: true }),
@@ -162,59 +192,33 @@ function AllGoal() {
   return (
     <div className="contentUser">
       <Content />
-      <div className="allTeamTitle">
-        <div style={{ fontWeight: "bold" }}>Báo cáo &gt; Bàn thắng</div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <button type="button"
-            className="btn btn-danger"
-            style={{ marginLeft: "15px", width: 140 }}
-            onClick={() => {
-              handleOnClick();
-            }} >
-            Bảng xếp hạng
-          </button>
-          <button type="button"
-            className="btn btn-danger"
-            style={{ marginLeft: "15px", width: 120 }}
-            onClick={() => {
-              handleOnClick1();
-            }} >
-            Top kiến tạo
-          </button>
-        </div>
-      </div>
-      <div className="animated fadeIn" style={{ margin: "0px 20px", marginTop: 20 }}>
-        <div className="row">
+      <div className="main-wrapper">
+        <div className="d-flex flex-column gap-4 p-4">
+          <h5 className="m-0">Danh sách cầu thủ ghi bàn</h5>
 
-          <div className="col-md-12">
-            <div className="card">
-              <div className="card-header">
-                <strong className="card-title">Top ghi bàn</strong>
-              </div>
-              <div className="card-body">
-                <table id="bootstrap-data-table-export" className="table table-striped table-bordered">
-                  <thead className="thead-dark">
-                    <tr>
-                      <th>TT</th>
-                      <th><i className="fa fa-running"></i> Cầu thủ</th>
-                      <th><i className="fa fa-users"></i> Đội bóng</th>
-                      <th><i className="fa fa-futbol"></i> Số bàn</th>
+          <div className="bg-white rounded-2 p-4">
+            <table className="scored-players table table-hover club-player-table">
+              <thead>
+                <tr>
+                  <th scope="col">STT</th>
+                  <th scope="col">Cầu thủ</th>
+                  <th scope="col">Đội bóng</th>
+                  <th scope="col">Số bàn thắng</th>
+                </tr>
+              </thead>
+              <tbody className="table-group-divider">
+                {listTeam.map((i, index) => (
 
-                    </tr>
-                  </thead>
-                  <tbody>
+                  <tr>
+                    <td scope="row">{index}</td>
+                    <td>{i.player}</td>
+                    <td>{i.club}</td>
+                    <td>{i.goals}</td>
+                  </tr>
+                ))}
 
-                    <tr>
-                      <td>1</td>
-                      <td><strong>Messi</strong></td>
-                      <td>PSG</td>
-                      <td><strong>31</strong></td>
-                    </tr>
-
-                  </tbody>
-                </table>
-              </div>
-            </div>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -298,92 +302,17 @@ function AllAssist() {
 }
 
 function Content(props) {
+  const [league, setLeague] = useState("");
+  const name = localStorage.getItem("seasonNameSelected");
+  useEffect(() => {
+    setLeague(name);
+  }, []);
   return (
-    <>
-      <div>
-        <div id="right-panel" className="right-panel">
-          <header id="header" className="header bg-light text-dark">
-            <div className="header-menu ">
-              <div
-                className="col-sm-24 "
-                style={{
-                  marginTop: "30px",
-                  borderBottom: "1px solid black",
-                  width: "100%",
-                  textAlign: "center",
-                  paddingBottom: 24,
-                }}
-              >
-                <h3 className="">GIẢI BÓNG ĐÁ VÔ ĐỊCH QUỐC GIA</h3>
-              </div>
-            </div>
-          </header>
-        </div>
-        <div className="animated fadeIn">
-          {/* <div className="row">
-            <div className="col-lg-2">
-            </div>
-            <div className="col-lg-8">
-              <div className="card">
-                <div className="card-header">
-                  <strong>Form đăng ký</strong>
-                </div>
-                <div className="card-body card-block">
-                  <form id="register" action="/club/add/<%=idSeason%>" method="post" className="form-horizontal">
-
-                    <div className="row form-group">
-                      <div className="col col-md-3 "><label for="tendoibong" className=" form-control-label ">Tên đội
-                        bóng</label>
-                      </div>
-                      <div className="col-12 col-md-9">
-                        <input type="text" id="tendoibong" name="tendoibong" placeholder="Tên đội bóng"
-                          className="form-control" required />
-                      </div>
-                    </div>
-                    <div className="row form-group">
-                      <div className="col col-md-3 "><label for="svd" className=" form-control-label ">Sân vận
-                        động</label>
-                      </div>
-                      <div className="col-12 col-md-9">
-                        <input type="text" id="svd" name="svd" placeholder="Sân vận động" className="form-control" required />
-                      </div>
-                    </div>
-                    <div className="row form-group">
-
-                      <div className="col col-md-3 "><label for="hlv" className=" form-control-label ">Huấn luyện
-                        viên </label>
-                      </div>
-                      <div className="col-12 col-md-9">
-                        <input type="text" id="hlv" name="hlv" placeholder="Huấn luyện viên"
-                          className="form-control" required />
-                      </div>
-                    </div>
-                    <div className="row form-group">
-                      <div className="col col-md-3"><label for="logo" className=" form-control-label">Logo</label></div>
-                      <div className="col-12 col-md-9">
-                        <div className="file-loading">
-                          <input value="" id="logo" name="logo" type="file" multiple />
-                        </div>
-                      </div>
-                      <input type="hidden" id="imgPath" name="imgPath" value="" />
-                    </div>
-                  </form>
-                </div>
-                <div className="card-footer">
-                  <button form="register" type="submit" className="btn btn-primary btn-sm">
-                    <i className="fa fa-check"></i> Đăng ký
-                  </button>
-                  <button form="register" type="reset" className="btn btn-danger btn-sm">
-                    <i className="fa fa-ban"> </i> Hủy đăng ký
-                  </button>
-
-                </div>
-              </div>
-            </div> */}
-          {/* </div> */}
-        </div>
-      </div>
-    </>
+    <div>
+      <header className="header d-flex flex-column justify-content-center px-4">
+        <h5 className="m-0 fw-semibold text-uppercase">{league}</h5>
+      </header>
+    </div>
   );
 }
 

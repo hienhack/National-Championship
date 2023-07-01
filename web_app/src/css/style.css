@@ -1,0 +1,316 @@
+@import "./sidebar.css";
+
+/* layout */
+.wrapper {
+	margin: 0;
+	display: flex;
+	overflow-y: hidden;
+}
+
+.main-wrapper {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	overflow-x: auto;
+	background-color: rgb(238, 252, 255);
+}
+
+.header {
+	height: 70px;
+	background-color: white;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.sidebar {
+	height: 100vh;
+	width: 270px;
+	min-width: 270px;
+}
+
+
+* {
+	font-family: "Roboto";
+}
+
+a {
+	text-decoration: none;
+}
+
+.fs-7 {
+	font-size: 15px;
+}
+
+.fs-8 {
+	font-size: 14px;
+}
+
+.btn.btn-success {
+	background-color: rgb(9, 196, 9);
+	border: none;
+}
+
+.text-success {
+	color: rgb(9, 196, 9);
+}
+
+.text-success * {
+	color: rgb(9, 196, 9);
+}
+
+.bg-white {
+	background-color: white;
+}
+
+.back-btn {
+	padding: 0;
+	outline: none;
+	background: transparent;
+	border: none;
+}
+
+.back-btn:hover {
+	opacity: 75%;
+}
+
+button {
+	background-color: transparent;
+	border: none;
+	padding: 0;
+}
+
+button:hover {
+	opacity: 70%;
+}
+
+.club-card {
+	/* min-width: 260px; */
+	height: fit-content;
+	padding: 15px;
+	background-color: white;
+	border-radius: 10px;
+	box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+}
+
+.club-card a {
+	color: black;
+}
+
+.club-card a:hover {
+	color: rgb(85, 85, 85);
+}
+
+.club-card .club-logo {
+	height: 100px;
+	width: 100px;
+	object-fit: cover;
+	display: block;
+}
+
+.club-card .club-card-body {
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.club-card .club-name {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.club-cover-img {
+	height: 200px;
+	width: 100%;
+	object-fit: cover;
+}
+
+.club-logo {
+	height: 160px;
+	width: 160px;
+	object-fit: cover;
+	border-radius: 50%;
+	border: 5px solid white;
+}
+
+
+.club-player-table .avatar {
+	height: 70px;
+	width: 70px;
+	object-fit: cover;
+}
+
+.club-player-table td {
+	vertical-align: middle;
+}
+
+.club-player-table .actions {
+	display: flex;
+	gap: 10px;
+}
+
+.club-player-table .actions a,
+.club-player-table .actions button {
+	font-size: 20px;
+	color: rgba(74, 72, 72, 0.747);
+}
+
+.club-player-table .actions a:hover {
+	color: black;
+}
+
+.club-player-table .actions button:hover>i {
+	color: red;
+}
+
+.club-player-table .actions button {
+	width: fit-content;
+	height: fit-content;
+	border: none;
+	background-color: transparent;
+}
+
+.play-list-table .avatar {
+	height: 70px;
+	width: 70px;
+	object-fit: cover;
+}
+
+.play-list-table td {
+	vertical-align: middle;
+}
+
+.play-list-table .player-detail-btn {
+	color: rgba(74, 72, 72, 0.747);
+}
+
+.play-list-table .player-detail-btn:hover {
+	opacity: 80%;
+}
+
+.match .club-logo {
+	width: 25px;
+	height: 25px;
+	object-fit: cover;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.match .remove-match {
+	display: none;
+}
+
+.match:hover .remove-match {
+	height: auto;
+	display: flex;
+	align-items: center;
+}
+
+.match * {
+	font-size: 14px;
+}
+
+.round-select * {
+	font-size: 14px;
+}
+
+.match .club-logo {
+	width: 25px;
+	height: 25px;
+	object-fit: cover;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.match .update-match {
+	display: none;
+}
+
+.match:hover .update-match {
+	height: auto;
+	display: flex;
+	align-items: center;
+}
+
+.match * {
+	font-size: 14px;
+}
+
+.round-select * {
+	font-size: 14px;
+}
+
+.club-win * {
+	font-weight: bolder;
+}
+.standings .club {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.club img {
+	max-height: 30px;
+	max-width: 30px;
+	object-fit: cover;
+}
+
+.standings td {
+	vertical-align: middle;
+}
+.scored-players .player {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.player img {
+	max-height: 30px;
+	max-width: 30px;
+	object-fit: cover;
+}
+
+.scored-players td {
+	vertical-align: middle;
+}
+.match-detail-club {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: center;
+}
+
+.match-detail-club img {
+	height: 80px;
+	width: 80px;
+	object-fit: cover;
+	display: block;
+}
+
+.goal {
+	display: flex;
+	gap: 10px;
+}
+
+.goal .remove-btn {
+	height: auto;
+	display: none;
+}
+
+.goal:hover .remove-btn {
+	display: block;
+}
+
+.goal[aria-label="club1"] {
+	justify-content: space-between;
+}
+
+.goal[aria-label="club2"] {
+	justify-content: end;
+}
+
+.goal[aria-label="club2"]>div {
+	flex-direction: row-reverse;
+}
