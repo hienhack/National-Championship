@@ -103,7 +103,6 @@ class ClubController {
         return;
     }
 
-    //chua xoa duoc 2 player
     async deletePlayerFromClub(req, res) {
         const { _id, season } = req.body;
         const club = await clubModel.findById(_id);
